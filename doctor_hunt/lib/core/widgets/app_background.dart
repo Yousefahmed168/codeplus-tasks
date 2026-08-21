@@ -42,9 +42,9 @@ class GradientBlob extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColors.blobGlow.withValues(alpha: 0.62),
-            blurRadius: 100,
-            spreadRadius: 10,
+            color: AppColors.info.withValues(alpha: 0.5),
+            blurRadius: 150,
+            spreadRadius: 5,
           ),
         ],
         shape: BoxShape.circle,
