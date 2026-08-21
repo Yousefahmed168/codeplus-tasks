@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "Doctor Hunt",
+    "email": "Email",
+    "password": "Password",
+    "google": "Google",
+    "facebook": "Facebook",
+    "continueBtn": "Continue",
+    "skip": "Skip",
+    "next": "Next",
+    "getStarted": "Get Started",
+    "name": "Name",
+    "validation": {
+      "enterEmail": "Enter your email",
+      "validEmail": "Enter a valid email",
+      "enterPassword": "Enter your password",
+      "minPassword": "Min 6 characters",
+      "enterName": "Enter your name"
+    }
+  },
+  "onboarding": {
+    "pages": [
+      {
+        "title": "Find Trusted Doctors",
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+      },
+      {
+        "title": "Choose Best Doctors",
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+      },
+      {
+        "title": "Easy Appointments",
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+      }
+    ]
+  },
+  "roleSelection": {
+    "title": "Choose your role",
+    "subtitle": "The selected role determines the experience and available features.",
+    "roles": {
+      "patient": {
+        "title": "Patient",
+        "description": "Find doctors, book appointments,\nand manage your medical records."
+      },
+      "admin": {
+        "title": "Admin",
+        "description": "Manage doctors, appointments,\nusers, and the platform."
+      }
+    },
+    "errorNoRole": "Please select a role"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "You can search course, apply course and find scholarship for abroad studies",
+      "forgotPassword": "Forgot password",
+      "noAccount": "Don't have an account? ",
+      "joinUs": "Join us",
+      "submitBtn": "Login"
+    },
+    "register": {
+      "title": "Join us to start searching",
+      "subtitle": "You can search course, apply course and find scholarship for abroad studies",
+      "termsPrefix": "I agree with the ",
+      "terms": "Terms of Service",
+      "termsAnd": " and ",
+      "privacy": "Privacy Policy",
+      "acceptTermsError": "Please accept the terms",
+      "haveAccount": "Have an account? ",
+      "loginLink": "Log in",
+      "submitBtn": "Sign up"
+    }
+  }
+}
