@@ -5,7 +5,7 @@ import 'package:doctor_hunt/core/utils/app_images.dart';
 import 'package:doctor_hunt/core/widgets/widgets.dart';
 import 'package:doctor_hunt/core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:doctor_hunt/features/auth/widgets/social_button.dart';
+import 'package:doctor_hunt/features/auth/presentation/widgets/social_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -18,25 +18,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscurePassword = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();
-  }
-
-  void _onLogin() {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _isLoading = true);
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) setState(() => _isLoading = false);
-    });
   }
 
   @override
@@ -92,9 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-
             const Gap(28),
-
             //  Email field
             CustomTextFormField(
               controller: _emailCtrl,
@@ -143,7 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
             //  Login button
             MainButton(
-              onPressed: _isLoading ? null : _onLogin,
+              onPressed: () {
+                context.go(AppRoutes.home);
+              },
               text: t.auth.login.submitBtn,
             ),
 

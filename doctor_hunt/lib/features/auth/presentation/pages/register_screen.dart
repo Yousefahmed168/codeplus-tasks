@@ -5,7 +5,7 @@ import 'package:doctor_hunt/core/utils/app_images.dart';
 import 'package:doctor_hunt/core/widgets/widgets.dart';
 import 'package:doctor_hunt/core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:doctor_hunt/features/auth/widgets/social_button.dart';
+import 'package:doctor_hunt/features/auth/presentation/widgets/social_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -18,7 +18,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -33,15 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _onRegister() {
-    if (!_formKey.currentState!.validate()) return;
-    if (!_agreeToTerms) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(t.auth.register.acceptTermsError)));
-      return;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +202,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const Gap(28),
 
             //  Sign up button
-            MainButton(text: t.auth.register.submitBtn, onPressed: _onRegister),
+            MainButton(
+              text: t.auth.register.submitBtn,
+              onPressed: () {
+                context.go(AppRoutes.home);
+              },
+            ),
 
             const Gap(40),
 

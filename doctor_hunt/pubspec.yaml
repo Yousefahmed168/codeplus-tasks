@@ -76,7 +76,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/lang/
     - assets/fonts/
     - assets/icons/
   # fonts:
@@ -85,3 +84,8 @@ flutter:
   #       # - asset: assets/fonts/CustomFont-Regular.ttf
   #       - asset: assets/fonts/CustomFont-Bold.ttf
   #         weight: 700
+flutter_assets:
+  assets_path: assets/
+  output_path: lib/constants/
+  filename: assets.dart
+  field_prefix: resource

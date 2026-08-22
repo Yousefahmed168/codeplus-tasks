@@ -44,6 +44,9 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$onboarding$en onboarding = Translations$onboarding$en._(_root);
 	late final Translations$roleSelection$en roleSelection = Translations$roleSelection$en._(_root);
 	late final Translations$auth$en auth = Translations$auth$en._(_root);
+	late final Translations$home$en home = Translations$home$en._(_root);
+	late final Translations$findDoctors$en findDoctors = Translations$findDoctors$en._(_root);
+	late final Translations$doctorDetails$en doctorDetails = Translations$doctorDetails$en._(_root);
 }
 
 // Path: common
@@ -83,6 +86,15 @@ class Translations$common$en {
 
 	/// en: 'Name'
 	String get name => 'Name';
+
+	/// en: 'Book Now'
+	String get bookNow => 'Book Now';
+
+	/// en: 'Next Available'
+	String get nextAvailable => 'Next Available';
+
+	/// en: 'Search'
+	String get search => 'Search';
 
 	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
 }
@@ -130,6 +142,114 @@ class Translations$auth$en {
 	// Translations
 	late final Translations$auth$login$en login = Translations$auth$login$en._(_root);
 	late final Translations$auth$register$en register = Translations$auth$register$en._(_root);
+}
+
+// Path: home
+class Translations$home$en {
+	Translations$home$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Live Doctors'
+	String get liveDoctors => 'Live Doctors';
+
+	/// en: 'Popular Doctor'
+	String get popularDoctor => 'Popular Doctor';
+
+	/// en: 'Feature Doctor'
+	String get featureDoctor => 'Feature Doctor';
+
+	/// en: 'See all'
+	String get seeAll => 'See all';
+
+	/// en: 'Hi Handwerker!'
+	String get hiHandwerker => 'Hi Handwerker!';
+
+	/// en: 'Find Your Doctor'
+	String get findYourDoctor => 'Find Your Doctor';
+
+	/// en: 'Search.....'
+	String get searchHint => 'Search.....';
+
+	/// en: 'LIVE'
+	String get live => 'LIVE';
+}
+
+// Path: findDoctors
+class Translations$findDoctors$en {
+	Translations$findDoctors$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Find Doctors'
+	String get title => 'Find Doctors';
+
+	/// en: 'Dentist'
+	String get searchHint => 'Dentist';
+
+	/// en: 'Search doctors, specialties...'
+	String get searchHintExtra => 'Search doctors, specialties...';
+
+	/// en: 'Recent Searches'
+	String get recentSearches => 'Recent Searches';
+
+	/// en: 'No doctors found'
+	String get noDoctorsFound => 'No doctors found';
+
+	/// en: 'Try a different search term'
+	String get tryDifferentSearchTerm => 'Try a different search term';
+
+	/// en: '$count Years experience'
+	String yearsExperience({required Object count}) => '${count} Years experience';
+
+	/// en: '$count Patient Stories'
+	String patientStories({required Object count}) => '${count} Patient Stories';
+
+	/// en: '$time tomorrow'
+	String timeTomorrow({required Object time}) => '${time} tomorrow';
+}
+
+// Path: doctorDetails
+class Translations$doctorDetails$en {
+	Translations$doctorDetails$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Doctor Details'
+	String get title => 'Doctor Details';
+
+	/// en: 'Specialist Cardiologist'
+	String get specialist => 'Specialist Cardiologist';
+
+	/// en: '$ $price/hr'
+	String perHour({required Object price}) => '\$ ${price}/hr';
+
+	/// en: 'Runing'
+	String get running => 'Runing';
+
+	/// en: 'Ongoing'
+	String get ongoing => 'Ongoing';
+
+	/// en: 'Patient'
+	String get patient => 'Patient';
+
+	/// en: 'Services'
+	String get services => 'Services';
+
+	/// en: 'Patient care should be the number one priority.'
+	String get service1 => 'Patient care should be the number one priority.';
+
+	/// en: 'If you run your practice you know how frustrating.'
+	String get service2 => 'If you run your practice you know how frustrating.';
+
+	/// en: 'That's why some of appointment reminder system.'
+	String get service3 => 'That\'s why some of appointment reminder system.';
 }
 
 // Path: common.validation
@@ -326,6 +446,9 @@ extension on Translations {
 			'common.next' => 'Next',
 			'common.getStarted' => 'Get Started',
 			'common.name' => 'Name',
+			'common.bookNow' => 'Book Now',
+			'common.nextAvailable' => 'Next Available',
+			'common.search' => 'Search',
 			'common.validation.enterEmail' => 'Enter your email',
 			'common.validation.validEmail' => 'Enter a valid email',
 			'common.validation.enterPassword' => 'Enter your password',
@@ -360,6 +483,33 @@ extension on Translations {
 			'auth.register.haveAccount' => 'Have an account? ',
 			'auth.register.loginLink' => 'Log in',
 			'auth.register.submitBtn' => 'Sign up',
+			'home.liveDoctors' => 'Live Doctors',
+			'home.popularDoctor' => 'Popular Doctor',
+			'home.featureDoctor' => 'Feature Doctor',
+			'home.seeAll' => 'See all',
+			'home.hiHandwerker' => 'Hi Handwerker!',
+			'home.findYourDoctor' => 'Find Your Doctor',
+			'home.searchHint' => 'Search.....',
+			'home.live' => 'LIVE',
+			'findDoctors.title' => 'Find Doctors',
+			'findDoctors.searchHint' => 'Dentist',
+			'findDoctors.searchHintExtra' => 'Search doctors, specialties...',
+			'findDoctors.recentSearches' => 'Recent Searches',
+			'findDoctors.noDoctorsFound' => 'No doctors found',
+			'findDoctors.tryDifferentSearchTerm' => 'Try a different search term',
+			'findDoctors.yearsExperience' => ({required Object count}) => '${count} Years experience',
+			'findDoctors.patientStories' => ({required Object count}) => '${count} Patient Stories',
+			'findDoctors.timeTomorrow' => ({required Object time}) => '${time} tomorrow',
+			'doctorDetails.title' => 'Doctor Details',
+			'doctorDetails.specialist' => 'Specialist Cardiologist',
+			'doctorDetails.perHour' => ({required Object price}) => '\$ ${price}/hr',
+			'doctorDetails.running' => 'Runing',
+			'doctorDetails.ongoing' => 'Ongoing',
+			'doctorDetails.patient' => 'Patient',
+			'doctorDetails.services' => 'Services',
+			'doctorDetails.service1' => 'Patient care should be the number one priority.',
+			'doctorDetails.service2' => 'If you run your practice you know how frustrating.',
+			'doctorDetails.service3' => 'That\'s why some of appointment reminder system.',
 			_ => null,
 		};
 	}

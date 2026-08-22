@@ -75,7 +75,6 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                 onTap: () => setState(() => _selectedRole = AppRole.admin),
               ),
 
-              //  Spacer pushes button to bottom
               const Spacer(),
 
               //  Continue button
@@ -143,7 +142,7 @@ class _RoleCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: selected ? selectedColor : const Color(0xFFE8E8E8),
+          color: selected ? selectedColor : AppColors.divider,
           width: selected ? 2 : 1.5,
         ),
         boxShadow: [
@@ -174,7 +173,7 @@ class _RoleCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: selected
                         ? selectedColor.withValues(alpha: 0.12)
-                        : const Color(0xFFF5F5F5),
+                        : AppColors.background,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(

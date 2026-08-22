@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/login_screen.dart';
-import '../../features/auth/presentation/register_screen.dart';
-import '../../features/home/views/home_screen.dart';
+import '../../features/auth/presentation/pages/login_screen.dart';
+import '../../features/auth/presentation/pages/register_screen.dart';
+import '../../features/doctors/models/doctor_model.dart';
+import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
+import '../../features/home/presentation/pages/home_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/role/choose_role.dart';
+import '../../features/search/presentation/pages/find_doctor.dart';
 import '../../features/splash/splash_screen.dart';
 
-// ---------------------------------------------------------------------------
-// Route paths — single source of truth for all navigation targets.
-// ---------------------------------------------------------------------------
 
 class AppRoutes {
   AppRoutes._();
@@ -21,11 +21,11 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
+  static const String doctorDetails = '/doctor-details';
+  static const String search = '/search';
 }
 
-// ---------------------------------------------------------------------------
 // Route tree
-// ---------------------------------------------------------------------------
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -61,12 +61,25 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const HomeScreen()),
     ),
+    GoRoute(
+      path: AppRoutes.doctorDetails,
+      pageBuilder: (context, state) {
+        final doctor = state.extra as Doctor;
+        return _slidePage(
+          key: state.pageKey,
+          child: DoctorDetailsScreen(doctor: doctor),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.search,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const FindDoctorScreen()),
+    ),
   ],
 );
 
-// ---------------------------------------------------------------------------
-// Shared slide transition builder (preserves original behaviour)
-// ---------------------------------------------------------------------------
+
 
 CustomTransitionPage<void> _slidePage({
   required LocalKey key,

@@ -1,3 +1,4 @@
+import 'package:doctor_hunt/core/theme/colors.dart';
 import 'package:doctor_hunt/core/utils/app_images.dart';
 import 'package:doctor_hunt/i18n/strings.g.dart';
 import 'package:doctor_hunt/core/widgets/widgets.dart';
@@ -97,8 +98,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         color: _currentPage == i
-                            ? const Color(0xFF19FFCC)
-                            : const Color(0xFFD0D0D0),
+                            ? AppColors.primaryLight
+                            : AppColors.surfaceDim,
                       ),
                     ),
                   ),
@@ -112,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: ElevatedButton(
                     onPressed: _goToNextPage,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0EBE7E),
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -172,7 +173,7 @@ class _OnboardingPageView extends StatelessWidget {
                   width: size.width * 1.1,
                   height: size.width * 1.1,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF0EBE7E),
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
                 ),
