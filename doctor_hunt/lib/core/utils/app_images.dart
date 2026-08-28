@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/constants/assets.dart';
+import '../constants/assets.dart';
 
 abstract class AppImages {
   static const String logo = Assets.resourceIconsIcon;

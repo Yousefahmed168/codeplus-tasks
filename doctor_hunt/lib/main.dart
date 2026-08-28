@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'i18n/strings.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize slang locale
+  LocaleSettings.useDeviceLocale();
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -22,7 +26,7 @@ void main() async {
   );
 
   // Run App
-  runApp(const MyApp());
+  runApp(TranslationProvider(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +45,8 @@ class MyApp extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.system,
           routerConfig: AppRouter.router,
+          locale: TranslationProvider.of(context).flutterLocale,
+          supportedLocales: AppLocaleUtils.supportedLocales,
         );
       },
     );

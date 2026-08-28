@@ -5,11 +5,12 @@ import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/doctors/models/doctor_model.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
-import '../../features/home/presentation/pages/home_screen.dart';
+import '../../features/home/presentation/pages/main_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/role/choose_role.dart';
 import '../../features/search/presentation/pages/find_doctor.dart';
 import '../../features/splash/splash_screen.dart';
+import '../../features/doctors/presentation/pages/select_time_screen.dart';
 
 
 class AppRoutes {
@@ -23,6 +24,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String doctorDetails = '/doctor-details';
   static const String search = '/search';
+  static const String selectTime = '/select-time';
 }
 
 // Route tree
@@ -59,7 +61,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const HomeScreen()),
+          _slidePage(key: state.pageKey, child: const MainScreen()),
     ),
     GoRoute(
       path: AppRoutes.doctorDetails,
@@ -75,6 +77,16 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.search,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const FindDoctorScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.selectTime,
+      pageBuilder: (context, state) {
+        final doctor = state.extra as Doctor;
+        return _slidePage(
+          key: state.pageKey,
+          child: SelectTimeScreen(doctor: doctor),
+        );
+      },
     ),
   ],
 );

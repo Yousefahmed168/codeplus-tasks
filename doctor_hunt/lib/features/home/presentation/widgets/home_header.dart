@@ -1,9 +1,9 @@
-import 'package:doctor_hunt/core/routes/app_routes.dart';
-import 'package:doctor_hunt/core/widgets/custom_text_form_field.dart';
+import '../../../../core/routes/app_routes.dart';
+import '../../../../core/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/core/utils/app_images.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/app_images.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../i18n/strings.g.dart';
@@ -40,7 +40,7 @@ class HomeHeader extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppColors.primary, AppColors.primary.withOpacity(0.7)],
+              colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.7)],
             ),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(24),
@@ -94,29 +94,27 @@ class HomeHeader extends StatelessWidget {
           left: 20,
           right: 20,
           bottom: -24,
-          child: Expanded(
-            child: CustomTextFormField(
-              suffixIcon: GestureDetector(
-                onTap: onClearSearch,
-                child: Icon(
-                  Icons.close_rounded,
-                  color: AppColors.textSecondary,
-                  size: 20,
-                ),
+          child: CustomTextFormField(
+            suffixIcon: GestureDetector(
+              onTap: onClearSearch,
+              child: Icon(
+                Icons.close_rounded,
+                color: AppColors.textSecondary,
+                size: 20,
               ),
-              prefixIcon: const Icon(
-                Icons.search_rounded,
-                color: AppColors.success,
-                size: 16,
-              ),
-              controller: searchController,
-              onChange: onSearchChanged,
-              textInputAction: TextInputAction.search,
-              hintText: t.home.searchHint,
-              onTap: () {
-                context.go(AppRoutes.search);
-              },
             ),
+            prefixIcon: const Icon(
+              Icons.search_rounded,
+              color: AppColors.success,
+              size: 16,
+            ),
+            controller: searchController,
+            onChange: onSearchChanged,
+            textInputAction: TextInputAction.search,
+            hintText: t.home.searchHint,
+            onTap: () {
+              context.go(AppRoutes.search);
+            },
           ),
         ),
       ],

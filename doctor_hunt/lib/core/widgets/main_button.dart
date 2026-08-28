@@ -1,5 +1,5 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
+import '../theme/colors.dart';
+import '../theme/style_atoms.dart';
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {

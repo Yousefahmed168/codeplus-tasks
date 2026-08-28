@@ -47,6 +47,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$home$en home = Translations$home$en._(_root);
 	late final Translations$findDoctors$en findDoctors = Translations$findDoctors$en._(_root);
 	late final Translations$doctorDetails$en doctorDetails = Translations$doctorDetails$en._(_root);
+	late final Translations$appointment$en appointment = Translations$appointment$en._(_root);
+	late final Translations$selectTime$en selectTime = Translations$selectTime$en._(_root);
 }
 
 // Path: common
@@ -161,6 +163,9 @@ class Translations$home$en {
 	/// en: 'Feature Doctor'
 	String get featureDoctor => 'Feature Doctor';
 
+	/// en: 'Favourite Doctors'
+	String get favouriteDoctors => 'Favourite Doctors';
+
 	/// en: 'See all'
 	String get seeAll => 'See all';
 
@@ -250,6 +255,72 @@ class Translations$doctorDetails$en {
 
 	/// en: 'That's why some of appointment reminder system.'
 	String get service3 => 'That\'s why some of appointment reminder system.';
+}
+
+// Path: appointment
+class Translations$appointment$en {
+	Translations$appointment$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Thank You !'
+	String get successTitle => 'Thank You !';
+
+	/// en: 'Your Appointment Successful'
+	String get successSubtitle => 'Your Appointment Successful';
+
+	/// en: 'You booked an appointment with $doctorName on $date, at $time'
+	String successMessage({required Object doctorName, required Object date, required Object time}) => 'You booked an appointment with ${doctorName} on ${date}, at ${time}';
+
+	/// en: 'Done'
+	String get doneBtn => 'Done';
+
+	/// en: 'Edit your appointment'
+	String get editBtn => 'Edit your appointment';
+}
+
+// Path: selectTime
+class Translations$selectTime$en {
+	Translations$selectTime$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Select Time'
+	String get title => 'Select Time';
+
+	/// en: 'Today, $date'
+	String today({required Object date}) => 'Today, ${date}';
+
+	/// en: 'Tomorrow, $date'
+	String tomorrow({required Object date}) => 'Tomorrow, ${date}';
+
+	/// en: 'No slots available'
+	String get noSlotsAvailable => 'No slots available';
+
+	/// en: '$count slots available'
+	String slotsAvailable({required Object count}) => '${count} slots available';
+
+	/// en: 'Afternoon $count slots'
+	String afternoonSlots({required Object count}) => 'Afternoon ${count} slots';
+
+	/// en: 'Evening $count slots'
+	String eveningSlots({required Object count}) => 'Evening ${count} slots';
+
+	/// en: 'Proceed'
+	String get proceed => 'Proceed';
+
+	/// en: 'Next availability on Wed, 24 Feb'
+	String get nextAvailability => 'Next availability on Wed, 24 Feb';
+
+	/// en: 'OR'
+	String get or => 'OR';
+
+	/// en: 'Contact Clinic'
+	String get contactClinic => 'Contact Clinic';
 }
 
 // Path: common.validation
@@ -486,6 +557,7 @@ extension on Translations {
 			'home.liveDoctors' => 'Live Doctors',
 			'home.popularDoctor' => 'Popular Doctor',
 			'home.featureDoctor' => 'Feature Doctor',
+			'home.favouriteDoctors' => 'Favourite Doctors',
 			'home.seeAll' => 'See all',
 			'home.hiHandwerker' => 'Hi Handwerker!',
 			'home.findYourDoctor' => 'Find Your Doctor',
@@ -510,6 +582,22 @@ extension on Translations {
 			'doctorDetails.service1' => 'Patient care should be the number one priority.',
 			'doctorDetails.service2' => 'If you run your practice you know how frustrating.',
 			'doctorDetails.service3' => 'That\'s why some of appointment reminder system.',
+			'appointment.successTitle' => 'Thank You !',
+			'appointment.successSubtitle' => 'Your Appointment Successful',
+			'appointment.successMessage' => ({required Object doctorName, required Object date, required Object time}) => 'You booked an appointment with ${doctorName} on ${date}, at ${time}',
+			'appointment.doneBtn' => 'Done',
+			'appointment.editBtn' => 'Edit your appointment',
+			'selectTime.title' => 'Select Time',
+			'selectTime.today' => ({required Object date}) => 'Today, ${date}',
+			'selectTime.tomorrow' => ({required Object date}) => 'Tomorrow, ${date}',
+			'selectTime.noSlotsAvailable' => 'No slots available',
+			'selectTime.slotsAvailable' => ({required Object count}) => '${count} slots available',
+			'selectTime.afternoonSlots' => ({required Object count}) => 'Afternoon ${count} slots',
+			'selectTime.eveningSlots' => ({required Object count}) => 'Evening ${count} slots',
+			'selectTime.proceed' => 'Proceed',
+			'selectTime.nextAvailability' => 'Next availability on Wed, 24 Feb',
+			'selectTime.or' => 'OR',
+			'selectTime.contactClinic' => 'Contact Clinic',
 			_ => null,
 		};
 	}

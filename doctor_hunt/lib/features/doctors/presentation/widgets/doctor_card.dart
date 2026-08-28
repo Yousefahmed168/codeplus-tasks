@@ -1,7 +1,7 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/features/doctors/models/doctor_model.dart';
-import 'package:doctor_hunt/i18n/strings.g.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
+import '../../models/doctor_model.dart';
+import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

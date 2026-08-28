@@ -1,5 +1,5 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -23,7 +23,7 @@ class SocialButton extends StatelessWidget {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.textHint.withOpacity(0.3)),
+          border: Border.all(color: AppColors.textHint.withValues(alpha: 0.3)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

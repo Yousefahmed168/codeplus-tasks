@@ -1,8 +1,8 @@
-import 'package:doctor_hunt/core/utils/app_images.dart';
-import 'package:doctor_hunt/i18n/strings.g.dart';
-import 'package:doctor_hunt/core/widgets/widgets.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/core/routes/app_routes.dart';
+import '../../core/utils/app_images.dart';
+import '../../i18n/strings.g.dart';
+import '../../core/widgets/widgets.dart';
+import '../../core/theme/style_atoms.dart';
+import '../../core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNext() {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.go(AppRoutes.onboarding);
+        context.go(AppRoutes.home);
       }
     });
   }

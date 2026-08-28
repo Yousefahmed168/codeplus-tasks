@@ -1,11 +1,16 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
+import '../../../../core/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 class MapPreview extends StatelessWidget {
   const MapPreview({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Example coordinates for a doctor's clinic
+    final clinicLocation = const LatLng(29.337383058534286, 30.854864845451573);
+
     return Container(
       width: double.infinity,
       height: 200,
@@ -16,74 +21,36 @@ class MapPreview extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          fit: StackFit.expand,
+        child: FlutterMap(
+          options: MapOptions(
+            initialCenter: clinicLocation,
+            initialZoom: 13.0,
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+            ),
+          ),
           children: [
-            // Map placeholder with grid pattern
-            CustomPaint(painter: _MapGridPainter()),
-
-            // Center pin
-            const Center(
-              child: Icon(
-                Icons.location_on_rounded,
-                size: 40,
-                color: AppColors.primary,
-              ),
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.doctor_hunt.app',
             ),
-
-            // Road lines
-            Positioned(
-              top: 40,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 3,
-                color: AppColors.border.withValues(alpha: 0.5),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              bottom: 0,
-              left: 60,
-              child: Container(
-                width: 3,
-                color: AppColors.border.withValues(alpha: 0.5),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              bottom: 0,
-              right: 80,
-              child: Container(
-                width: 3,
-                color: AppColors.border.withValues(alpha: 0.5),
-              ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: clinicLocation,
+                  width: 40,
+                  height: 40,
+                  child: const Icon(
+                    Icons.location_on_rounded,
+                    size: 40,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-}
-
-class _MapGridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.border.withValues(alpha: 0.15)
-      ..strokeWidth = 1;
-
-    // Horizontal lines
-    for (double y = 0; y < size.height; y += 20) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-
-    // Vertical lines
-    for (double x = 0; x < size.width; x += 20) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

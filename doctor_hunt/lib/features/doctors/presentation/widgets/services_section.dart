@@ -1,5 +1,5 @@
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/i18n/strings.g.dart';
+import '../../../../core/theme/style_atoms.dart';
+import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

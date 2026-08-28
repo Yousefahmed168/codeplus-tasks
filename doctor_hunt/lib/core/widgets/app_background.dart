@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
+import '../theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppBackground extends StatelessWidget {

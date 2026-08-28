@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import 'package:gap/gap.dart';
 
 class PopularDoctorCard extends StatelessWidget {

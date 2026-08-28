@@ -1,10 +1,10 @@
-import 'package:doctor_hunt/core/routes/app_routes.dart';
-import 'package:doctor_hunt/core/widgets/app_background.dart';
+import '../../../../core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/core/utils/app_images.dart';
-import 'package:doctor_hunt/core/constants/assets.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/app_images.dart';
+import '../../../../core/constants/assets.dart';
+import '../../../../core/data/dummy_doctors.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/home_header.dart';
@@ -12,8 +12,6 @@ import '../widgets/live_doctor_card.dart';
 import '../widgets/category_card.dart';
 import '../widgets/popular_doctor_card.dart';
 import '../widgets/feature_doctor_card.dart';
-import '../widgets/home_bottom_nav_bar.dart';
-import '../../../doctors/models/doctor_model.dart';
 import '../../../../i18n/strings.g.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,20 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentNavIndex = 0;
   final TextEditingController _searchController = TextEditingController();
-
-  final Doctor _dummyDoctor = const Doctor(
-    name: 'Dr. Crick',
-    specialty: 'Cardiologist',
-    yearsExperience: 5,
-    ratingPercentage: 4.8,
-    patientStories: 120,
-    nextAvailableTime: '10:00 AM tomorrow',
-    imagePath: AppImages.doctor,
-    isFavorite: false,
-    hourlyRate: 25.00,
-  );
 
   @override
   void dispose() {
@@ -47,15 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBackground(
-      
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        bottomNavigationBar: HomeBottomNavBar(
-          currentIndex: _currentNavIndex,
-          onTap: (index) => setState(() => _currentNavIndex = index),
-        ),
-        body: CustomScrollView(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
               child: Column(
@@ -100,28 +79,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           svgAssetPath: Assets.resourceIconsDentist,
                           gradientColors: [
                             AppColors.info,
-                            AppColors.info.withOpacity(0.7),
+                            AppColors.info.withValues(alpha: 0.7),
                           ],
                         ),
                         CategoryCard(
                           iconData: Icons.favorite_rounded,
                           gradientColors: [
                             AppColors.success,
-                            AppColors.success.withOpacity(0.7),
+                            AppColors.success.withValues(alpha: 0.7),
                           ],
                         ),
                         CategoryCard(
                           svgAssetPath: Assets.resourceIconsEye,
                           gradientColors: [
                             AppColors.warning,
-                            AppColors.warning.withOpacity(0.6),
+                            AppColors.warning.withValues(alpha: 0.6),
                           ],
                         ),
                         CategoryCard(
                           iconData: Icons.wc_rounded,
                           gradientColors: [
                             AppColors.error,
-                            AppColors.error.withOpacity(0.5),
+                            AppColors.error.withValues(alpha: 0.5),
                           ],
                         ),
                       ],
@@ -144,33 +123,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       children: [
                         PopularDoctorCard(
-                          imagePath: AppImages.doctor1,
-                          name: 'Dr. Fillerup Grab',
-                          specialty: 'Medicine Specialist',
-                          rating: 4.5,
+                          imagePath: DummyDoctors.all[1].imagePath,
+                          name: DummyDoctors.all[1].name,
+                          specialty: DummyDoctors.all[1].specialty,
+                          rating: DummyDoctors.all[1].ratingPercentage,
                           onTap: () => context.go(
                             AppRoutes.doctorDetails,
-                            extra: _dummyDoctor,
+                            extra: DummyDoctors.all[1],
                           ),
                         ),
                         PopularDoctorCard(
-                          imagePath: AppImages.doctor2,
-                          name: 'Dr. Blessing',
-                          specialty: 'Dentist Specialist',
-                          rating: 4.0,
+                          imagePath: DummyDoctors.all[2].imagePath,
+                          name: DummyDoctors.all[2].name,
+                          specialty: DummyDoctors.all[2].specialty,
+                          rating: DummyDoctors.all[2].ratingPercentage,
                           onTap: () => context.go(
                             AppRoutes.doctorDetails,
-                            extra: _dummyDoctor,
+                            extra: DummyDoctors.all[2],
                           ),
                         ),
                         PopularDoctorCard(
-                          imagePath: AppImages.doctor3,
-                          name: 'Dr. Crick',
-                          specialty: 'Cardiologist',
-                          rating: 5.0,
+                          imagePath: DummyDoctors.all[0].imagePath,
+                          name: DummyDoctors.all[0].name,
+                          specialty: DummyDoctors.all[0].specialty,
+                          rating: DummyDoctors.all[0].ratingPercentage,
                           onTap: () => context.go(
                             AppRoutes.doctorDetails,
-                            extra: _dummyDoctor,
+                            extra: DummyDoctors.all[0],
                           ),
                         ),
                       ],
@@ -196,53 +175,53 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             context.go(
                               AppRoutes.doctorDetails,
-                              extra: _dummyDoctor,
+                              extra: DummyDoctors.all[0],
                             );
                           },
-                          imagePath: AppImages.doctor,
-                          name: 'Dr. Crick',
-                          rating: 3.7,
-                          hourlyRate: 25.00,
-                          isFavorite: false,
+                          imagePath: DummyDoctors.all[0].imagePath,
+                          name: DummyDoctors.all[0].name,
+                          rating: DummyDoctors.all[0].ratingPercentage,
+                          hourlyRate: DummyDoctors.all[0].hourlyRate,
+                          isFavorite: DummyDoctors.all[0].isFavorite,
                         ),
                         FeatureDoctorCard(
                           onTap: () {
                             context.go(
                               AppRoutes.doctorDetails,
-                              extra: _dummyDoctor,
+                              extra: DummyDoctors.all[2],
                             );
                           },
-                          imagePath: AppImages.doctor2,
-                          name: 'Dr. Strain',
-                          rating: 3.0,
-                          hourlyRate: 22.00,
-                          isFavorite: true,
+                          imagePath: DummyDoctors.all[2].imagePath,
+                          name: DummyDoctors.all[2].name,
+                          rating: DummyDoctors.all[2].ratingPercentage,
+                          hourlyRate: DummyDoctors.all[2].hourlyRate,
+                          isFavorite: DummyDoctors.all[2].isFavorite,
                         ),
                         FeatureDoctorCard(
                           onTap: () {
                             context.go(
                               AppRoutes.doctorDetails,
-                              extra: _dummyDoctor,
+                              extra: DummyDoctors.all[5],
                             );
                           },
-                          imagePath: AppImages.doctor3,
-                          name: 'Dr. Lachinet',
-                          rating: 2.9,
-                          hourlyRate: 29.00,
-                          isFavorite: false,
+                          imagePath: DummyDoctors.all[5].imagePath,
+                          name: DummyDoctors.all[5].name,
+                          rating: DummyDoctors.all[5].ratingPercentage,
+                          hourlyRate: DummyDoctors.all[5].hourlyRate,
+                          isFavorite: DummyDoctors.all[5].isFavorite,
                         ),
                         FeatureDoctorCard(
                           onTap: () {
                             context.go(
                               AppRoutes.doctorDetails,
-                              extra: _dummyDoctor,
+                              extra: DummyDoctors.all[1],
                             );
                           },
-                          imagePath: AppImages.doctor1,
-                          name: 'Dr. Blessing',
-                          rating: 4.8,
-                          hourlyRate: 35.00,
-                          isFavorite: true,
+                          imagePath: DummyDoctors.all[1].imagePath,
+                          name: DummyDoctors.all[1].name,
+                          rating: DummyDoctors.all[1].ratingPercentage,
+                          hourlyRate: DummyDoctors.all[1].hourlyRate,
+                          isFavorite: DummyDoctors.all[1].isFavorite,
                         ),
                       ],
                     ),
@@ -253,7 +232,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 

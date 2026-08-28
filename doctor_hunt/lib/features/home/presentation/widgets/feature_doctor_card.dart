@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import 'package:gap/gap.dart';
 
 class FeatureDoctorCard extends StatelessWidget {
@@ -29,7 +29,7 @@ class FeatureDoctorCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 120,
-        height: 120,
+        height: 130,
         margin: const EdgeInsets.only(right: 5),
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -80,7 +80,7 @@ class FeatureDoctorCard extends StatelessWidget {
                 ),
               ],
             ),
-            Gap(8),
+            Gap(5),
 
             // Circular Avatar
             Container(
@@ -113,10 +113,10 @@ class FeatureDoctorCard extends StatelessWidget {
               textAlign: TextAlign.center,
               text: TextSpan(
                 children: [
-                  TextSpan(text: '\$ ', style: context.medium14BlobGlow),
+                  TextSpan(text: '\$ ', style: context.medium12BlobGlow),
                   TextSpan(
-                    text: '${hourlyRate.toStringAsFixed(2)}/ hours',
-                    style: context.medium12,
+                    text: '${hourlyRate.toStringAsFixed(2)}/ hr',
+                    style: context.medium11,
                   ),
                 ],
               ),

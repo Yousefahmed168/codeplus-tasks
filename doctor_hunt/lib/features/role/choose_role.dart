@@ -1,10 +1,10 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/i18n/strings.g.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/core/utils/app_images.dart';
-import 'package:doctor_hunt/core/utils/extensions.dart';
-import 'package:doctor_hunt/core/widgets/widgets.dart';
-import 'package:doctor_hunt/core/routes/app_routes.dart';
+import '../../core/theme/colors.dart';
+import '../../i18n/strings.g.dart';
+import '../../core/theme/style_atoms.dart';
+import '../../core/utils/app_images.dart';
+import '../../core/utils/extensions.dart';
+import '../../core/widgets/widgets.dart';
+import '../../core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

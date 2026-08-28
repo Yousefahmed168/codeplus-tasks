@@ -1,9 +1,12 @@
-import 'package:doctor_hunt/core/constants/assets.dart';
-import 'package:doctor_hunt/core/routes/app_routes.dart';
-import 'package:doctor_hunt/core/theme/colors.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
-import 'package:doctor_hunt/features/doctors/models/doctor_model.dart';
-import 'package:doctor_hunt/features/doctors/presentation/widgets/doctor_card.dart';
+import '../../../../core/widgets/custom_text_form_field.dart';
+
+import '../../../../core/data/dummy_doctors.dart';
+import '../../../../core/routes/app_routes.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
+import '../../../doctors/models/doctor_model.dart';
+import '../../../doctors/presentation/widgets/doctor_card.dart';
+import '../../../../core/widgets/app_background.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -28,66 +31,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
     'Dermatologist',
   ];
 
-  final List<Doctor> _allDoctors = const [
-    Doctor(
-      name: 'Dr. Shruti Kedia',
-      specialty: 'Tooths Dentist',
-      yearsExperience: 7,
-      ratingPercentage: 87,
-      patientStories: 69,
-      nextAvailableTime: '10:00 AM',
-      imagePath: Assets.resourceImagesDoctor1,
-      isFavorite: true,
-    ),
-    Doctor(
-      name: 'Dr. Watamaniuk',
-      specialty: 'Tooths Dentist',
-      yearsExperience: 9,
-      ratingPercentage: 74,
-      patientStories: 78,
-      nextAvailableTime: '12:00 AM',
-      imagePath: Assets.resourceImagesDoctor2,
-    ),
-    Doctor(
-      name: 'Dr. Crownover',
-      specialty: 'Tooths Dentist',
-      yearsExperience: 5,
-      ratingPercentage: 59,
-      patientStories: 86,
-      nextAvailableTime: '11:00 AM',
-      imagePath: Assets.resourceImagesDoctor3,
-      isFavorite: true,
-    ),
-    Doctor(
-      name: 'Dr. Balestra',
-      specialty: 'Tooths Dentist',
-      yearsExperience: 6,
-      ratingPercentage: 72,
-      patientStories: 53,
-      nextAvailableTime: '2:00 PM',
-      imagePath: Assets.resourceImagesDoctor,
-    ),
-    Doctor(
-      name: 'Dr. Pediatrician',
-      specialty: 'Specialist Cardiologist',
-      yearsExperience: 10,
-      ratingPercentage: 95,
-      patientStories: 120,
-      nextAvailableTime: '9:00 AM',
-      imagePath: Assets.resourceImagesDoctor1,
-      hourlyRate: 28.00,
-    ),
-    Doctor(
-      name: 'Dr. Fillerup Grab',
-      specialty: 'Medicine Specialist',
-      yearsExperience: 12,
-      ratingPercentage: 91,
-      patientStories: 200,
-      nextAvailableTime: '3:00 PM',
-      imagePath: Assets.resourceImagesDoctor2,
-      hourlyRate: 35.00,
-    ),
-  ];
+  List<Doctor> get _allDoctors => DummyDoctors.all;
 
   @override
   void initState() {
@@ -117,95 +61,80 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Gap(16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go(AppRoutes.home);
-                      }
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 20,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  Gap(12),
-                  Text(t.findDoctors.title, style: context.bold20.textPrimary),
-                ],
-              ),
-            ),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border, width: 1.5),
-                ),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.search_rounded,
-                      size: 22,
-                      color: AppColors.textHint,
-                    ),
-                    Gap(10),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        focusNode: _focusNode,
-                        onChanged: (v) => setState(() => _searchQuery = v),
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                          hintText: t.findDoctors.searchHintExtra,
-                          hintStyle: context.regular14.textHint,
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                        style: context.regular14.textPrimary,
+                    GestureDetector(
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go(AppRoutes.home);
+                        }
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                    if (_searchQuery.isNotEmpty)
-                      GestureDetector(
-                        onTap: () {
-                          _searchController.clear();
-                          setState(() => _searchQuery = '');
-                        },
-                        child: const Icon(
-                          Icons.close_rounded,
-                          size: 20,
-                          color: AppColors.textHint,
-                        ),
-                      ),
+                    Gap(12),
+                    Text(
+                      t.findDoctors.title,
+                      style: context.bold20.textPrimary,
+                    ),
                   ],
                 ),
               ),
-            ),
-            Gap(24),
-            Expanded(
-              child: _searchQuery.isEmpty
-                  ? _buildRecentSearches()
-                  : _buildSearchResults(),
-            ),
-          ],
+              Gap(20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextFormField(
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                          },
+                          child: Icon(
+                            Icons.close_rounded,
+                            color: AppColors.textSecondary,
+                            size: 20,
+                          ),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.search_rounded,
+                          color: AppColors.success,
+                          size: 16,
+                        ),
+                        controller: _searchController,
+                        onChange: (v) => setState(() => _searchQuery = v),
+                        textInputAction: TextInputAction.search,
+                        hintText: t.home.searchHint,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Gap(24),
+              Expanded(
+                child: _searchQuery.isEmpty
+                    ? _buildRecentSearches()
+                    : _buildSearchResults(),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/theme/colors.dart';
+import '../../../../core/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
@@ -77,7 +77,7 @@ class _NavBarItem extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     AppColors.primary,
-                    AppColors.primary.withOpacity(0.7),
+                    AppColors.primary.withValues(alpha: 0.7),
                   ],
                 ),
               ),

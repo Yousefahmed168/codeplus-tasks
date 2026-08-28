@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:doctor_hunt/core/theme/style_atoms.dart';
+import '../theme/style_atoms.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
@@ -18,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.textAlign = TextAlign.start,
     this.maxLines,
+    this.borderEnabled = false,
   });
   final String? hintText;
   final TextInputType? keyboardType;
@@ -32,6 +33,8 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextAlign textAlign;
   final int? maxLines;
+
+  final bool borderEnabled;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
