@@ -46,3 +46,15 @@ app.*.map.json
 
 
 .freebuff/
+firebase.json
+firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Environment variables - never commit real secrets
+.env
+.env.example
+
+# Firebase Admin SDK service account key
+scripts/serviceAccountKey.json
+

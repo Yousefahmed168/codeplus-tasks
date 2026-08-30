@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../models/doctor_model.dart';
+import '../../models/doctor.dart';
 
 class FavoriteDoctorGridCard extends StatelessWidget {
   const FavoriteDoctorGridCard({

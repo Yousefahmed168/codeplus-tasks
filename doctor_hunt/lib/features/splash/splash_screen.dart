@@ -1,11 +1,13 @@
-import '../../core/utils/app_images.dart';
-import '../../i18n/strings.g.dart';
-import '../../core/widgets/widgets.dart';
-import '../../core/theme/style_atoms.dart';
-import '../../core/routes/app_routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
+import '../../core/theme/style_atoms.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/routes/app_routes.dart';
+import '../../core/services/auth_service.dart';
+import '../../core/utils/app_images.dart';
+import '../../core/widgets/widgets.dart';
+import '../../i18n/strings.g.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,12 +23,27 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToNext();
   }
 
-  void _navigateToNext() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
+  Future<void> _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+
+    final currentUser = AuthService.instance.currentUser;
+    if (currentUser == null) {
+      // Not logged in → go to role selection (which leads to login/register)
+      context.go(AppRoutes.role);
+    } else {
+      // Logged in → check role
+      final role = await AuthService.instance.getUserRole(currentUser.uid);
+      if (!mounted) return;
+
+      if (role == null) {
+        context.go(AppRoutes.role);
+      } else if (role.name == 'doctor') {
+        context.go(AppRoutes.doctorDashboard);
+      } else {
         context.go(AppRoutes.home);
       }
-    });
+    }
   }
 
   @override

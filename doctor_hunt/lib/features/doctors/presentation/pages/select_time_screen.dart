@@ -9,7 +9,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/widgets/main_button.dart';
-import '../../models/doctor_model.dart';
+import '../../models/doctor.dart';
 import '../widgets/doctor_profile_header.dart';
 import '../../../../i18n/strings.g.dart';
 

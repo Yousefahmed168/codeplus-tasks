@@ -13,12 +13,26 @@
     "bookNow": "Book Now",
     "nextAvailable": "Next Available",
     "search": "Search",
+    "phone": "Phone",
+    "confirmPassword": "Confirm Password",
+    "logout": "Logout",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "undo": "Undo",
+    "notice": "Notice",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "errorGeneric": "An error occurred. Please try again",
     "validation": {
       "enterEmail": "Enter your email",
       "validEmail": "Enter a valid email",
       "enterPassword": "Enter your password",
       "minPassword": "Min 6 characters",
-      "enterName": "Enter your name"
+      "enterName": "Enter your name",
+      "enterPhone": "Enter your phone number",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "enterConfirmPassword": "Please confirm your password",
+      "selectRole": "Please select a role"
     }
   },
   "onboarding": {
@@ -45,9 +59,9 @@
         "title": "Patient",
         "description": "Find doctors, book appointments,\nand manage your medical records."
       },
-      "admin": {
-        "title": "Admin",
-        "description": "Manage doctors, appointments,\nusers, and the platform."
+      "doctor": {
+        "title": "Doctor",
+        "description": "Manage appointments, patients,\nand your professional profile."
       }
     },
     "errorNoRole": "Please select a role"
@@ -55,15 +69,20 @@
   "auth": {
     "login": {
       "title": "Welcome back",
-      "subtitle": "You can search course, apply course and find scholarship for abroad studies",
+      "subtitle": "You can search doctors, book appointments and manage your health",
       "forgotPassword": "Forgot password",
+      "forgotPasswordTitle": "Reset Password",
+      "forgotPasswordSubtitle": "Enter your email to receive a password reset link",
+      "forgotPasswordSend": "Send Reset Link",
+      "forgotPasswordSuccess": "Reset link sent! Check your email",
       "noAccount": "Don't have an account? ",
       "joinUs": "Join us",
-      "submitBtn": "Login"
+      "submitBtn": "Login",
+      "loggingIn": "Logging in..."
     },
     "register": {
       "title": "Join us to start searching",
-      "subtitle": "You can search course, apply course and find scholarship for abroad studies",
+      "subtitle": "You can search doctors, book appointments and manage your health",
       "termsPrefix": "I agree with the ",
       "terms": "Terms of Service",
       "termsAnd": " and ",
@@ -71,7 +90,12 @@
       "acceptTermsError": "Please accept the terms",
       "haveAccount": "Have an account? ",
       "loginLink": "Log in",
-      "submitBtn": "Sign up"
+      "submitBtn": "Sign up",
+      "specialtyHint": "Specialty (e.g. Cardiology)",
+      "bioHint": "Short bio about yourself",
+      "experienceHint": "Years of experience",
+      "creatingAccount": "Creating account...",
+      "doctorNameHint": "Dr. Name"
     }
   },
   "home": {
@@ -83,7 +107,14 @@
     "hiHandwerker": "Hi Handwerker!",
     "findYourDoctor": "Find Your Doctor",
     "searchHint": "Search.....",
-    "live": "LIVE"
+    "live": "LIVE",
+    "doctorsFromFirestore": "Our Doctors",
+    "seededSuccess": "Seeded doctors to database!",
+    "mapBookingsPlaceholder": "Map / Bookings Screen",
+    "chatPlaceholder": "Chat Screen",
+    "failedToLoadDoctors": "Failed to load doctors",
+    "noDoctorsAvailable": "No doctors available",
+    "noDoctorsAvailableYet": "No doctors available yet"
   },
   "findDoctors": {
     "title": "Find Doctors",
@@ -94,19 +125,29 @@
     "tryDifferentSearchTerm": "Try a different search term",
     "yearsExperience": "$count Years experience",
     "patientStories": "$count Patient Stories",
-    "timeTomorrow": "$time tomorrow"
+    "timeTomorrow": "$time tomorrow",
+    "tenYearsExperience": "10 years experience"
   },
   "doctorDetails": {
     "title": "Doctor Details",
     "specialist": "Specialist Cardiologist",
-    "perHour": "$ $price/hr",
-    "running": "Runing",
+    "perHour": "$price/hr",
+    "running": "Running",
     "ongoing": "Ongoing",
     "patient": "Patient",
+    "patients": "Patients",
     "services": "Services",
     "service1": "Patient care should be the number one priority.",
     "service2": "If you run your practice you know how frustrating.",
-    "service3": "That's why some of appointment reminder system."
+    "service3": "That's why some of appointment reminder system.",
+    "doctorInfo": "Doctor Info",
+    "removedFromFavorites": "$doctorName removed from favorites"
+  },
+  "favorite": {
+    "pleaseLogin": "Please log in to view favorites",
+    "noFavoriteDoctors": "No favorite doctors yet",
+    "tapHeartHint": "Tap the heart icon on any doctor to add them here",
+    "doctorRemoved": "$doctorName removed from favorites"
   },
   "appointment": {
     "successTitle": "Thank You !",
@@ -114,6 +155,23 @@
     "successMessage": "You booked an appointment with $doctorName on $date, at $time",
     "doneBtn": "Done",
     "editBtn": "Edit your appointment"
+  },
+  "updateProfile": {
+    "title": "Complete Registration",
+    "bioLabel": "Bio",
+    "bioHint": "Enter general medical information like your academic education and previous experiences...",
+    "clinicAddressLabel": "Clinic Address",
+    "clinicAddressHint": "123 Main St, Downtown, City",
+    "workHoursFrom": "Work Hours From",
+    "to": "To",
+    "phone1Label": "Phone Number 1",
+    "phone2Label": "Phone Number 2 (Optional)",
+    "phoneHint": "+20xxxxxxxxxx",
+    "selectImageError": "Please select a profile image",
+    "completeRegistration": "Complete Registration",
+    "required": "Required",
+    "specialization": "Specialization",
+    "chooseSpecialization": "Choose specialization"
   },
   "selectTime": {
     "title": "Select Time",
@@ -127,5 +185,21 @@
     "nextAvailability": "Next availability on Wed, 24 Feb",
     "or": "OR",
     "contactClinic": "Contact Clinic"
+  },
+  "dashboard": {
+    "title": "Doctor Dashboard",
+    "profile": "My Profile",
+    "appointments": "Appointments",
+    "myPatients": "My Patients",
+    "availability": "Availability",
+    "settings": "Settings",
+    "updateProfile": "Update Profile",
+    "updateProfileSuccess": "Profile updated successfully",
+    "totalPatients": "Total Patients",
+    "completedConsultations": "Completed Consultations",
+    "rating": "Rating",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "doctorInfo": "Doctor Info"
   }
 }

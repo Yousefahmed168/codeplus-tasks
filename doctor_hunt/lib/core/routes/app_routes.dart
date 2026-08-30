@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
-import '../../features/doctors/models/doctor_model.dart';
+import '../../features/dashboard/presentation/pages/doctor_dashboard_screen.dart';
+import '../../features/doctors/models/doctor.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
 import '../../features/home/presentation/pages/main_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/role/choose_role.dart';
 import '../../features/search/presentation/pages/find_doctor.dart';
 import '../../features/splash/splash_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/doctors/presentation/pages/select_time_screen.dart';
-
+import '../../features/auth/presentation/pages/update_doctor_profile_screen.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
 
 class AppRoutes {
   AppRoutes._();
-
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String role = '/role';
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
+  static const String doctorDashboard = '/doctor-dashboard';
   static const String doctorDetails = '/doctor-details';
   static const String search = '/search';
   static const String selectTime = '/select-time';
+  static const String updateDoctorProfile = '/update-doctor-profile';
 }
-
-// Route tree
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -55,13 +56,23 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.register,
-      pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const RegisterScreen()),
+      pageBuilder: (context, state) {
+        final role = state.extra as String?;
+        return _slidePage(
+          key: state.pageKey,
+          child: RegisterScreen(role: role),
+        );
+      },
     ),
     GoRoute(
       path: AppRoutes.home,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const MainScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.doctorDashboard,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const DoctorDashboardScreen()),
     ),
     GoRoute(
       path: AppRoutes.doctorDetails,
@@ -88,10 +99,18 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: AppRoutes.updateDoctorProfile,
+      pageBuilder: (context, state) => _slidePage(
+        key: state.pageKey,
+        child: BlocProvider(
+          create: (_) => AuthCubit()..loadCurrentProfile(),
+          child: const UpdateDoctorProfileScreen(),
+        ),
+      ),
+    ),
   ],
 );
-
-
 
 CustomTransitionPage<void> _slidePage({
   required LocalKey key,

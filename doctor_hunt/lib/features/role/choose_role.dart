@@ -2,7 +2,6 @@ import '../../core/theme/colors.dart';
 import '../../i18n/strings.g.dart';
 import '../../core/theme/style_atoms.dart';
 import '../../core/utils/app_images.dart';
-import '../../core/utils/extensions.dart';
 import '../../core/widgets/widgets.dart';
 import '../../core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
-enum AppRole { patient, admin }
+enum AppRole { patient, doctor }
 
 class ChooseRoleScreen extends StatefulWidget {
   const ChooseRoleScreen({super.key});
@@ -24,7 +23,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
 
   void _onContinue() {
     if (_selectedRole == null) return;
-    context.go(AppRoutes.login);
+    context.go(AppRoutes.register, extra: _selectedRole!.name);
   }
 
   @override
@@ -67,41 +66,29 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
               ),
               const Gap(16),
               _RoleCard(
-                role: AppRole.admin,
-                selected: _selectedRole == AppRole.admin,
-                icon: Icons.admin_panel_settings_outlined,
-                title: t.roleSelection.roles.admin.title,
-                description: t.roleSelection.roles.admin.description,
-                onTap: () => setState(() => _selectedRole = AppRole.admin),
+                role: AppRole.doctor,
+                selected: _selectedRole == AppRole.doctor,
+                icon: Icons.medical_services_outlined,
+                title: t.roleSelection.roles.doctor.title,
+                description: t.roleSelection.roles.doctor.description,
+                onTap: () => setState(() => _selectedRole = AppRole.doctor),
               ),
 
               const Spacer(),
 
               //  Continue button
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: _selectedRole != null
-                      ? _onContinue
-                      : () => context.showErrorSnackBar(
-                          t.roleSelection.errorNoRole,
-                        ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    disabledBackgroundColor: AppColors.primary.withValues(
-                      alpha: 0.9,
-                    ),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  child: Text(
-                    t.common.continueBtn,
-                    style: context.bold16.textOnPrimary,
-                  ),
-                ),
+              MainButton(
+                text: t.common.continueBtn,
+                onPressed: _selectedRole != null
+                    ? _onContinue
+                    : () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(t.roleSelection.errorNoRole),
+                            backgroundColor: AppColors.error,
+                          ),
+                        );
+                      },
               ),
               const Gap(32),
             ],

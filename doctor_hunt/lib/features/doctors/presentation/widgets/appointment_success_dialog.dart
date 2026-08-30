@@ -39,11 +39,11 @@ class AppointmentSuccessDialog extends StatelessWidget {
             Container(
               width: 120,
               height: 120,
-              decoration: const BoxDecoration(
-                color: Color(0xFFE8F8F2),
+              decoration: BoxDecoration(
+                color: AppColors.background,
                 shape: BoxShape.circle,
               ),
-              child: const Center(
+              child: Center(
                 child: Icon(
                   Icons.thumb_up_rounded,
                   color: AppColors.success,

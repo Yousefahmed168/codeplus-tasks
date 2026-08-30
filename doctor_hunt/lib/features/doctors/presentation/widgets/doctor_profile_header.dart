@@ -43,12 +43,29 @@ class DoctorProfileHeader extends StatelessWidget {
           // Doctor photo
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              imagePath,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-            ),
+            child: imagePath.startsWith('http')
+                ? Image.network(
+                    imagePath,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.person,
+                      size: 80,
+                      color: AppColors.primary,
+                    ),
+                  )
+                : Image.asset(
+                    imagePath,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.person,
+                      size: 80,
+                      color: AppColors.primary,
+                    ),
+                  ),
           ),
           const Gap(12),
 

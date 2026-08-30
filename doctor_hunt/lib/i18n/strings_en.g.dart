@@ -47,8 +47,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$home$en home = Translations$home$en._(_root);
 	late final Translations$findDoctors$en findDoctors = Translations$findDoctors$en._(_root);
 	late final Translations$doctorDetails$en doctorDetails = Translations$doctorDetails$en._(_root);
+	late final Translations$favorite$en favorite = Translations$favorite$en._(_root);
 	late final Translations$appointment$en appointment = Translations$appointment$en._(_root);
+	late final Translations$updateProfile$en updateProfile = Translations$updateProfile$en._(_root);
 	late final Translations$selectTime$en selectTime = Translations$selectTime$en._(_root);
+	late final Translations$dashboard$en dashboard = Translations$dashboard$en._(_root);
 }
 
 // Path: common
@@ -97,6 +100,36 @@ class Translations$common$en {
 
 	/// en: 'Search'
 	String get search => 'Search';
+
+	/// en: 'Phone'
+	String get phone => 'Phone';
+
+	/// en: 'Confirm Password'
+	String get confirmPassword => 'Confirm Password';
+
+	/// en: 'Logout'
+	String get logout => 'Logout';
+
+	/// en: 'OK'
+	String get ok => 'OK';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
+
+	/// en: 'Undo'
+	String get undo => 'Undo';
+
+	/// en: 'Notice'
+	String get notice => 'Notice';
+
+	/// en: 'Confirm'
+	String get confirm => 'Confirm';
+
+	/// en: 'Loading...'
+	String get loading => 'Loading...';
+
+	/// en: 'An error occurred. Please try again'
+	String get errorGeneric => 'An error occurred. Please try again';
 
 	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
 }
@@ -180,6 +213,27 @@ class Translations$home$en {
 
 	/// en: 'LIVE'
 	String get live => 'LIVE';
+
+	/// en: 'Our Doctors'
+	String get doctorsFromFirestore => 'Our Doctors';
+
+	/// en: 'Seeded doctors to database!'
+	String get seededSuccess => 'Seeded doctors to database!';
+
+	/// en: 'Map / Bookings Screen'
+	String get mapBookingsPlaceholder => 'Map / Bookings Screen';
+
+	/// en: 'Chat Screen'
+	String get chatPlaceholder => 'Chat Screen';
+
+	/// en: 'Failed to load doctors'
+	String get failedToLoadDoctors => 'Failed to load doctors';
+
+	/// en: 'No doctors available'
+	String get noDoctorsAvailable => 'No doctors available';
+
+	/// en: 'No doctors available yet'
+	String get noDoctorsAvailableYet => 'No doctors available yet';
 }
 
 // Path: findDoctors
@@ -216,6 +270,9 @@ class Translations$findDoctors$en {
 
 	/// en: '$time tomorrow'
 	String timeTomorrow({required Object time}) => '${time} tomorrow';
+
+	/// en: '10 years experience'
+	String get tenYearsExperience => '10 years experience';
 }
 
 // Path: doctorDetails
@@ -232,17 +289,20 @@ class Translations$doctorDetails$en {
 	/// en: 'Specialist Cardiologist'
 	String get specialist => 'Specialist Cardiologist';
 
-	/// en: '$ $price/hr'
-	String perHour({required Object price}) => '\$ ${price}/hr';
+	/// en: '$price/hr'
+	String perHour({required Object price}) => '${price}/hr';
 
-	/// en: 'Runing'
-	String get running => 'Runing';
+	/// en: 'Running'
+	String get running => 'Running';
 
 	/// en: 'Ongoing'
 	String get ongoing => 'Ongoing';
 
 	/// en: 'Patient'
 	String get patient => 'Patient';
+
+	/// en: 'Patients'
+	String get patients => 'Patients';
 
 	/// en: 'Services'
 	String get services => 'Services';
@@ -255,6 +315,33 @@ class Translations$doctorDetails$en {
 
 	/// en: 'That's why some of appointment reminder system.'
 	String get service3 => 'That\'s why some of appointment reminder system.';
+
+	/// en: 'Doctor Info'
+	String get doctorInfo => 'Doctor Info';
+
+	/// en: '$doctorName removed from favorites'
+	String removedFromFavorites({required Object doctorName}) => '${doctorName} removed from favorites';
+}
+
+// Path: favorite
+class Translations$favorite$en {
+	Translations$favorite$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Please log in to view favorites'
+	String get pleaseLogin => 'Please log in to view favorites';
+
+	/// en: 'No favorite doctors yet'
+	String get noFavoriteDoctors => 'No favorite doctors yet';
+
+	/// en: 'Tap the heart icon on any doctor to add them here'
+	String get tapHeartHint => 'Tap the heart icon on any doctor to add them here';
+
+	/// en: '$doctorName removed from favorites'
+	String doctorRemoved({required Object doctorName}) => '${doctorName} removed from favorites';
 }
 
 // Path: appointment
@@ -279,6 +366,60 @@ class Translations$appointment$en {
 
 	/// en: 'Edit your appointment'
 	String get editBtn => 'Edit your appointment';
+}
+
+// Path: updateProfile
+class Translations$updateProfile$en {
+	Translations$updateProfile$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Complete Registration'
+	String get title => 'Complete Registration';
+
+	/// en: 'Bio'
+	String get bioLabel => 'Bio';
+
+	/// en: 'Enter general medical information like your academic education and previous experiences...'
+	String get bioHint => 'Enter general medical information like your academic education and previous experiences...';
+
+	/// en: 'Clinic Address'
+	String get clinicAddressLabel => 'Clinic Address';
+
+	/// en: '123 Main St, Downtown, City'
+	String get clinicAddressHint => '123 Main St, Downtown, City';
+
+	/// en: 'Work Hours From'
+	String get workHoursFrom => 'Work Hours From';
+
+	/// en: 'To'
+	String get to => 'To';
+
+	/// en: 'Phone Number 1'
+	String get phone1Label => 'Phone Number 1';
+
+	/// en: 'Phone Number 2 (Optional)'
+	String get phone2Label => 'Phone Number 2 (Optional)';
+
+	/// en: '+20xxxxxxxxxx'
+	String get phoneHint => '+20xxxxxxxxxx';
+
+	/// en: 'Please select a profile image'
+	String get selectImageError => 'Please select a profile image';
+
+	/// en: 'Complete Registration'
+	String get completeRegistration => 'Complete Registration';
+
+	/// en: 'Required'
+	String get required => 'Required';
+
+	/// en: 'Specialization'
+	String get specialization => 'Specialization';
+
+	/// en: 'Choose specialization'
+	String get chooseSpecialization => 'Choose specialization';
 }
 
 // Path: selectTime
@@ -323,6 +464,57 @@ class Translations$selectTime$en {
 	String get contactClinic => 'Contact Clinic';
 }
 
+// Path: dashboard
+class Translations$dashboard$en {
+	Translations$dashboard$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Doctor Dashboard'
+	String get title => 'Doctor Dashboard';
+
+	/// en: 'My Profile'
+	String get profile => 'My Profile';
+
+	/// en: 'Appointments'
+	String get appointments => 'Appointments';
+
+	/// en: 'My Patients'
+	String get myPatients => 'My Patients';
+
+	/// en: 'Availability'
+	String get availability => 'Availability';
+
+	/// en: 'Settings'
+	String get settings => 'Settings';
+
+	/// en: 'Update Profile'
+	String get updateProfile => 'Update Profile';
+
+	/// en: 'Profile updated successfully'
+	String get updateProfileSuccess => 'Profile updated successfully';
+
+	/// en: 'Total Patients'
+	String get totalPatients => 'Total Patients';
+
+	/// en: 'Completed Consultations'
+	String get completedConsultations => 'Completed Consultations';
+
+	/// en: 'Rating'
+	String get rating => 'Rating';
+
+	/// en: 'Available'
+	String get available => 'Available';
+
+	/// en: 'Unavailable'
+	String get unavailable => 'Unavailable';
+
+	/// en: 'Doctor Info'
+	String get doctorInfo => 'Doctor Info';
+}
+
 // Path: common.validation
 class Translations$common$validation$en {
 	Translations$common$validation$en._(this._root);
@@ -345,6 +537,18 @@ class Translations$common$validation$en {
 
 	/// en: 'Enter your name'
 	String get enterName => 'Enter your name';
+
+	/// en: 'Enter your phone number'
+	String get enterPhone => 'Enter your phone number';
+
+	/// en: 'Passwords do not match'
+	String get passwordsDoNotMatch => 'Passwords do not match';
+
+	/// en: 'Please confirm your password'
+	String get enterConfirmPassword => 'Please confirm your password';
+
+	/// en: 'Please select a role'
+	String get selectRole => 'Please select a role';
 }
 
 // Path: onboarding.pages.0
@@ -400,7 +604,7 @@ class Translations$roleSelection$roles$en {
 
 	// Translations
 	late final Translations$roleSelection$roles$patient$en patient = Translations$roleSelection$roles$patient$en._(_root);
-	late final Translations$roleSelection$roles$admin$en admin = Translations$roleSelection$roles$admin$en._(_root);
+	late final Translations$roleSelection$roles$doctor$en doctor = Translations$roleSelection$roles$doctor$en._(_root);
 }
 
 // Path: auth.login
@@ -414,11 +618,23 @@ class Translations$auth$login$en {
 	/// en: 'Welcome back'
 	String get title => 'Welcome back';
 
-	/// en: 'You can search course, apply course and find scholarship for abroad studies'
-	String get subtitle => 'You can search course, apply course and find scholarship for abroad studies';
+	/// en: 'You can search doctors, book appointments and manage your health'
+	String get subtitle => 'You can search doctors, book appointments and manage your health';
 
 	/// en: 'Forgot password'
 	String get forgotPassword => 'Forgot password';
+
+	/// en: 'Reset Password'
+	String get forgotPasswordTitle => 'Reset Password';
+
+	/// en: 'Enter your email to receive a password reset link'
+	String get forgotPasswordSubtitle => 'Enter your email to receive a password reset link';
+
+	/// en: 'Send Reset Link'
+	String get forgotPasswordSend => 'Send Reset Link';
+
+	/// en: 'Reset link sent! Check your email'
+	String get forgotPasswordSuccess => 'Reset link sent! Check your email';
 
 	/// en: 'Don't have an account? '
 	String get noAccount => 'Don\'t have an account? ';
@@ -428,6 +644,9 @@ class Translations$auth$login$en {
 
 	/// en: 'Login'
 	String get submitBtn => 'Login';
+
+	/// en: 'Logging in...'
+	String get loggingIn => 'Logging in...';
 }
 
 // Path: auth.register
@@ -441,8 +660,8 @@ class Translations$auth$register$en {
 	/// en: 'Join us to start searching'
 	String get title => 'Join us to start searching';
 
-	/// en: 'You can search course, apply course and find scholarship for abroad studies'
-	String get subtitle => 'You can search course, apply course and find scholarship for abroad studies';
+	/// en: 'You can search doctors, book appointments and manage your health'
+	String get subtitle => 'You can search doctors, book appointments and manage your health';
 
 	/// en: 'I agree with the '
 	String get termsPrefix => 'I agree with the ';
@@ -467,6 +686,21 @@ class Translations$auth$register$en {
 
 	/// en: 'Sign up'
 	String get submitBtn => 'Sign up';
+
+	/// en: 'Specialty (e.g. Cardiology)'
+	String get specialtyHint => 'Specialty (e.g. Cardiology)';
+
+	/// en: 'Short bio about yourself'
+	String get bioHint => 'Short bio about yourself';
+
+	/// en: 'Years of experience'
+	String get experienceHint => 'Years of experience';
+
+	/// en: 'Creating account...'
+	String get creatingAccount => 'Creating account...';
+
+	/// en: 'Dr. Name'
+	String get doctorNameHint => 'Dr. Name';
 }
 
 // Path: roleSelection.roles.patient
@@ -484,19 +718,19 @@ class Translations$roleSelection$roles$patient$en {
 	String get description => 'Find doctors, book appointments,\nand manage your medical records.';
 }
 
-// Path: roleSelection.roles.admin
-class Translations$roleSelection$roles$admin$en {
-	Translations$roleSelection$roles$admin$en._(this._root);
+// Path: roleSelection.roles.doctor
+class Translations$roleSelection$roles$doctor$en {
+	Translations$roleSelection$roles$doctor$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Admin'
-	String get title => 'Admin';
+	/// en: 'Doctor'
+	String get title => 'Doctor';
 
-	/// en: 'Manage doctors, appointments, users, and the platform.'
-	String get description => 'Manage doctors, appointments,\nusers, and the platform.';
+	/// en: 'Manage appointments, patients, and your professional profile.'
+	String get description => 'Manage appointments, patients,\nand your professional profile.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -520,11 +754,25 @@ extension on Translations {
 			'common.bookNow' => 'Book Now',
 			'common.nextAvailable' => 'Next Available',
 			'common.search' => 'Search',
+			'common.phone' => 'Phone',
+			'common.confirmPassword' => 'Confirm Password',
+			'common.logout' => 'Logout',
+			'common.ok' => 'OK',
+			'common.cancel' => 'Cancel',
+			'common.undo' => 'Undo',
+			'common.notice' => 'Notice',
+			'common.confirm' => 'Confirm',
+			'common.loading' => 'Loading...',
+			'common.errorGeneric' => 'An error occurred. Please try again',
 			'common.validation.enterEmail' => 'Enter your email',
 			'common.validation.validEmail' => 'Enter a valid email',
 			'common.validation.enterPassword' => 'Enter your password',
 			'common.validation.minPassword' => 'Min 6 characters',
 			'common.validation.enterName' => 'Enter your name',
+			'common.validation.enterPhone' => 'Enter your phone number',
+			'common.validation.passwordsDoNotMatch' => 'Passwords do not match',
+			'common.validation.enterConfirmPassword' => 'Please confirm your password',
+			'common.validation.selectRole' => 'Please select a role',
 			'onboarding.pages.0.title' => 'Find Trusted Doctors',
 			'onboarding.pages.0.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.',
 			'onboarding.pages.1.title' => 'Choose Best Doctors',
@@ -535,17 +783,22 @@ extension on Translations {
 			'roleSelection.subtitle' => 'The selected role determines the experience and available features.',
 			'roleSelection.roles.patient.title' => 'Patient',
 			'roleSelection.roles.patient.description' => 'Find doctors, book appointments,\nand manage your medical records.',
-			'roleSelection.roles.admin.title' => 'Admin',
-			'roleSelection.roles.admin.description' => 'Manage doctors, appointments,\nusers, and the platform.',
+			'roleSelection.roles.doctor.title' => 'Doctor',
+			'roleSelection.roles.doctor.description' => 'Manage appointments, patients,\nand your professional profile.',
 			'roleSelection.errorNoRole' => 'Please select a role',
 			'auth.login.title' => 'Welcome back',
-			'auth.login.subtitle' => 'You can search course, apply course and find scholarship for abroad studies',
+			'auth.login.subtitle' => 'You can search doctors, book appointments and manage your health',
 			'auth.login.forgotPassword' => 'Forgot password',
+			'auth.login.forgotPasswordTitle' => 'Reset Password',
+			'auth.login.forgotPasswordSubtitle' => 'Enter your email to receive a password reset link',
+			'auth.login.forgotPasswordSend' => 'Send Reset Link',
+			'auth.login.forgotPasswordSuccess' => 'Reset link sent! Check your email',
 			'auth.login.noAccount' => 'Don\'t have an account? ',
 			'auth.login.joinUs' => 'Join us',
 			'auth.login.submitBtn' => 'Login',
+			'auth.login.loggingIn' => 'Logging in...',
 			'auth.register.title' => 'Join us to start searching',
-			'auth.register.subtitle' => 'You can search course, apply course and find scholarship for abroad studies',
+			'auth.register.subtitle' => 'You can search doctors, book appointments and manage your health',
 			'auth.register.termsPrefix' => 'I agree with the ',
 			'auth.register.terms' => 'Terms of Service',
 			'auth.register.termsAnd' => ' and ',
@@ -554,6 +807,11 @@ extension on Translations {
 			'auth.register.haveAccount' => 'Have an account? ',
 			'auth.register.loginLink' => 'Log in',
 			'auth.register.submitBtn' => 'Sign up',
+			'auth.register.specialtyHint' => 'Specialty (e.g. Cardiology)',
+			'auth.register.bioHint' => 'Short bio about yourself',
+			'auth.register.experienceHint' => 'Years of experience',
+			'auth.register.creatingAccount' => 'Creating account...',
+			'auth.register.doctorNameHint' => 'Dr. Name',
 			'home.liveDoctors' => 'Live Doctors',
 			'home.popularDoctor' => 'Popular Doctor',
 			'home.featureDoctor' => 'Feature Doctor',
@@ -563,6 +821,13 @@ extension on Translations {
 			'home.findYourDoctor' => 'Find Your Doctor',
 			'home.searchHint' => 'Search.....',
 			'home.live' => 'LIVE',
+			'home.doctorsFromFirestore' => 'Our Doctors',
+			'home.seededSuccess' => 'Seeded doctors to database!',
+			'home.mapBookingsPlaceholder' => 'Map / Bookings Screen',
+			'home.chatPlaceholder' => 'Chat Screen',
+			'home.failedToLoadDoctors' => 'Failed to load doctors',
+			'home.noDoctorsAvailable' => 'No doctors available',
+			'home.noDoctorsAvailableYet' => 'No doctors available yet',
 			'findDoctors.title' => 'Find Doctors',
 			'findDoctors.searchHint' => 'Dentist',
 			'findDoctors.searchHintExtra' => 'Search doctors, specialties...',
@@ -572,21 +837,44 @@ extension on Translations {
 			'findDoctors.yearsExperience' => ({required Object count}) => '${count} Years experience',
 			'findDoctors.patientStories' => ({required Object count}) => '${count} Patient Stories',
 			'findDoctors.timeTomorrow' => ({required Object time}) => '${time} tomorrow',
+			'findDoctors.tenYearsExperience' => '10 years experience',
 			'doctorDetails.title' => 'Doctor Details',
 			'doctorDetails.specialist' => 'Specialist Cardiologist',
-			'doctorDetails.perHour' => ({required Object price}) => '\$ ${price}/hr',
-			'doctorDetails.running' => 'Runing',
+			'doctorDetails.perHour' => ({required Object price}) => '${price}/hr',
+			'doctorDetails.running' => 'Running',
 			'doctorDetails.ongoing' => 'Ongoing',
 			'doctorDetails.patient' => 'Patient',
+			'doctorDetails.patients' => 'Patients',
 			'doctorDetails.services' => 'Services',
 			'doctorDetails.service1' => 'Patient care should be the number one priority.',
 			'doctorDetails.service2' => 'If you run your practice you know how frustrating.',
 			'doctorDetails.service3' => 'That\'s why some of appointment reminder system.',
+			'doctorDetails.doctorInfo' => 'Doctor Info',
+			'doctorDetails.removedFromFavorites' => ({required Object doctorName}) => '${doctorName} removed from favorites',
+			'favorite.pleaseLogin' => 'Please log in to view favorites',
+			'favorite.noFavoriteDoctors' => 'No favorite doctors yet',
+			'favorite.tapHeartHint' => 'Tap the heart icon on any doctor to add them here',
+			'favorite.doctorRemoved' => ({required Object doctorName}) => '${doctorName} removed from favorites',
 			'appointment.successTitle' => 'Thank You !',
 			'appointment.successSubtitle' => 'Your Appointment Successful',
 			'appointment.successMessage' => ({required Object doctorName, required Object date, required Object time}) => 'You booked an appointment with ${doctorName} on ${date}, at ${time}',
 			'appointment.doneBtn' => 'Done',
 			'appointment.editBtn' => 'Edit your appointment',
+			'updateProfile.title' => 'Complete Registration',
+			'updateProfile.bioLabel' => 'Bio',
+			'updateProfile.bioHint' => 'Enter general medical information like your academic education and previous experiences...',
+			'updateProfile.clinicAddressLabel' => 'Clinic Address',
+			'updateProfile.clinicAddressHint' => '123 Main St, Downtown, City',
+			'updateProfile.workHoursFrom' => 'Work Hours From',
+			'updateProfile.to' => 'To',
+			'updateProfile.phone1Label' => 'Phone Number 1',
+			'updateProfile.phone2Label' => 'Phone Number 2 (Optional)',
+			'updateProfile.phoneHint' => '+20xxxxxxxxxx',
+			'updateProfile.selectImageError' => 'Please select a profile image',
+			'updateProfile.completeRegistration' => 'Complete Registration',
+			'updateProfile.required' => 'Required',
+			'updateProfile.specialization' => 'Specialization',
+			'updateProfile.chooseSpecialization' => 'Choose specialization',
 			'selectTime.title' => 'Select Time',
 			'selectTime.today' => ({required Object date}) => 'Today, ${date}',
 			'selectTime.tomorrow' => ({required Object date}) => 'Tomorrow, ${date}',
@@ -598,6 +886,20 @@ extension on Translations {
 			'selectTime.nextAvailability' => 'Next availability on Wed, 24 Feb',
 			'selectTime.or' => 'OR',
 			'selectTime.contactClinic' => 'Contact Clinic',
+			'dashboard.title' => 'Doctor Dashboard',
+			'dashboard.profile' => 'My Profile',
+			'dashboard.appointments' => 'Appointments',
+			'dashboard.myPatients' => 'My Patients',
+			'dashboard.availability' => 'Availability',
+			'dashboard.settings' => 'Settings',
+			'dashboard.updateProfile' => 'Update Profile',
+			'dashboard.updateProfileSuccess' => 'Profile updated successfully',
+			'dashboard.totalPatients' => 'Total Patients',
+			'dashboard.completedConsultations' => 'Completed Consultations',
+			'dashboard.rating' => 'Rating',
+			'dashboard.available' => 'Available',
+			'dashboard.unavailable' => 'Unavailable',
+			'dashboard.doctorInfo' => 'Doctor Info',
 			_ => null,
 		};
 	}

@@ -51,12 +51,29 @@ class DoctorInfoCard extends StatelessWidget {
               // Doctor photo
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imagePath,
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
-                ),
+                child: imagePath.startsWith('http')
+                    ? Image.network(
+                        imagePath,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.person,
+                          size: 50,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    : Image.asset(
+                        imagePath,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.person,
+                          size: 50,
+                          color: AppColors.primary,
+                        ),
+                      ),
               ),
               Gap(12),
 

@@ -1,7 +1,10 @@
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../models/doctor_model.dart';
+import '../../../../core/services/favorite_service.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/user_service.dart';
+import '../../models/doctor.dart';
 import '../widgets/doctor_info_card.dart';
 import '../widgets/map_preview.dart';
 import '../widgets/services_section.dart';
@@ -23,11 +26,87 @@ class DoctorDetailsScreen extends StatefulWidget {
 
 class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
   late Doctor _doctor;
+  bool _isFavorite = false;
+
+  String? get _patientUid => AuthService.instance.currentUser?.uid;
 
   @override
   void initState() {
     super.initState();
     _doctor = widget.doctor;
+    _isFavorite = _doctor.isFavorite;
+  }
+
+  Future<void> _toggleFavorite() async {
+    if (_patientUid == null) return;
+
+    final wasFavorited = _isFavorite;
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
+
+    try {
+      // We need the doctor UID from Firestore. Since Doctor model doesn't have uid,
+      // we look it up by streaming all doctors and matching by name + image.
+      final allDoctors = await UserService.instance
+          .streamDoctors()
+          .first;
+
+      final matched = allDoctors.where((d) =>
+          d.name == _doctor.name && d.imageUrl == _doctor.imagePath);
+
+      if (matched.isNotEmpty) {
+        final doctorUid = matched.first.uid;
+        if (doctorUid != null) {
+          await FavoriteService.instance.toggleFavorite(
+            patientUid: _patientUid!,
+            doctorUid: doctorUid,
+          );
+        }
+      }
+
+      // Show undo snackbar when REMOVING a favorite
+      if (wasFavorited && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${_doctor.name} removed from favorites'),
+            action: SnackBarAction(
+              label: t.common.undo,
+              textColor: AppColors.primary,
+              onPressed: () async {
+                // Re-add to favorites
+                if (matched.isNotEmpty) {
+                  final doctorUid = matched.first.uid;
+                  if (doctorUid != null) {
+                    await FavoriteService.instance.addFavorite(
+                      patientUid: _patientUid!,
+                      doctorUid: doctorUid,
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _isFavorite = true;
+                      });
+                    }
+                  }
+                }
+              },
+            ),
+            duration: const Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Revert on error
+      if (mounted) {
+        setState(() {
+          _isFavorite = !_isFavorite;
+        });
+      }
+    }
   }
 
   @override
@@ -93,14 +172,8 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                             : _doctor.ratingPercentage.round(),
                         hourlyRate: _doctor.hourlyRate,
                         imagePath: _doctor.imagePath,
-                        isFavorite: _doctor.isFavorite,
-                        onFavoriteToggle: () {
-                          setState(() {
-                            _doctor = _doctor.copyWith(
-                              isFavorite: !_doctor.isFavorite,
-                            );
-                          });
-                        },
+                        isFavorite: _isFavorite,
+                        onFavoriteToggle: _toggleFavorite,
                         onBookNow: () {
                           context.push(AppRoutes.selectTime, extra: _doctor);
                         },

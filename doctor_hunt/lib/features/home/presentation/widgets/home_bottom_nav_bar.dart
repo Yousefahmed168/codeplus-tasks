@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
+  final int favoritesCount;
   final ValueChanged<int>? onTap;
 
-  const HomeBottomNavBar({super.key, this.currentIndex = 0, this.onTap});
+  const HomeBottomNavBar({
+    super.key,
+    this.currentIndex = 0,
+    this.favoritesCount = 0,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,7 @@ class HomeBottomNavBar extends StatelessWidget {
           _NavBarItem(
             icon: Icons.favorite_rounded,
             isSelected: currentIndex == 1,
+            badgeCount: favoritesCount,
             onTap: () => onTap?.call(1),
           ),
           _NavBarItem(
@@ -55,11 +62,13 @@ class HomeBottomNavBar extends StatelessWidget {
 class _NavBarItem extends StatelessWidget {
   final IconData icon;
   final bool isSelected;
+  final int badgeCount;
   final VoidCallback onTap;
 
   const _NavBarItem({
     required this.icon,
     required this.isSelected,
+    this.badgeCount = 0,
     required this.onTap,
   });
 
@@ -68,22 +77,61 @@ class _NavBarItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: isSelected
-          ? Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary,
-                    AppColors.primary.withValues(alpha: 0.7),
-                  ],
+      child: SizedBox(
+        width: 48,
+        height: 48,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            isSelected
+                ? Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.primary.withValues(alpha: 0.7),
+                        ],
+                      ),
+                    ),
+                    child: Icon(icon, color: Colors.white, size: 24),
+                  )
+                : Icon(icon, color: AppColors.textLight, size: 24),
+            // Badge
+            if (badgeCount > 0)
+              Positioned(
+                top: -4,
+                right: -4,
+                child: Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 18,
+                    minHeight: 18,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.error,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: Center(
+                    child: Text(
+                      badgeCount > 99 ? '99+' : '$badgeCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        height: 1,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: Icon(icon, color: Colors.white, size: 24),
-            )
-          : Icon(icon, color: AppColors.textLight, size: 24),
+          ],
+        ),
+      ),
     );
   }
 }

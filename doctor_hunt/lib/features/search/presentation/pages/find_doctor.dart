@@ -1,12 +1,13 @@
+import '../../../doctors/models/doctor_model.dart';
+
 import '../../../../core/widgets/custom_text_form_field.dart';
 
-import '../../../../core/data/dummy_doctors.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../doctors/models/doctor_model.dart';
-import '../../../doctors/presentation/widgets/doctor_card.dart';
+import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/app_background.dart';
+import '../../../../core/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -24,14 +25,6 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   final FocusNode _focusNode = FocusNode();
   String _searchQuery = "";
 
-  final List<String> _recentSearches = [
-    'Dentist',
-    'Cardiologist',
-    'Pediatrician',
-    'Dermatologist',
-  ];
-
-  List<Doctor> get _allDoctors => DummyDoctors.all;
 
   @override
   void initState() {
@@ -46,17 +39,6 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
     _searchController.dispose();
     _focusNode.dispose();
     super.dispose();
-  }
-
-  List<Doctor> get _filteredDoctors {
-    if (_searchQuery.isEmpty) return [];
-    return _allDoctors
-        .where(
-          (d) =>
-              d.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              d.specialty.toLowerCase().contains(_searchQuery.toLowerCase()),
-        )
-        .toList();
   }
 
   @override
@@ -129,9 +111,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
               ),
               Gap(24),
               Expanded(
-                child: _searchQuery.isEmpty
-                    ? _buildRecentSearches()
-                    : _buildSearchResults(),
+                child: _buildSearchResults(),
               ),
             ],
           ),
@@ -140,83 +120,158 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
     );
   }
 
-  Widget _buildRecentSearches() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(t.findDoctors.recentSearches, style: context.bold16.textPrimary),
-          Gap(16),
-          ...List.generate(_recentSearches.length, (i) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: GestureDetector(
-                onTap: () {
-                  _searchController.text = _recentSearches[i];
-                  setState(() => _searchQuery = _recentSearches[i]);
-                },
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.history_rounded,
-                      size: 20,
-                      color: AppColors.textHint,
-                    ),
-                    Gap(12),
-                    Text(
-                      _recentSearches[i],
-                      style: context.regular14.textSecondary,
-                    ),
-                  ],
+
+  Widget _buildSearchResults() {
+    return StreamBuilder<List<DoctorModel>>(
+      stream: UserService.instance.streamDoctors(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              t.home.failedToLoadDoctors,
+              style: context.regular14.textSecondary,
+            ),
+          );
+        }
+
+        final allDoctors = snapshot.data ?? [];
+        final results = allDoctors
+            .where(
+              (d) =>
+                  (d.name ?? '').toLowerCase().contains(
+                    _searchQuery.toLowerCase(),
+                  ) ||
+                  (d.specialization ?? '').toLowerCase().contains(
+                    _searchQuery.toLowerCase(),
+                  ),
+            )
+            .toList();
+
+        if (results.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.search_off_rounded,
+                  size: 64,
+                  color: AppColors.textHint.withValues(alpha: 0.5),
                 ),
-              ),
-            );
-          }),
-        ],
-      ),
+                Gap(16),
+                Text(
+                  t.findDoctors.noDoctorsFound,
+                  style: context.bold16.textSecondary,
+                ),
+                Gap(8),
+                Text(
+                  t.findDoctors.tryDifferentSearchTerm,
+                  style: context.regular14.textHint,
+                ),
+              ],
+            ),
+          );
+        }
+
+        return ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemCount: results.length,
+          separatorBuilder: (_, _) => Gap(16),
+          itemBuilder: (context, index) {
+            final doctor = results[index];
+            return _buildDoctorResultCard(context, doctor);
+          },
+        );
+      },
     );
   }
 
-  Widget _buildSearchResults() {
-    final results = _filteredDoctors;
-    if (results.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search_off_rounded,
-              size: 64,
-              color: AppColors.textHint.withValues(alpha: 0.5),
-            ),
-            Gap(16),
-            Text(
-              t.findDoctors.noDoctorsFound,
-              style: context.bold16.textSecondary,
-            ),
-            Gap(8),
-            Text(
-              t.findDoctors.tryDifferentSearchTerm,
-              style: context.regular14.textHint,
+  Widget _buildDoctorResultCard(BuildContext context, DoctorModel doctor) {
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          AppRoutes.doctorDetails,
+          extra: doctor.toDoctor(),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-      );
-    }
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: results.length,
-      separatorBuilder: (_, _) => Gap(16),
-      itemBuilder: (context, index) {
-        final doctor = results[index];
-        return DoctorCard(
-          doctor: doctor,
-          onTap: () => context.push(AppRoutes.doctorDetails, extra: doctor),
-          onBookNow: () {},
-          onFavoriteToggle: () {},
-        );
-      },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
+                  ? Image.network(
+                      doctor.imageUrl!,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => Image.asset(
+                        AppImages.doctor,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Image.asset(
+                      AppImages.doctor,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+            Gap(12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    doctor.name ?? 'Unknown',
+                    style: context.bold16.textPrimary,
+                  ),
+                  Gap(2),
+                  Text(
+                    doctor.specialization ?? 'General',
+                    style: context.regular14.primary,
+                  ),
+                  Gap(4),
+                  Text(
+                    t.findDoctors.tenYearsExperience,
+                    style: context.regular12.textSecondary,
+                  ),
+                  Gap(6),
+                  Row(
+                    children: [
+                      Icon(Icons.star_rounded, size: 14, color: AppColors.star),
+                      Gap(4),
+                      Text(
+                        (doctor.rating ?? 0).toStringAsFixed(1),
+                        style: context.regular12.textSecondary,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

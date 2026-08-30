@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../core/widgets/custom_text_form_field.dart';
-import '../../../../core/data/dummy_doctors.dart';
+import '../../../../core/utils/app_images.dart';
+import '../../../../core/services/user_service.dart';
+import '../../../../core/services/favorite_service.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../models/doctor_model.dart';
-import '../widgets/favorite_doctor_grid_card.dart';
-import '../../../home/presentation/widgets/feature_doctor_card.dart';
 import '../../../../i18n/strings.g.dart';
 
 class FavoriteDoctorsScreen extends StatefulWidget {
@@ -17,21 +19,18 @@ class FavoriteDoctorsScreen extends StatefulWidget {
 }
 
 class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
-  List<Doctor> get _favoriteDoctors =>
-      DummyDoctors.all.where((d) => d.isFavorite).toList();
-
-  List<Doctor> get _featureDoctors => DummyDoctors.all;
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
+  String? get _patientUid => AuthService.instance.currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
+    // If not logged in, show nothing
+    if (_patientUid == null) {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(child: Text(t.favorite.pleaseLogin)),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -63,104 +62,209 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
           ),
         ),
         leadingWidth: 64,
-        title: Text(t.home.favouriteDoctors, style: context.bold.px20.textPrimary),
+        title: Text(
+          t.home.favouriteDoctors,
+          style: context.bold.px20.textPrimary,
+        ),
         centerTitle: false,
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CustomTextFormField(
-                controller: _searchController,
-                hintText: t.findDoctors.searchHint,
-                prefixIcon: const Icon(
-                  Icons.search_rounded,
-                  color: AppColors.textHint,
-                ),
-                suffixIcon: IconButton(
-                  icon: const Icon(
-                    Icons.close_rounded,
-                    color: AppColors.textHint,
-                    size: 20,
-                  ),
-                  onPressed: () => _searchController.clear(),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.85,
-              ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return FavoriteDoctorGridCard(
-                  doctor: _favoriteDoctors[index],
-                  onFavoriteToggle: () {},
+      body: StreamBuilder<Set<String>>(
+        stream: FavoriteService.instance.streamFavoriteIds(_patientUid!),
+        builder: (context, favSnapshot) {
+          final favoriteIds = favSnapshot.data ?? {};
+
+          return StreamBuilder<List<DoctorModel>>(
+            stream: UserService.instance.streamDoctors(),
+            builder: (context, docSnapshot) {
+              if (docSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary),
                 );
-              }, childCount: _favoriteDoctors.length),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(32),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              }
+              if (docSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Failed to load doctors',
+                    style: context.regular14.textSecondary,
+                  ),
+                );
+              }
+
+              final allDoctors = docSnapshot.data ?? [];
+              // Filter to only show favorited doctors
+              final favoriteDoctors = allDoctors
+                  .where((d) => d.uid != null && favoriteIds.contains(d.uid))
+                  .toList();
+
+              if (favoriteDoctors.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        t.home.featureDoctor,
-                        style: context.bold.px18.textPrimary,
+                      Icon(
+                        Icons.favorite_border_rounded,
+                        size: 64,
+                        color: AppColors.textHint,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            t.home.seeAll,
-                            style: context.regular.px12.textSecondary,
-                          ),
-                          const Icon(
-                            Icons.chevron_right_rounded,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
-                        ],
+                      const Gap(16),
+                      Text(
+                        'No favorite doctors yet',
+                        style: context.regular16.textSecondary,
+                      ),
+                      const Gap(8),
+                      Text(
+                        'Tap the heart icon on any doctor to add them here',
+                        style: context.regular14.textHint,
                       ),
                     ],
                   ),
-                ),
-                const Gap(16),
-                SizedBox(
-                  height: 130, // FeatureDoctorCard has height 120
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _featureDoctors.length,
-                    separatorBuilder: (context, index) => const Gap(10),
-                    itemBuilder: (context, index) {
-                      final doctor = _featureDoctors[index];
-                      return FeatureDoctorCard(
-                        name: doctor.name,
-                        imagePath: doctor.imagePath,
-                        rating: doctor.ratingPercentage,
-                        hourlyRate: doctor.hourlyRate,
-                        isFavorite: doctor.isFavorite,
-                      );
-                    },
+                );
+              }
+
+              return CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(20),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.85,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final doctor = favoriteDoctors[index];
+                          return _buildDoctorGridCard(context, doctor);
+                        },
+                        childCount: favoriteDoctors.length,
+                      ),
+                    ),
                   ),
-                ),
-                const Gap(32),
-              ],
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildDoctorGridCard(BuildContext context, DoctorModel doctor) {
+    final patientUid = _patientUid!;
+    return GestureDetector(
+      onTap: () =>
+          context.push(AppRoutes.doctorDetails, extra: doctor.toDoctor(isFavorite: true)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: (doctor.imageUrl != null &&
+                            doctor.imageUrl!.isNotEmpty)
+                        ? Image.network(
+                            doctor.imageUrl!,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Image.asset(
+                              AppImages.doctor,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(
+                            AppImages.doctor,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                  const Gap(12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      doctor.name ?? 'Unknown',
+                      style: context.bold16.textPrimary,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const Gap(4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      doctor.specialization ?? 'General',
+                      style: context.regular12.primary,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Favorite heart - tap to REMOVE from favorites
+            Positioned(
+              top: 12,
+              right: 12,
+              child: GestureDetector(
+                onTap: () async {
+                  final doctorName = doctor.name ?? 'Doctor';
+                  await FavoriteService.instance.toggleFavorite(
+                    patientUid: patientUid,
+                    doctorUid: doctor.uid!,
+                  );
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('$doctorName removed from favorites'),
+                        action: SnackBarAction(
+                          label: t.common.undo,
+                          textColor: AppColors.primary,
+                          onPressed: () async {
+                            await FavoriteService.instance.addFavorite(
+                              patientUid: patientUid,
+                              doctorUid: doctor.uid!,
+                            );
+                          },
+                        ),
+                        duration: const Duration(seconds: 3),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: const Icon(
+                  Icons.favorite_rounded,
+                  color: Colors.red,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -24,14 +24,14 @@ class PopularDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 175,
-        margin: const EdgeInsets.only(right: 14),
+        width: 150,
+        margin: const EdgeInsets.only(right: 7),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withValues(alpha: 0.09),
               blurRadius: 14,
               offset: const Offset(0, 4),
             ),
@@ -48,8 +48,30 @@ class PopularDoctorCard extends StatelessWidget {
               child: Container(
                 height: 140,
                 width: double.infinity,
-                color: AppColors.background,
-                child: Image.asset(imagePath, fit: BoxFit.fill),
+                color: AppColors.divider,
+                child: imagePath.startsWith('http')
+                    ? Image.network(
+                        imagePath,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) => const Center(
+                          child: Icon(
+                            Icons.person,
+                            size: 60,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      )
+                    : Image.asset(
+                        imagePath,
+                        fit: BoxFit.fill,
+                        errorBuilder: (_, _, _) => const Center(
+                          child: Icon(
+                            Icons.person,
+                            size: 50,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
               ),
             ),
             Padding(

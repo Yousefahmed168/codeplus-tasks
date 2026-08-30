@@ -83,16 +83,30 @@ class FeatureDoctorCard extends StatelessWidget {
             Gap(5),
 
             // Circular Avatar
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.fill,
-                ),
-              ),
+            ClipOval(
+              child: imagePath.startsWith('http')
+                  ? Image.network(
+                      imagePath,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: AppColors.primary,
+                      ),
+                    )
+                  : Image.asset(
+                      imagePath,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: AppColors.primary,
+                      ),
+                    ),
             ),
             Gap(5),
 
