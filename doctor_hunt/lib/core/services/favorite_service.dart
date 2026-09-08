@@ -2,19 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'auth_service.dart';
 
-/// Service for managing per-patient favorite doctors in Firestore.
-///
-/// Firestore structure:
-///   patients/{patientUid}/favorites/{doctorUid} → { addedAt: timestamp }
-///
-/// Provides real-time streams so the heart icon stays in sync across screens.
+
 class FavoriteService {
   FavoriteService._();
   static final FavoriteService instance = FavoriteService._();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Returns the favorites subcollection reference for a patient.
   CollectionReference<Map<String, dynamic>> _favoritesRef(String patientUid) {
     return _firestore
         .collection(AuthService.patientsCollection)
@@ -22,14 +16,12 @@ class FavoriteService {
         .collection('favorites');
   }
 
-  /// Real-time stream of all favorite doctor UIDs for the given patient.
   Stream<Set<String>> streamFavoriteIds(String patientUid) {
     return _favoritesRef(patientUid).snapshots().map(
           (snapshot) => snapshot.docs.map((doc) => doc.id).toSet(),
         );
   }
 
-  /// Check if a single doctor is favorited.
   Future<bool> isFavorited({
     required String patientUid,
     required String doctorUid,
@@ -43,7 +35,6 @@ class FavoriteService {
     }
   }
 
-  /// Toggle a doctor's favorite status. Returns the new state (true = now favorited).
   Future<bool> toggleFavorite({
     required String patientUid,
     required String doctorUid,
@@ -69,7 +60,6 @@ class FavoriteService {
     }
   }
 
-  /// Explicitly add a doctor to favorites.
   Future<void> addFavorite({
     required String patientUid,
     required String doctorUid,
@@ -84,7 +74,6 @@ class FavoriteService {
     }
   }
 
-  /// Explicitly remove a doctor from favorites.
   Future<void> removeFavorite({
     required String patientUid,
     required String doctorUid,

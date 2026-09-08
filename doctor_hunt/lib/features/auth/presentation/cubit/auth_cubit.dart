@@ -7,12 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../doctors/models/doctor_model.dart';
-import '../../models/user_model.dart';
+import '../../data/models/user_model.dart';
 import 'auth_state.dart';
 
-/// Cubit that manages doctor profile creation and update.
-///
-/// Handles image picking, Cloudinary upload, form state, and Firestore writes.
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitialState());
 
@@ -20,10 +17,9 @@ class AuthCubit extends Cubit<AuthState> {
   final _userService = UserService.instance;
   final _cloudinary = uploadImageToCloudinary;
 
-  // ── Form key ──────────────────────────────────────────────────────────
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  // ── Controllers ───────────────────────────────────────────────────────
+  //  Controllers 
   final TextEditingController bioController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController openHourController = TextEditingController();
@@ -31,16 +27,13 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController phone1Controller = TextEditingController();
   final TextEditingController phone2Controller = TextEditingController();
 
-  // ── State fields ──────────────────────────────────────────────────────
+  //  State fields 
   String? specialization;
   File? imageFile;
   String? _existingImageUrl;
 
-  /// Current user's UID, resolved from Firebase Auth.
   String? get _uid => _authService.currentUser?.uid;
 
-  // ── Initialize from existing profile (for editing) ────────────────────
-  /// Loads the current doctor's profile data into the controllers.
   Future<void> loadCurrentProfile() async {
     if (_uid == null) {
       emit(AuthErrorState('No signed-in user'));
@@ -68,14 +61,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // ── Image handling ────────────────────────────────────────────────────
-  /// Sets the picked image file. Call this from the image picker callback.
   void setImage(File file) {
     imageFile = file;
     emit(AuthInitialState());
   }
 
-  /// Uploads the picked image to Cloudinary and returns the secure URL.
   Future<String?> _uploadImageToCloudinary() async {
     if (imageFile == null) return _existingImageUrl;
 
@@ -88,8 +78,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // ── Update doctor profile ─────────────────────────────────────────────
-  /// Uploads the image to Cloudinary, then updates the Firestore document.
   Future<void> updateDoctor() async {
     if (_uid == null) {
       emit(AuthErrorState('No signed-in user'));
@@ -130,8 +118,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // ── Register new doctor ───────────────────────────────────────────────
-  /// Registers a new doctor, uploads image, then creates the Firestore doc.
   Future<void> registerDoctor({
     required String name,
     required String email,

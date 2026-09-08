@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/routes/app_router.dart';
@@ -16,6 +17,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Disable Firebase App Verification (reCAPTCHA) for local testing
+  try {
+    await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
+  } catch (e) {
+    debugPrint('Could not disable app verification: $e');
+  }
+
 
   // Initialize slang locale
   LocaleSettings.useDeviceLocale();

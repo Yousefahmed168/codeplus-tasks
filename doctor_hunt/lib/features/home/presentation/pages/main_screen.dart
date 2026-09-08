@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/widgets/app_background.dart';
@@ -8,6 +6,7 @@ import '../../../../features/home/presentation/pages/home_screen.dart';
 import '../../../../features/home/presentation/widgets/home_bottom_nav_bar.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../doctors/presentation/pages/favorite_doctors_screen.dart';
+import '../../../auth/presentation/pages/patient_profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,10 +19,7 @@ class _MainScreenState extends State<MainScreen> {
 
   String? get _patientUid => AuthService.instance.currentUser?.uid;
 
-  Future<void> _logout() async {
-    await AuthService.instance.logout();
-    if (mounted) context.go(AppRoutes.role);
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +34,13 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            const HomeScreen(),
+            HomeScreen(
+              onAvatarTap: () => setState(() => _currentIndex = 4),
+            ),
             const FavoriteDoctorsScreen(),
             Center(child: Text(t.home.mapBookingsPlaceholder)),
             Center(child: Text(t.home.chatPlaceholder)),
+            const PatientProfileScreen(),
           ],
         ),
         bottomNavigationBar: StreamBuilder<Set<String>>(
@@ -58,12 +57,6 @@ class _MainScreenState extends State<MainScreen> {
               },
             );
           },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _logout,
-          backgroundColor: Colors.white,
-          elevation: 4,
-          child: const Icon(Icons.logout_rounded, color: Colors.red),
         ),
       ),
     );

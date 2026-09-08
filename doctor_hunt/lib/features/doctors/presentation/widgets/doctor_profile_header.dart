@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -44,12 +45,12 @@ class DoctorProfileHeader extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: imagePath.startsWith('http')
-                ? Image.network(
-                    imagePath,
+                ? CachedNetworkImage(
+                    imageUrl: imagePath,
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => const Icon(
+                    errorWidget: (_, _, _) => const Icon(
                       Icons.person,
                       size: 80,
                       color: AppColors.primary,
@@ -99,7 +100,7 @@ class DoctorProfileHeader extends StatelessWidget {
           GestureDetector(
             onTap: onFavoriteToggle,
             child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite, // Mockup has a red heart
+              isFavorite ? Icons.favorite : Icons.favorite, 
               color: isFavorite ? Colors.red : Colors.red,
               size: 20,
             ),

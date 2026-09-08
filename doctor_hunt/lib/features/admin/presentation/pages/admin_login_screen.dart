@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -9,28 +9,28 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../i18n/strings.g.dart';
-import '../widgets/social_button.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class AdminLoginScreen extends StatefulWidget {
+  const AdminLoginScreen({super.key});
+
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<AdminLoginScreen> createState() => _AdminLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  final _forgotPasswordEmailCtrl = TextEditingController();
   bool _obscurePassword = true;
+  bool _rememberMe = false;
   bool _isLoading = false;
 
   @override
   void dispose() {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
-    _forgotPasswordEmailCtrl.dispose();
     super.dispose();
   }
 
@@ -38,26 +38,39 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
-      await AuthService.instance.login(
-        email: _emailCtrl.text,
-        password: _passwordCtrl.text,
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailCtrl.text.trim(),
+        password: _passwordCtrl.text.trim(),
       );
-      final user = AuthService.instance.currentUser;
-      if (user == null || !mounted) return;
-      final role = await AuthService.instance.getUserRole(user.uid);
-      if (!mounted) return;
-      if (role == null) {
-        context.go(AppRoutes.role);
-      } else if (role.name == 'doctor') {
-        context.go(AppRoutes.doctorDashboard);
+
+      final uid = credential.user!.uid;
+
+      final adminDoc = await FirebaseFirestore.instance
+          .collection('admins')
+          .doc(uid)
+          .get();
+
+      if (adminDoc.exists) {
+        // Admin — document exists in admins collection
+        if (mounted) context.go(AppRoutes.adminMain);
       } else {
-        context.go(AppRoutes.home);
+        // Not an admin
+        await FirebaseAuth.instance.signOut();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(t.admin.login.accessDenied),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AuthService.instance.getErrorMessage(e.code)),
+            content: Text(e.message ?? 'Authentication error'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -65,8 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.common.errorGeneric),
+          const SnackBar(
+            content: Text('An error occurred. Please try again.'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -77,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showForgotPasswordDialog() {
-    _forgotPasswordEmailCtrl.text = _emailCtrl.text;
+    final emailCtrl = TextEditingController(text: _emailCtrl.text);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -89,9 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
               t.auth.login.forgotPasswordSubtitle,
               style: context.regular14.textSecondary,
             ),
-            Gap(16),
+            const Gap(16),
             CustomTextFormField(
-              controller: _forgotPasswordEmailCtrl,
+              controller: emailCtrl,
               hintText: t.common.email,
               keyboardType: TextInputType.emailAddress,
             ),
@@ -104,8 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           TextButton(
             onPressed: () async {
-              if (_forgotPasswordEmailCtrl.text.isEmpty) return;
-              final email = _forgotPasswordEmailCtrl.text.trim();
+              if (emailCtrl.text.isEmpty) return;
+              final email = emailCtrl.text.trim();
               if (mounted) Navigator.pop(ctx);
               try {
                 await AuthService.instance.sendPasswordResetEmail(email);
@@ -144,54 +157,42 @@ class _LoginScreenState extends State<LoginScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              const Gap(50),
+              const Gap(40),
+              // Back button
+              Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  onTap: () => context.go(AppRoutes.role),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                ),
+              ),
+              const Gap(24),
+              // Logo
+              SvgPicture.asset(AppImages.logo, width: 56, height: 56),
+              const Gap(12),
               Text(
-                t.auth.login.title,
+                t.admin.login.title,
                 style: context.bold24.textPrimary,
                 textAlign: TextAlign.center,
               ),
-              const Gap(12),
+              const Gap(8),
               Text(
-                t.auth.login.subtitle,
+                t.admin.login.subtitle,
                 style: context.regular14.textSecondary,
                 textAlign: TextAlign.center,
               ),
-              const Gap(70),
-              Row(
-                children: [
-                  Expanded(
-                    child: SocialButton(
-                      label: t.common.google,
-                      icon: SvgPicture.asset(
-                        AppImages.google,
-                        width: 20,
-                        height: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                  const Gap(12),
-                  Expanded(
-                    child: SocialButton(
-                      label: t.common.facebook,
-                      icon: SvgPicture.asset(
-                        AppImages.facebook,
-                        width: 20,
-                        height: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                ],
-              ),
-              const Gap(28),
+              const Gap(60),
+
+              // Email
+              Text(t.common.email, style: context.semiBold14.textPrimary),
+              const Gap(8),
               CustomTextFormField(
                 controller: _emailCtrl,
-                hintText: t.common.email,
+                hintText: 'admin@doctorhunt.com',
                 keyboardType: TextInputType.emailAddress,
-                suffixIcon: const Icon(
-                  Icons.check_circle_rounded,
-                  color: AppColors.primary,
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: AppColors.textHint,
                   size: 20,
                 ),
                 validator: (v) {
@@ -203,9 +204,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               const Gap(16),
+
+              // Password
+              Text(t.common.password, style: context.semiBold14.textPrimary),
+              const Gap(8),
               CustomTextFormField(
                 controller: _passwordCtrl,
                 hintText: t.common.password,
+                prefixIcon: const Icon(
+                  Icons.lock_outline_rounded,
+                  color: AppColors.textHint,
+                  size: 20,
+                ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword
@@ -225,35 +235,52 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
-              const Gap(28),
+              const Gap(8),
+
+              // Remember me + Forgot password
+              Row(
+                children: [
+                  Checkbox(
+                    value: _rememberMe,
+                    onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                    activeColor: AppColors.primary,
+                  ),
+                  Text(
+                    t.admin.login.rememberMe,
+                    style: context.regular14.textSecondary,
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: _showForgotPasswordDialog,
+                    child: Text(
+                      t.auth.login.forgotPassword,
+                      style: context.semiBold14.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(24),
+
+              // Login button
               MainButton(
-                text: _isLoading
-                    ? t.auth.login.loggingIn
-                    : t.auth.login.submitBtn,
+                text: _isLoading ? t.common.loading : t.admin.login.loginBtn,
                 onPressed: _isLoading ? null : _login,
               ),
-              const Gap(16),
-              TextButton(
-                onPressed: _showForgotPasswordDialog,
-                child: Text(
-                  t.auth.login.forgotPassword,
-                  style: context.semiBold14.primary,
-                ),
-              ),
-              const Gap(70),
+              const Gap(24),
+
+              // Secure access note
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    t.auth.login.noAccount,
-                    style: context.regular14.textSecondary,
+                  const Icon(
+                    Icons.shield_rounded,
+                    color: AppColors.primary,
+                    size: 16,
                   ),
-                  GestureDetector(
-                    onTap: () => context.go(AppRoutes.register),
-                    child: Text(
-                      t.auth.login.joinUs,
-                      style: context.bold14.primaryLight,
-                    ),
+                  const Gap(8),
+                  Text(
+                    t.admin.login.secureAccess,
+                    style: context.regular12.textSecondary,
                   ),
                 ],
               ),

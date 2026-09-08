@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
-enum AppRole { patient, doctor }
+enum AppRole { patient, doctor, admin }
 
 class ChooseRoleScreen extends StatefulWidget {
   const ChooseRoleScreen({super.key});
@@ -23,7 +23,11 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
 
   void _onContinue() {
     if (_selectedRole == null) return;
-    context.go(AppRoutes.register, extra: _selectedRole!.name);
+    if (_selectedRole == AppRole.admin) {
+      context.go(AppRoutes.adminLogin);
+    } else {
+      context.go(AppRoutes.register, extra: _selectedRole!.name);
+    }
   }
 
   @override
@@ -72,6 +76,15 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                 title: t.roleSelection.roles.doctor.title,
                 description: t.roleSelection.roles.doctor.description,
                 onTap: () => setState(() => _selectedRole = AppRole.doctor),
+              ),
+              const Gap(16),
+              _RoleCard(
+                role: AppRole.admin,
+                selected: _selectedRole == AppRole.admin,
+                icon: Icons.admin_panel_settings_outlined,
+                title: t.admin.chooseRole.title,
+                description: t.admin.chooseRole.description,
+                onTap: () => setState(() => _selectedRole = AppRole.admin),
               ),
 
               const Spacer(),

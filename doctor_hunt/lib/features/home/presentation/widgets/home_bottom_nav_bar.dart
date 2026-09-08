@@ -53,6 +53,11 @@ class HomeBottomNavBar extends StatelessWidget {
             isSelected: currentIndex == 3,
             onTap: () => onTap?.call(3),
           ),
+          _NavBarItem(
+            icon: Icons.person_rounded,
+            isSelected: currentIndex == 4,
+            onTap: () => onTap?.call(4),
+          ),
         ],
       ),
     );

@@ -52,6 +52,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$updateProfile$en updateProfile = Translations$updateProfile$en._(_root);
 	late final Translations$selectTime$en selectTime = Translations$selectTime$en._(_root);
 	late final Translations$dashboard$en dashboard = Translations$dashboard$en._(_root);
+	late final Translations$admin$en admin = Translations$admin$en._(_root);
 }
 
 // Path: common
@@ -313,8 +314,8 @@ class Translations$doctorDetails$en {
 	/// en: 'If you run your practice you know how frustrating.'
 	String get service2 => 'If you run your practice you know how frustrating.';
 
-	/// en: 'That's why some of appointment reminder system.'
-	String get service3 => 'That\'s why some of appointment reminder system.';
+	/// en: 'Thats why some of appointment reminder system.'
+	String get service3 => 'Thats why some of appointment reminder system.';
 
 	/// en: 'Doctor Info'
 	String get doctorInfo => 'Doctor Info';
@@ -515,6 +516,21 @@ class Translations$dashboard$en {
 	String get doctorInfo => 'Doctor Info';
 }
 
+// Path: admin
+class Translations$admin$en {
+	Translations$admin$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$admin$chooseRole$en chooseRole = Translations$admin$chooseRole$en._(_root);
+	late final Translations$admin$login$en login = Translations$admin$login$en._(_root);
+	late final Translations$admin$doctors$en doctors = Translations$admin$doctors$en._(_root);
+	late final Translations$admin$createDoctor$en createDoctor = Translations$admin$createDoctor$en._(_root);
+	late final Translations$admin$editDoctor$en editDoctor = Translations$admin$editDoctor$en._(_root);
+	late final Translations$admin$settings$en settings = Translations$admin$settings$en._(_root);
+}
+
 // Path: common.validation
 class Translations$common$validation$en {
 	Translations$common$validation$en._(this._root);
@@ -562,8 +578,8 @@ class Translations$onboarding$pages$0$en {
 	/// en: 'Find Trusted Doctors'
 	String get title => 'Find Trusted Doctors';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.';
+	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
+	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
 }
 
 // Path: onboarding.pages.1
@@ -577,8 +593,8 @@ class Translations$onboarding$pages$1$en {
 	/// en: 'Choose Best Doctors'
 	String get title => 'Choose Best Doctors';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.';
+	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
+	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
 }
 
 // Path: onboarding.pages.2
@@ -592,8 +608,8 @@ class Translations$onboarding$pages$2$en {
 	/// en: 'Easy Appointments'
 	String get title => 'Easy Appointments';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.';
+	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
+	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
 }
 
 // Path: roleSelection.roles
@@ -636,8 +652,8 @@ class Translations$auth$login$en {
 	/// en: 'Reset link sent! Check your email'
 	String get forgotPasswordSuccess => 'Reset link sent! Check your email';
 
-	/// en: 'Don't have an account? '
-	String get noAccount => 'Don\'t have an account? ';
+	/// en: 'Dont have an account? '
+	String get noAccount => 'Dont have an account? ';
 
 	/// en: 'Join us'
 	String get joinUs => 'Join us';
@@ -703,6 +719,180 @@ class Translations$auth$register$en {
 	String get doctorNameHint => 'Dr. Name';
 }
 
+// Path: admin.chooseRole
+class Translations$admin$chooseRole$en {
+	Translations$admin$chooseRole$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Admin'
+	String get title => 'Admin';
+
+	/// en: 'Manage doctors and app settings'
+	String get description => 'Manage doctors and app settings';
+}
+
+// Path: admin.login
+class Translations$admin$login$en {
+	Translations$admin$login$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Welcome Back!'
+	String get title => 'Welcome Back!';
+
+	/// en: 'Login to your admin account'
+	String get subtitle => 'Login to your admin account';
+
+	/// en: 'Remember me'
+	String get rememberMe => 'Remember me';
+
+	/// en: 'Login'
+	String get loginBtn => 'Login';
+
+	/// en: 'Secure admin access only'
+	String get secureAccess => 'Secure admin access only';
+
+	/// en: 'Access denied. You are not an admin.'
+	String get accessDenied => 'Access denied. You are not an admin.';
+}
+
+// Path: admin.doctors
+class Translations$admin$doctors$en {
+	Translations$admin$doctors$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Doctors'
+	String get title => 'Doctors';
+
+	/// en: 'Search doctors...'
+	String get searchHint => 'Search doctors...';
+
+	/// en: 'Total Doctors'
+	String get totalDoctors => 'Total Doctors';
+
+	/// en: 'Active'
+	String get active => 'Active';
+
+	/// en: 'No doctors found'
+	String get noDoctorsFound => 'No doctors found';
+
+	/// en: 'Delete Doctor'
+	String get deleteTitle => 'Delete Doctor';
+
+	/// en: 'Are you sure you want to remove Dr. @name?'
+	String get deleteConfirm => 'Are you sure you want to remove Dr. @name?';
+
+	/// en: 'Dr. @name deleted'
+	String get deleted => 'Dr. @name deleted';
+}
+
+// Path: admin.createDoctor
+class Translations$admin$createDoctor$en {
+	Translations$admin$createDoctor$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Create Doctor'
+	String get title => 'Create Doctor';
+
+	/// en: 'Doctor Name'
+	String get nameLabel => 'Doctor Name';
+
+	/// en: 'Enter doctor name'
+	String get nameHint => 'Enter doctor name';
+
+	/// en: 'doctor@email.com'
+	String get emailHint => 'doctor@email.com';
+
+	/// en: '+20xxxxxxxxxx'
+	String get phoneHint => '+20xxxxxxxxxx';
+
+	/// en: 'Specialty'
+	String get specialtyLabel => 'Specialty';
+
+	/// en: 'Select specialty'
+	String get specialtyHint => 'Select specialty';
+
+	/// en: 'Bio'
+	String get bioLabel => 'Bio';
+
+	/// en: 'Brief description about the doctor...'
+	String get bioHint => 'Brief description about the doctor...';
+
+	/// en: 'Clinic Address'
+	String get addressLabel => 'Clinic Address';
+
+	/// en: '123 Main St, Downtown, City'
+	String get addressHint => '123 Main St, Downtown, City';
+
+	/// en: 'Doctor Image'
+	String get imageLabel => 'Doctor Image';
+
+	/// en: 'Upload doctor image'
+	String get imageUpload => 'Upload doctor image';
+
+	/// en: 'Tap to pick an image'
+	String get imageTapHint => 'Tap to pick an image';
+
+	/// en: 'Create Doctor'
+	String get createBtn => 'Create Doctor';
+
+	/// en: 'Creating...'
+	String get creatingBtn => 'Creating...';
+
+	/// en: 'Doctor created successfully'
+	String get success => 'Doctor created successfully';
+
+	/// en: 'Failed to create doctor'
+	String get failed => 'Failed to create doctor';
+}
+
+// Path: admin.editDoctor
+class Translations$admin$editDoctor$en {
+	Translations$admin$editDoctor$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Edit Doctor'
+	String get title => 'Edit Doctor';
+
+	/// en: 'Update Doctor'
+	String get updateBtn => 'Update Doctor';
+
+	/// en: 'Updating...'
+	String get updatingBtn => 'Updating...';
+
+	/// en: 'Doctor updated successfully'
+	String get success => 'Doctor updated successfully';
+
+	/// en: 'Failed to update doctor'
+	String get failed => 'Failed to update doctor';
+}
+
+// Path: admin.settings
+class Translations$admin$settings$en {
+	Translations$admin$settings$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+}
+
 // Path: roleSelection.roles.patient
 class Translations$roleSelection$roles$patient$en {
 	Translations$roleSelection$roles$patient$en._(this._root);
@@ -715,7 +905,7 @@ class Translations$roleSelection$roles$patient$en {
 	String get title => 'Patient';
 
 	/// en: 'Find doctors, book appointments, and manage your medical records.'
-	String get description => 'Find doctors, book appointments,\nand manage your medical records.';
+	String get description => 'Find doctors, book appointments, and manage your medical records.';
 }
 
 // Path: roleSelection.roles.doctor
@@ -730,7 +920,7 @@ class Translations$roleSelection$roles$doctor$en {
 	String get title => 'Doctor';
 
 	/// en: 'Manage appointments, patients, and your professional profile.'
-	String get description => 'Manage appointments, patients,\nand your professional profile.';
+	String get description => 'Manage appointments, patients, and your professional profile.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -774,17 +964,17 @@ extension on Translations {
 			'common.validation.enterConfirmPassword' => 'Please confirm your password',
 			'common.validation.selectRole' => 'Please select a role',
 			'onboarding.pages.0.title' => 'Find Trusted Doctors',
-			'onboarding.pages.0.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.',
+			'onboarding.pages.0.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
 			'onboarding.pages.1.title' => 'Choose Best Doctors',
-			'onboarding.pages.1.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.',
+			'onboarding.pages.1.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
 			'onboarding.pages.2.title' => 'Easy Appointments',
-			'onboarding.pages.2.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old.',
+			'onboarding.pages.2.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
 			'roleSelection.title' => 'Choose your role',
 			'roleSelection.subtitle' => 'The selected role determines the experience and available features.',
 			'roleSelection.roles.patient.title' => 'Patient',
-			'roleSelection.roles.patient.description' => 'Find doctors, book appointments,\nand manage your medical records.',
+			'roleSelection.roles.patient.description' => 'Find doctors, book appointments, and manage your medical records.',
 			'roleSelection.roles.doctor.title' => 'Doctor',
-			'roleSelection.roles.doctor.description' => 'Manage appointments, patients,\nand your professional profile.',
+			'roleSelection.roles.doctor.description' => 'Manage appointments, patients, and your professional profile.',
 			'roleSelection.errorNoRole' => 'Please select a role',
 			'auth.login.title' => 'Welcome back',
 			'auth.login.subtitle' => 'You can search doctors, book appointments and manage your health',
@@ -793,7 +983,7 @@ extension on Translations {
 			'auth.login.forgotPasswordSubtitle' => 'Enter your email to receive a password reset link',
 			'auth.login.forgotPasswordSend' => 'Send Reset Link',
 			'auth.login.forgotPasswordSuccess' => 'Reset link sent! Check your email',
-			'auth.login.noAccount' => 'Don\'t have an account? ',
+			'auth.login.noAccount' => 'Dont have an account? ',
 			'auth.login.joinUs' => 'Join us',
 			'auth.login.submitBtn' => 'Login',
 			'auth.login.loggingIn' => 'Logging in...',
@@ -848,7 +1038,7 @@ extension on Translations {
 			'doctorDetails.services' => 'Services',
 			'doctorDetails.service1' => 'Patient care should be the number one priority.',
 			'doctorDetails.service2' => 'If you run your practice you know how frustrating.',
-			'doctorDetails.service3' => 'That\'s why some of appointment reminder system.',
+			'doctorDetails.service3' => 'Thats why some of appointment reminder system.',
 			'doctorDetails.doctorInfo' => 'Doctor Info',
 			'doctorDetails.removedFromFavorites' => ({required Object doctorName}) => '${doctorName} removed from favorites',
 			'favorite.pleaseLogin' => 'Please log in to view favorites',
@@ -900,6 +1090,46 @@ extension on Translations {
 			'dashboard.available' => 'Available',
 			'dashboard.unavailable' => 'Unavailable',
 			'dashboard.doctorInfo' => 'Doctor Info',
+			'admin.chooseRole.title' => 'Admin',
+			'admin.chooseRole.description' => 'Manage doctors and app settings',
+			'admin.login.title' => 'Welcome Back!',
+			'admin.login.subtitle' => 'Login to your admin account',
+			'admin.login.rememberMe' => 'Remember me',
+			'admin.login.loginBtn' => 'Login',
+			'admin.login.secureAccess' => 'Secure admin access only',
+			'admin.login.accessDenied' => 'Access denied. You are not an admin.',
+			'admin.doctors.title' => 'Doctors',
+			'admin.doctors.searchHint' => 'Search doctors...',
+			'admin.doctors.totalDoctors' => 'Total Doctors',
+			'admin.doctors.active' => 'Active',
+			'admin.doctors.noDoctorsFound' => 'No doctors found',
+			'admin.doctors.deleteTitle' => 'Delete Doctor',
+			'admin.doctors.deleteConfirm' => 'Are you sure you want to remove Dr. @name?',
+			'admin.doctors.deleted' => 'Dr. @name deleted',
+			'admin.createDoctor.title' => 'Create Doctor',
+			'admin.createDoctor.nameLabel' => 'Doctor Name',
+			'admin.createDoctor.nameHint' => 'Enter doctor name',
+			'admin.createDoctor.emailHint' => 'doctor@email.com',
+			'admin.createDoctor.phoneHint' => '+20xxxxxxxxxx',
+			'admin.createDoctor.specialtyLabel' => 'Specialty',
+			'admin.createDoctor.specialtyHint' => 'Select specialty',
+			'admin.createDoctor.bioLabel' => 'Bio',
+			'admin.createDoctor.bioHint' => 'Brief description about the doctor...',
+			'admin.createDoctor.addressLabel' => 'Clinic Address',
+			'admin.createDoctor.addressHint' => '123 Main St, Downtown, City',
+			'admin.createDoctor.imageLabel' => 'Doctor Image',
+			'admin.createDoctor.imageUpload' => 'Upload doctor image',
+			'admin.createDoctor.imageTapHint' => 'Tap to pick an image',
+			'admin.createDoctor.createBtn' => 'Create Doctor',
+			'admin.createDoctor.creatingBtn' => 'Creating...',
+			'admin.createDoctor.success' => 'Doctor created successfully',
+			'admin.createDoctor.failed' => 'Failed to create doctor',
+			'admin.editDoctor.title' => 'Edit Doctor',
+			'admin.editDoctor.updateBtn' => 'Update Doctor',
+			'admin.editDoctor.updatingBtn' => 'Updating...',
+			'admin.editDoctor.success' => 'Doctor updated successfully',
+			'admin.editDoctor.failed' => 'Failed to update doctor',
+			'admin.settings.title' => 'Settings',
 			_ => null,
 		};
 	}

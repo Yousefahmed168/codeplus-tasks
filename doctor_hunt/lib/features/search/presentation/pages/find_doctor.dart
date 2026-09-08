@@ -9,6 +9,7 @@ import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../i18n/strings.g.dart';
@@ -217,12 +218,12 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
-                  ? Image.network(
-                      doctor.imageUrl!,
+                  ? CachedNetworkImage(
+                      imageUrl: doctor.imageUrl!,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Image.asset(
+                      errorWidget: (_, _, _) => Image.asset(
                         AppImages.doctor,
                         width: 80,
                         height: 80,

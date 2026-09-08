@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -178,12 +179,12 @@ class _FavoriteDoctorsScreenState extends State<FavoriteDoctorsScreen> {
                   ClipOval(
                     child: (doctor.imageUrl != null &&
                             doctor.imageUrl!.isNotEmpty)
-                        ? Image.network(
-                            doctor.imageUrl!,
+                        ? CachedNetworkImage(
+                            imageUrl: doctor.imageUrl!,
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Image.asset(
+                            errorWidget: (_, _, _) => Image.asset(
                               AppImages.doctor,
                               width: 80,
                               height: 80,

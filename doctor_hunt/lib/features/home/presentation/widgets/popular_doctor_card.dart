@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import 'package:gap/gap.dart';
@@ -50,10 +51,10 @@ class PopularDoctorCard extends StatelessWidget {
                 width: double.infinity,
                 color: AppColors.divider,
                 child: imagePath.startsWith('http')
-                    ? Image.network(
-                        imagePath,
+                    ? CachedNetworkImage(
+                        imageUrl: imagePath,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => const Center(
+                        errorWidget: (_, _, _) => const Center(
                           child: Icon(
                             Icons.person,
                             size: 60,

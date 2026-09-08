@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import 'package:gap/gap.dart';
@@ -85,12 +86,12 @@ class FeatureDoctorCard extends StatelessWidget {
             // Circular Avatar
             ClipOval(
               child: imagePath.startsWith('http')
-                  ? Image.network(
-                      imagePath,
+                  ? CachedNetworkImage(
+                      imageUrl: imagePath,
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => const Icon(
+                      errorWidget: (_, _, _) => const Icon(
                         Icons.person,
                         size: 30,
                         color: AppColors.primary,

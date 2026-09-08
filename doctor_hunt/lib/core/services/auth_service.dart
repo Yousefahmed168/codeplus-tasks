@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../../features/doctors/models/doctor_model.dart';
 import '../../features/auth/data/models/patient_model.dart';
-import '../../features/auth/models/user_model.dart';
+import '../../features/auth/data/models/user_model.dart';
 
-/// Singleton that wraps FirebaseAuth for login, registration, and role lookup.
 class AuthService {
   AuthService._();
   static final AuthService instance = AuthService._();
@@ -13,23 +12,19 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Firestore collection names
   static const String patientsCollection = 'patients';
   static const String doctorsCollection = 'doctors';
+  static const String adminsCollection = 'admins';
 
-  /// Returns the correct Firestore collection for the given [role].
   static String collectionForRole(UserRole role) {
     return role == UserRole.doctor ? doctorsCollection : patientsCollection;
   }
 
-  /// Currently signed-in Firebase user (nullable).
   User? get currentUser => _auth.currentUser;
 
-  /// Stream of auth state changes.
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  /// Determines a user's role by checking both Firestore collections.
-  /// Returns [UserRole.doctor], [UserRole.patient], or null if not found.
+
   Future<UserRole?> getUserRole(String uid) async {
     try {
       final doctorDoc =
@@ -40,6 +35,10 @@ class AuthService {
           await _firestore.collection(patientsCollection).doc(uid).get();
       if (patientDoc.exists) return UserRole.patient;
 
+      final adminDoc =
+          await _firestore.collection(adminsCollection).doc(uid).get();
+      if (adminDoc.exists) return UserRole.admin;
+
       return null;
     } catch (e) {
       debugPrint('AuthService.getUserRole error: $e');
@@ -47,7 +46,6 @@ class AuthService {
     }
   }
 
-  /// Sign in with email + password.
   Future<UserCredential> login({
     required String email,
     required String password,
@@ -58,7 +56,6 @@ class AuthService {
     );
   }
 
-  /// Register a new patient and write their profile to Firestore.
   Future<UserCredential> registerPatient({
     required String name,
     required String email,
@@ -84,7 +81,6 @@ class AuthService {
     return credential;
   }
 
-  /// Register a new doctor and write their profile to Firestore.
   Future<UserCredential> registerDoctor({
     required String name,
     required String email,
@@ -116,17 +112,14 @@ class AuthService {
     return credential;
   }
 
-  /// Send a password-reset email.
   Future<void> sendPasswordResetEmail(String email) async {
     await _auth.sendPasswordResetEmail(email: email.trim());
   }
 
-  /// Sign out the current user.
   Future<void> logout() async {
     await _auth.signOut();
   }
 
-  /// Converts a FirebaseAuth error code into a human-readable message.
   String getErrorMessage(String code) {
     switch (code) {
       case 'user-not-found':

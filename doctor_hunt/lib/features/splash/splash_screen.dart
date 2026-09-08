@@ -38,6 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (role == null) {
         context.go(AppRoutes.role);
+      } else if (role.name == 'admin') {
+        context.go(AppRoutes.adminMain);
       } else if (role.name == 'doctor') {
         context.go(AppRoutes.doctorDashboard);
       } else {

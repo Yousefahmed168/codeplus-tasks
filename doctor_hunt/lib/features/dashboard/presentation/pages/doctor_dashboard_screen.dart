@@ -1,5 +1,6 @@
-import 'package:doctor_hunt/features/auth/models/user_model.dart';
+import 'package:doctor_hunt/features/auth/data/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -36,7 +37,7 @@ class _DoctorDashboardScreenState extends State<DoctorDashboardScreen> {
       setState(() {
         _doctor = profile as DoctorModel?;
         _isAvailable =
-            true; // DoctorModel doesn't have isAvailable, so assume true for UI
+            true; 
         _isLoading = false;
       });
     }
@@ -168,7 +169,7 @@ class _DoctorDashboardScreenState extends State<DoctorDashboardScreen> {
               color: AppColors.primary.withValues(alpha: 0.1),
               image: _doctor?.imageUrl != null && _doctor!.imageUrl!.isNotEmpty
                   ? DecorationImage(
-                      image: NetworkImage(_doctor!.imageUrl!),
+                      image: CachedNetworkImageProvider(_doctor!.imageUrl!),
                       fit: BoxFit.cover,
                     )
                   : null,

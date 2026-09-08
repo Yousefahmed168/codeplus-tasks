@@ -39,15 +39,15 @@
     "pages": [
       {
         "title": "Find Trusted Doctors",
-        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text."
       },
       {
         "title": "Choose Best Doctors",
-        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text."
       },
       {
         "title": "Easy Appointments",
-        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of it over 2000 years old."
+        "description": "Contrary to popular belief, Lorem Ipsum is not simply random text."
       }
     ]
   },
@@ -57,11 +57,11 @@
     "roles": {
       "patient": {
         "title": "Patient",
-        "description": "Find doctors, book appointments,\nand manage your medical records."
+        "description": "Find doctors, book appointments, and manage your medical records."
       },
       "doctor": {
         "title": "Doctor",
-        "description": "Manage appointments, patients,\nand your professional profile."
+        "description": "Manage appointments, patients, and your professional profile."
       }
     },
     "errorNoRole": "Please select a role"
@@ -75,7 +75,7 @@
       "forgotPasswordSubtitle": "Enter your email to receive a password reset link",
       "forgotPasswordSend": "Send Reset Link",
       "forgotPasswordSuccess": "Reset link sent! Check your email",
-      "noAccount": "Don't have an account? ",
+      "noAccount": "Dont have an account? ",
       "joinUs": "Join us",
       "submitBtn": "Login",
       "loggingIn": "Logging in..."
@@ -139,7 +139,7 @@
     "services": "Services",
     "service1": "Patient care should be the number one priority.",
     "service2": "If you run your practice you know how frustrating.",
-    "service3": "That's why some of appointment reminder system.",
+    "service3": "Thats why some of appointment reminder system.",
     "doctorInfo": "Doctor Info",
     "removedFromFavorites": "$doctorName removed from favorites"
   },
@@ -201,5 +201,59 @@
     "available": "Available",
     "unavailable": "Unavailable",
     "doctorInfo": "Doctor Info"
+  },
+  "admin": {
+    "chooseRole": {
+      "title": "Admin",
+      "description": "Manage doctors and app settings"
+    },
+    "login": {
+      "title": "Welcome Back!",
+      "subtitle": "Login to your admin account",
+      "rememberMe": "Remember me",
+      "loginBtn": "Login",
+      "secureAccess": "Secure admin access only",
+      "accessDenied": "Access denied. You are not an admin."
+    },
+    "doctors": {
+      "title": "Doctors",
+      "searchHint": "Search doctors...",
+      "totalDoctors": "Total Doctors",
+      "active": "Active",
+      "noDoctorsFound": "No doctors found",
+      "deleteTitle": "Delete Doctor",
+      "deleteConfirm": "Are you sure you want to remove Dr. @name?",
+      "deleted": "Dr. @name deleted"
+    },
+    "createDoctor": {
+      "title": "Create Doctor",
+      "nameLabel": "Doctor Name",
+      "nameHint": "Enter doctor name",
+      "emailHint": "doctor@email.com",
+      "phoneHint": "+20xxxxxxxxxx",
+      "specialtyLabel": "Specialty",
+      "specialtyHint": "Select specialty",
+      "bioLabel": "Bio",
+      "bioHint": "Brief description about the doctor...",
+      "addressLabel": "Clinic Address",
+      "addressHint": "123 Main St, Downtown, City",
+      "imageLabel": "Doctor Image",
+      "imageUpload": "Upload doctor image",
+      "imageTapHint": "Tap to pick an image",
+      "createBtn": "Create Doctor",
+      "creatingBtn": "Creating...",
+      "success": "Doctor created successfully",
+      "failed": "Failed to create doctor"
+    },
+    "editDoctor": {
+      "title": "Edit Doctor",
+      "updateBtn": "Update Doctor",
+      "updatingBtn": "Updating...",
+      "success": "Doctor updated successfully",
+      "failed": "Failed to update doctor"
+    },
+    "settings": {
+      "title": "Settings"
+    }
   }
 }

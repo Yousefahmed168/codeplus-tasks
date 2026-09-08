@@ -9,7 +9,6 @@ import '../../../../core/constants/assets.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/services/auth_service.dart';
-import '../../../../core/utils/db_seeder.dart';
 import '../../../../features/doctors/models/doctor_model.dart';
 import '../widgets/home_header.dart';
 import '../widgets/live_doctor_card.dart';
@@ -19,7 +18,8 @@ import '../widgets/feature_doctor_card.dart';
 import '../../../../i18n/strings.g.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onAvatarTap;
+  const HomeScreen({super.key, this.onAvatarTap});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -39,19 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'seed_db_btn',
-        onPressed: () async {
-          await DbSeeder.seedDoctors();
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(t.home.seededSuccess)),
-            );
-          }
-        },
-        tooltip: 'Seed Mock Doctors',
-        child: const Icon(Icons.add),
-      ),
+      //
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -62,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   searchController: _searchController,
                   onClearSearch: () => _searchController.clear(),
                   onSearchTap: () => context.go(AppRoutes.search),
+                  onAvatarTap: widget.onAvatarTap,
                 ),
                 Gap(36),
                 _buildSectionHeader(
@@ -121,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Gap(24),
 
-                // ── Popular Doctors (with favorites stream) ────────────
+                //  Popular Doctors (with favorites stream) 
                 StreamBuilder<List<DoctorModel>>(
                   stream: UserService.instance.streamDoctors(),
                   builder: (context, docSnapshot) {
@@ -163,17 +152,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // If user not logged in, show all as not-favorited
                     if (_patientUid == null) {
-                      return _buildDoctorSections(
-                        context,
-                        doctors,
-                        <String>{},
-                      );
+                      return _buildDoctorSections(context, doctors, <String>{});
                     }
 
                     // Stream favorite IDs for real-time sync
                     return StreamBuilder<Set<String>>(
-                      stream: FavoriteService.instance
-                          .streamFavoriteIds(_patientUid!),
+                      stream: FavoriteService.instance.streamFavoriteIds(
+                        _patientUid!,
+                      ),
                       builder: (context, favSnapshot) {
                         final favoriteIds = favSnapshot.data ?? {};
                         return _buildDoctorSections(
@@ -202,10 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(
-          title: t.home.popularDoctor,
-          showSeeAll: true,
-        ),
+        _buildSectionHeader(title: t.home.popularDoctor, showSeeAll: true),
         Gap(12),
         SizedBox(
           height: 220,
@@ -220,8 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
               final isFav =
                   doctor.uid != null && favoriteIds.contains(doctor.uid);
               return PopularDoctorCard(
-                imagePath: (doctor.imageUrl != null &&
-                        doctor.imageUrl!.isNotEmpty)
+                imagePath:
+                    (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
                     ? doctor.imageUrl!
                     : AppImages.doctor,
                 name: doctor.name ?? 'Unknown',
@@ -236,10 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Gap(24),
-        _buildSectionHeader(
-          title: t.home.featureDoctor,
-          showSeeAll: true,
-        ),
+        _buildSectionHeader(title: t.home.featureDoctor, showSeeAll: true),
         Gap(12),
         SizedBox(
           height: 135,
@@ -258,8 +238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   AppRoutes.doctorDetails,
                   extra: doctor.toDoctor(isFavorite: isFav),
                 ),
-                imagePath: (doctor.imageUrl != null &&
-                        doctor.imageUrl!.isNotEmpty)
+                imagePath:
+                    (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
                     ? doctor.imageUrl!
                     : AppImages.doctor,
                 name: doctor.name ?? 'Unknown',
@@ -289,9 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
       patientUid: _patientUid!,
       doctorUid: doctorUid,
     );
-    // StreamBuilder auto-rebuilds — no setState needed
 
-    // Show undo snackbar when REMOVING a favorite
     if (wasFavorite && !isNowFavorite && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -3,6 +3,7 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 
 class DoctorInfoCard extends StatelessWidget {
@@ -52,12 +53,12 @@ class DoctorInfoCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: imagePath.startsWith('http')
-                    ? Image.network(
-                        imagePath,
+                    ? CachedNetworkImage(
+                        imageUrl: imagePath,
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Icon(
+                        errorWidget: (context, url, error) => Icon(
                           Icons.person,
                           size: 50,
                           color: AppColors.primary,

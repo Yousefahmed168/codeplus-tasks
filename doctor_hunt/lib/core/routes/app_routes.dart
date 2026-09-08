@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
+import '../../features/auth/presentation/pages/update_doctor_profile_screen.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/dashboard/presentation/pages/doctor_dashboard_screen.dart';
 import '../../features/doctors/models/doctor.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
+import '../../features/doctors/presentation/pages/select_time_screen.dart';
 import '../../features/home/presentation/pages/main_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/role/choose_role.dart';
 import '../../features/search/presentation/pages/find_doctor.dart';
 import '../../features/splash/splash_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../features/doctors/presentation/pages/select_time_screen.dart';
-import '../../features/auth/presentation/pages/update_doctor_profile_screen.dart';
-import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/admin/presentation/pages/admin_login_screen.dart';
+import '../../features/admin/presentation/pages/admin_main_screen.dart';
+import '../../features/admin/presentation/pages/admin_doctors_screen.dart';
+import '../../features/admin/presentation/pages/create_doctor_screen.dart';
+import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -28,6 +33,13 @@ class AppRoutes {
   static const String search = '/search';
   static const String selectTime = '/select-time';
   static const String updateDoctorProfile = '/update-doctor-profile';
+  // Admin routes
+  static const String adminLogin = '/admin/login';
+  static const String adminMain = '/admin/main';
+  static const String adminDoctors = '/admin/doctors';
+  static const String createDoctor = '/admin/create-doctor';
+  static const String editDoctor = '/admin/edit-doctor';
+  static const String adminSettings = '/admin/settings';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -108,6 +120,37 @@ final GoRouter appRouter = GoRouter(
           child: const UpdateDoctorProfileScreen(),
         ),
       ),
+    ),
+    // Admin routes
+    GoRoute(
+      path: AppRoutes.adminLogin,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const AdminLoginScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.adminMain,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const AdminMainScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.adminDoctors,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const AdminDoctorsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.createDoctor,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const CreateDoctorScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.editDoctor,
+      pageBuilder: (context, state) {
+        final doctor = state.extra as dynamic;
+        return _slidePage(
+          key: state.pageKey,
+          child: EditDoctorScreen(doctor: doctor),
+        );
+      },
     ),
   ],
 );
