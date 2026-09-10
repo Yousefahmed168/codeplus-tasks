@@ -53,7 +53,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
           .first;
 
       final matched = allDoctors.where((d) =>
-          d.name == _doctor.name && d.imageUrl == _doctor.imagePath);
+          d.name == _doctor.name && d.imageUrl == _doctor.imageUrl);
 
       if (matched.isNotEmpty) {
         final doctorUid = matched.first.uid;
@@ -165,13 +165,13 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                     children: [
                       // Doctor info card
                       DoctorInfoCard(
-                        name: _doctor.name,
-                        specialty: _doctor.specialty,
+                        name: _doctor.name ?? 'Unknown',
+                        specialty: _doctor.specialization ?? 'General',
                         rating: _doctor.ratingPercentage.round() > 5
                             ? 5
                             : _doctor.ratingPercentage.round(),
                         hourlyRate: _doctor.hourlyRate,
-                        imagePath: _doctor.imagePath,
+                        imagePath: _doctor.imageUrl ?? 'assets/images/doctor.png',
                         isFavorite: _isFavorite,
                         onFavoriteToggle: _toggleFavorite,
                         onBookNow: () {

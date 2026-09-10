@@ -1,20 +1,16 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
-import '../../../../features/auth/data/models/specializations.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../core/widgets/widgets.dart';
-import '../../../../features/doctors/models/doctor_model.dart';
+import '../../../../features/doctors/models/doctor.dart';
+import '../../../../i18n/strings.g.dart';
+import '../widgets/doctor_form_widget.dart';
 
 class EditDoctorScreen extends StatefulWidget {
-  final DoctorModel doctor;
+  final Doctor doctor;
 
   const EditDoctorScreen({super.key, required this.doctor});
 
@@ -67,14 +63,19 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
 
   Future<void> _pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
       if (pickedFile != null) {
         setState(() => _imagePath = pickedFile.path);
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to pick image: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${t.admin.editDoctor.failed}: $e'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     }
@@ -84,7 +85,6 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
     try {
-      // Upload image if selected
       if (_imagePath != null) {
         _uploadedImageUrl = await CloudinaryService.instance.uploadImage(
           filePath: _imagePath!,
@@ -104,12 +104,8 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         'closeHour': _closeHourCtrl.text.trim(),
       };
 
-      if (_uploadedImageUrl != null) {
-        data['image'] = _uploadedImageUrl;
-      }
-
-      // Remove null values
-      data.removeWhere((key, value) => value == null);
+      if (_uploadedImageUrl != null) data['image'] = _uploadedImageUrl;
+      data.removeWhere((_, value) => value == null);
 
       if (widget.doctor.uid != null) {
         await AdminService.instance.updateDoctor(widget.doctor.uid!, data);
@@ -117,14 +113,20 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: const Text('Doctor updated successfully'), backgroundColor: AppColors.success),
+          SnackBar(
+            content: Text(t.admin.editDoctor.success),
+            backgroundColor: AppColors.success,
+          ),
         );
         context.pop();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update doctor: $e'), backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text('${t.admin.editDoctor.failed}: $e'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     } finally {
@@ -140,114 +142,34 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+          ),
           onPressed: () => context.pop(),
         ),
-        title: Text('Edit Doctor', style: context.bold18.textPrimary),
+        title: Text(
+          t.admin.editDoctor.title,
+          style: context.bold18.textPrimary,
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: GestureDetector(
-                  onTap: _pickImage,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 100, height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          image: _imagePath != null
-                              ? DecorationImage(image: FileImage(File(_imagePath!)), fit: BoxFit.cover)
-                              : (widget.doctor.imageUrl != null && widget.doctor.imageUrl!.isNotEmpty
-                                  ? DecorationImage(image: CachedNetworkImageProvider(widget.doctor.imageUrl!), fit: BoxFit.cover)
-                                  : null),
-                        ),
-                        child: _imagePath == null && (widget.doctor.imageUrl == null || widget.doctor.imageUrl!.isEmpty)
-                            ? Icon(Icons.person, color: AppColors.primary, size: 40)
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 0, right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-                          child: const Icon(Icons.camera_alt, color: Colors.white, size: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Gap(24),
-              Text('Doctor Name', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _nameCtrl, hintText: 'Enter doctor name',
-                prefixIcon: const Icon(Icons.person_outline, color: AppColors.textHint, size: 20),
-                validator: (v) { if (v == null || v.isEmpty) return 'Please enter doctor name'; return null; }),
-              const Gap(16),
-              Text('Email', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _emailCtrl, hintText: 'doctor@email.com',
-                keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textHint, size: 20)),
-              const Gap(16),
-              Text('Phone 1', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _phone1Ctrl, hintText: '+20xxxxxxxxxx',
-                keyboardType: TextInputType.phone,
-                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textHint, size: 20)),
-              const Gap(16),
-              Text('Phone 2 (Optional)', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _phone2Ctrl, hintText: '+20xxxxxxxxxx',
-                keyboardType: TextInputType.phone,
-                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.textHint, size: 20)),
-              const Gap(16),
-              Text('Specialty', style: context.semiBold14.textPrimary), const Gap(8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(color: AppColors.surfaceVariant, borderRadius: BorderRadius.circular(20)),
-                child: DropdownButton<String>(
-                  isExpanded: true, underline: const SizedBox(),
-                  iconEnabledColor: AppColors.primary,
-                  hint: Text('Select specialty', style: context.regular14.textSecondary),
-                  icon: const Icon(Icons.expand_circle_down_outlined),
-                  value: _selectedSpecialty,
-                  onChanged: (v) => setState(() => _selectedSpecialty = v),
-                  items: specializations.map((String spec) => DropdownMenuItem(value: spec, child: Text(spec))).toList(),
-                ),
-              ),
-              const Gap(16),
-              Row(children: [
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Open Hour', style: context.semiBold14.textPrimary),
-                  const Gap(8),
-                  CustomTextFormField(controller: _openHourCtrl, hintText: '09:00'),
-                ])),
-                const Gap(16),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Close Hour', style: context.semiBold14.textPrimary),
-                  const Gap(8),
-                  CustomTextFormField(controller: _closeHourCtrl, hintText: '17:00'),
-                ])),
-              ]),
-              const Gap(16),
-              Text('Bio', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _bioCtrl, hintText: 'Brief description about the doctor...', maxLines: 3),
-              const Gap(16),
-              Text('Clinic Address', style: context.semiBold14.textPrimary), const Gap(8),
-              CustomTextFormField(controller: _addressCtrl, hintText: '123 Main St, Downtown, City'),
-              const Gap(24),
-              MainButton(
-                text: _isSubmitting ? 'Updating...' : 'Update Doctor',
-                onPressed: _isSubmitting ? null : _submit,
-              ),
-              const Gap(32),
-            ],
-          ),
+        child: DoctorFormWidget(
+          formKey: _formKey,
+          nameCtrl: _nameCtrl,
+          emailCtrl: _emailCtrl,
+         
+          imagePath: _imagePath,
+          existingImageUrl: widget.doctor.imageUrl,
+          onPickImage: _pickImage,
+          isSubmitting: _isSubmitting,
+          submitLabel: t.admin.editDoctor.updateBtn,
+          submittingLabel: t.admin.editDoctor.updatingBtn,
+          onSubmit: _submit,
+          openHourCtrl: _openHourCtrl,
+          closeHourCtrl: _closeHourCtrl,
         ),
       ),
     );

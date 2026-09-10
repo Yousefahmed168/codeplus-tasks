@@ -41,7 +41,7 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                 children: [
                   ClipOval(
                     child: Image.asset(
-                      doctor.imagePath,
+                      doctor.imageUrl ?? 'assets/images/doctor.png',
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
@@ -51,7 +51,7 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      doctor.name,
+                      doctor.name ?? 'Unknown',
                       style: context.bold16.textPrimary,
                       textAlign: TextAlign.center,
                       maxLines: 1,
@@ -62,7 +62,7 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      doctor.specialty,
+                      doctor.specialization ?? 'General',
                       style: context.regular12.primary,
                       textAlign: TextAlign.center,
                       maxLines: 1,
@@ -78,8 +78,12 @@ class FavoriteDoctorGridCard extends StatelessWidget {
               child: GestureDetector(
                 onTap: onFavoriteToggle,
                 child: Icon(
-                  doctor.isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                  color: doctor.isFavorite ? Colors.red : Colors.grey.shade400,
+                  doctor.isFavorite
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
+                  color: doctor.isFavorite
+                      ? AppColors.error
+                      : AppColors.textSecondary,
                   size: 20,
                 ),
               ),

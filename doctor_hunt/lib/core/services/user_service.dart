@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_hunt/features/auth/data/models/user_model.dart';
 import 'package:flutter/foundation.dart';
-import '../../features/doctors/models/doctor_model.dart';
+import '../../features/doctors/models/doctor.dart';
 import '../../features/auth/data/models/patient_model.dart';
 import 'auth_service.dart';
 
@@ -23,7 +23,7 @@ class UserService {
       if (doctorDoc.exists) {
         final data = doctorDoc.data()!;
         data['uid'] = doctorDoc.id;
-        return DoctorModel.fromJson(data);
+        return Doctor.fromJson(data);
       }
 
       final patientDoc = await _firestore
@@ -44,7 +44,7 @@ class UserService {
   }
 
   /// Streams all doctor documents from the doctors collection.
-  Stream<List<DoctorModel>> streamDoctors() {
+  Stream<List<Doctor>> streamDoctors() {
     return _firestore
         .collection(AuthService.doctorsCollection)
         .snapshots()
@@ -53,10 +53,24 @@ class UserService {
               .map((doc) {
                 final data = doc.data();
                 data['uid'] = doc.id;
-                return DoctorModel.fromJson(data);
+                return Doctor.fromJson(data);
               })
               .toList(),
         );
+  }
+
+  /// Streams a single patient document by [uid].
+  Stream<PatientModel?> streamPatient(String uid) {
+    return _firestore
+        .collection(AuthService.patientsCollection)
+        .doc(uid)
+        .snapshots()
+        .map((doc) {
+      if (!doc.exists) return null;
+      final data = doc.data()!;
+      data['uid'] = doc.id;
+      return PatientModel.fromJson(data);
+    });
   }
 
   /// Updates a user document in the correct collection based on [role].

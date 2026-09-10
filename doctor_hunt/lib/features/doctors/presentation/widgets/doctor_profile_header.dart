@@ -100,8 +100,8 @@ class DoctorProfileHeader extends StatelessWidget {
           GestureDetector(
             onTap: onFavoriteToggle,
             child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite, 
-              color: isFavorite ? Colors.red : Colors.red,
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? AppColors.error : AppColors.textHint,
               size: 20,
             ),
           ),

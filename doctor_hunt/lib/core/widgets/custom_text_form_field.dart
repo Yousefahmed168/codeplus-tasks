@@ -19,7 +19,9 @@ class CustomTextFormField extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.maxLines,
     this.borderEnabled = false,
+    this.obscureText = false,
   });
+  final bool obscureText;
   final String? hintText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
@@ -42,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
       style: context.regular14.textPrimary,
       keyboardType: keyboardType,
       readOnly: readOnly,
+      obscureText: obscureText,
       focusNode: focusNode,
       maxLines: maxLines,
       textAlign: textAlign,

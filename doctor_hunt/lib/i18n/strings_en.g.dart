@@ -528,7 +528,10 @@ class Translations$admin$en {
 	late final Translations$admin$doctors$en doctors = Translations$admin$doctors$en._(_root);
 	late final Translations$admin$createDoctor$en createDoctor = Translations$admin$createDoctor$en._(_root);
 	late final Translations$admin$editDoctor$en editDoctor = Translations$admin$editDoctor$en._(_root);
+	late final Translations$admin$doctorDetails$en doctorDetails = Translations$admin$doctorDetails$en._(_root);
+	late final Translations$admin$editProfile$en editProfile = Translations$admin$editProfile$en._(_root);
 	late final Translations$admin$settings$en settings = Translations$admin$settings$en._(_root);
+	late final Translations$admin$changePassword$en changePassword = Translations$admin$changePassword$en._(_root);
 }
 
 // Path: common.validation
@@ -881,6 +884,72 @@ class Translations$admin$editDoctor$en {
 	String get failed => 'Failed to update doctor';
 }
 
+// Path: admin.doctorDetails
+class Translations$admin$doctorDetails$en {
+	Translations$admin$doctorDetails$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Doctor Details'
+	String get title => 'Doctor Details';
+
+	/// en: 'Doctor Info'
+	String get doctorInfo => 'Doctor Info';
+
+	/// en: 'Specialty'
+	String get specialty => 'Specialty';
+
+	/// en: 'Account Status'
+	String get accountStatus => 'Account Status';
+
+	/// en: 'Active'
+	String get active => 'Active';
+
+	/// en: 'Inactive'
+	String get inactive => 'Inactive';
+
+	/// en: 'Edit Doctor'
+	String get editDoctor => 'Edit Doctor';
+
+	/// en: 'Delete Doctor'
+	String get deleteDoctor => 'Delete Doctor';
+}
+
+// Path: admin.editProfile
+class Translations$admin$editProfile$en {
+	Translations$admin$editProfile$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Edit Profile'
+	String get title => 'Edit Profile';
+
+	/// en: 'Tap photo to change'
+	String get tapPhotoToChange => 'Tap photo to change';
+
+	/// en: 'FULL NAME'
+	String get fullName => 'FULL NAME';
+
+	/// en: 'EMAIL ADDRESS'
+	String get emailAddress => 'EMAIL ADDRESS';
+
+	/// en: 'Save Changes'
+	String get saveChanges => 'Save Changes';
+
+	/// en: 'Saving...'
+	String get saving => 'Saving...';
+
+	/// en: 'Profile updated successfully'
+	String get success => 'Profile updated successfully';
+
+	/// en: 'Failed to update profile'
+	String get failed => 'Failed to update profile';
+}
+
 // Path: admin.settings
 class Translations$admin$settings$en {
 	Translations$admin$settings$en._(this._root);
@@ -891,6 +960,120 @@ class Translations$admin$settings$en {
 
 	/// en: 'Settings'
 	String get title => 'Settings';
+
+	/// en: 'App Settings'
+	String get appSettings => 'App Settings';
+
+	/// en: 'Push Notifications'
+	String get pushNotif => 'Push Notifications';
+
+	/// en: 'Enable push notifications for all users'
+	String get pushNotifDesc => 'Enable push notifications for all users';
+
+	/// en: 'Email Notifications'
+	String get emailNotif => 'Email Notifications';
+
+	/// en: 'Send email notifications for important events'
+	String get emailNotifDesc => 'Send email notifications for important events';
+
+	/// en: 'Doctor Management'
+	String get doctorManagement => 'Doctor Management';
+
+	/// en: 'Auto-Approve Doctors'
+	String get autoApprove => 'Auto-Approve Doctors';
+
+	/// en: 'Automatically approve new doctor registrations'
+	String get autoApproveDesc => 'Automatically approve new doctor registrations';
+
+	/// en: 'System'
+	String get system => 'System';
+
+	/// en: 'Maintenance Mode'
+	String get maintenance => 'Maintenance Mode';
+
+	/// en: 'Put the app in maintenance mode for all users'
+	String get maintenanceDesc => 'Put the app in maintenance mode for all users';
+
+	/// en: 'Dark Mode'
+	String get darkMode => 'Dark Mode';
+
+	/// en: 'Enable dark mode for admin interface'
+	String get darkModeDesc => 'Enable dark mode for admin interface';
+
+	/// en: 'Account'
+	String get account => 'Account';
+
+	/// en: 'Admin Profile'
+	String get adminProfile => 'Admin Profile';
+
+	/// en: 'Edit admin details & permissions'
+	String get adminProfileDesc => 'Edit admin details & permissions';
+
+	/// en: 'Change Password'
+	String get changePassword => 'Change Password';
+
+	/// en: 'Update admin security credentials'
+	String get changePasswordDesc => 'Update admin security credentials';
+
+	/// en: 'Notification Preferences'
+	String get notificationPreferences => 'Notification Preferences';
+
+	/// en: 'Manage notification settings'
+	String get notificationPreferencesDesc => 'Manage notification settings';
+
+	/// en: 'App Information'
+	String get appInformation => 'App Information';
+
+	/// en: 'App version'
+	String get appVersion => 'App version';
+
+	/// en: 'Help & Support'
+	String get helpSupport => 'Help & Support';
+
+	/// en: 'Get help with the admin panel'
+	String get helpSupportDesc => 'Get help with the admin panel';
+
+	/// en: 'About'
+	String get about => 'About';
+
+	/// en: 'App version and information'
+	String get aboutDesc => 'App version and information';
+}
+
+// Path: admin.changePassword
+class Translations$admin$changePassword$en {
+	Translations$admin$changePassword$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Change Password'
+	String get title => 'Change Password';
+
+	/// en: 'Current Password'
+	String get currentPassword => 'Current Password';
+
+	/// en: 'New Password'
+	String get newPassword => 'New Password';
+
+	/// en: 'Confirm New Password'
+	String get confirmNewPassword => 'Confirm New Password';
+
+	/// en: 'Update Password'
+	String get updatePassword => 'Update Password';
+
+	/// en: 'Updating...'
+	String get updating => 'Updating...';
+
+	/// en: 'Password updated successfully'
+	String get success => 'Password updated successfully';
+
+	/// en: 'Failed to update password'
+	String get failed => 'Failed to update password';
+
+	/// en: 'Please enter your current password'
+	String get currentPasswordRequired => 'Please enter your current password';
 }
 
 // Path: roleSelection.roles.patient
@@ -1129,7 +1312,58 @@ extension on Translations {
 			'admin.editDoctor.updatingBtn' => 'Updating...',
 			'admin.editDoctor.success' => 'Doctor updated successfully',
 			'admin.editDoctor.failed' => 'Failed to update doctor',
+			'admin.doctorDetails.title' => 'Doctor Details',
+			'admin.doctorDetails.doctorInfo' => 'Doctor Info',
+			'admin.doctorDetails.specialty' => 'Specialty',
+			'admin.doctorDetails.accountStatus' => 'Account Status',
+			'admin.doctorDetails.active' => 'Active',
+			'admin.doctorDetails.inactive' => 'Inactive',
+			'admin.doctorDetails.editDoctor' => 'Edit Doctor',
+			'admin.doctorDetails.deleteDoctor' => 'Delete Doctor',
+			'admin.editProfile.title' => 'Edit Profile',
+			'admin.editProfile.tapPhotoToChange' => 'Tap photo to change',
+			'admin.editProfile.fullName' => 'FULL NAME',
+			'admin.editProfile.emailAddress' => 'EMAIL ADDRESS',
+			'admin.editProfile.saveChanges' => 'Save Changes',
+			'admin.editProfile.saving' => 'Saving...',
+			'admin.editProfile.success' => 'Profile updated successfully',
+			'admin.editProfile.failed' => 'Failed to update profile',
 			'admin.settings.title' => 'Settings',
+			'admin.settings.appSettings' => 'App Settings',
+			'admin.settings.pushNotif' => 'Push Notifications',
+			'admin.settings.pushNotifDesc' => 'Enable push notifications for all users',
+			'admin.settings.emailNotif' => 'Email Notifications',
+			'admin.settings.emailNotifDesc' => 'Send email notifications for important events',
+			'admin.settings.doctorManagement' => 'Doctor Management',
+			'admin.settings.autoApprove' => 'Auto-Approve Doctors',
+			'admin.settings.autoApproveDesc' => 'Automatically approve new doctor registrations',
+			'admin.settings.system' => 'System',
+			'admin.settings.maintenance' => 'Maintenance Mode',
+			'admin.settings.maintenanceDesc' => 'Put the app in maintenance mode for all users',
+			'admin.settings.darkMode' => 'Dark Mode',
+			'admin.settings.darkModeDesc' => 'Enable dark mode for admin interface',
+			'admin.settings.account' => 'Account',
+			'admin.settings.adminProfile' => 'Admin Profile',
+			'admin.settings.adminProfileDesc' => 'Edit admin details & permissions',
+			'admin.settings.changePassword' => 'Change Password',
+			'admin.settings.changePasswordDesc' => 'Update admin security credentials',
+			'admin.settings.notificationPreferences' => 'Notification Preferences',
+			'admin.settings.notificationPreferencesDesc' => 'Manage notification settings',
+			'admin.settings.appInformation' => 'App Information',
+			'admin.settings.appVersion' => 'App version',
+			'admin.settings.helpSupport' => 'Help & Support',
+			'admin.settings.helpSupportDesc' => 'Get help with the admin panel',
+			'admin.settings.about' => 'About',
+			'admin.settings.aboutDesc' => 'App version and information',
+			'admin.changePassword.title' => 'Change Password',
+			'admin.changePassword.currentPassword' => 'Current Password',
+			'admin.changePassword.newPassword' => 'New Password',
+			'admin.changePassword.confirmNewPassword' => 'Confirm New Password',
+			'admin.changePassword.updatePassword' => 'Update Password',
+			'admin.changePassword.updating' => 'Updating...',
+			'admin.changePassword.success' => 'Password updated successfully',
+			'admin.changePassword.failed' => 'Failed to update password',
+			'admin.changePassword.currentPasswordRequired' => 'Please enter your current password',
 			_ => null,
 		};
 	}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 import 'admin_doctors_screen.dart';
 import 'admin_settings_screen.dart';
+import '../../../../i18n/strings.g.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -31,16 +32,16 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
         onTap: (i) => setState(() => _currentTab = i),
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textHint,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_outline),
-            activeIcon: Icon(Icons.people),
-            label: 'Doctors',
+            icon: const Icon(Icons.people_outline),
+            activeIcon: const Icon(Icons.people),
+            label: t.admin.doctors.title,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            activeIcon: const Icon(Icons.settings),
+            label: t.admin.settings.title,
           ),
         ],
       ),

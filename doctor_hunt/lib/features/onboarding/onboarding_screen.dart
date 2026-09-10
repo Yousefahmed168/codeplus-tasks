@@ -110,20 +110,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 52,
-                  child: ElevatedButton(
+                  child: MainButton(
+                    text: isLast ? t.common.getStarted : t.common.next,
                     onPressed: _goToNextPage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: Text(
-                      isLast ? t.common.getStarted : t.common.next,
-                      style: context.semiBold16.textOnPrimary,
-                    ),
                   ),
                 ),
                 Gap(12),

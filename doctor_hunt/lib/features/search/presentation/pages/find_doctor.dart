@@ -1,4 +1,4 @@
-import '../../../doctors/models/doctor_model.dart';
+import '../../../doctors/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
 
@@ -123,7 +123,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
 
   Widget _buildSearchResults() {
-    return StreamBuilder<List<DoctorModel>>(
+    return StreamBuilder<List<Doctor>>(
       stream: UserService.instance.streamDoctors(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -191,12 +191,12 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
     );
   }
 
-  Widget _buildDoctorResultCard(BuildContext context, DoctorModel doctor) {
+  Widget _buildDoctorResultCard(BuildContext context, Doctor doctor) {
     return GestureDetector(
       onTap: () {
         context.push(
           AppRoutes.doctorDetails,
-          extra: doctor.toDoctor(),
+          extra: doctor,
         );
       },
       child: Container(

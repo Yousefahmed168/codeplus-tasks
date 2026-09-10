@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_hunt/core/services/local/shared_pref.dart';
-import 'package:doctor_hunt/features/doctors/models/doctor_model.dart';
+import 'package:doctor_hunt/features/doctors/models/doctor.dart';
 import 'package:doctor_hunt/features/auth/data/models/patient_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -45,11 +45,11 @@ class FirebaseProvider {
         .get();
   }
 
-  static Future<void> addDoctor(DoctorModel doctor) async {
+  static Future<void> addDoctor(Doctor doctor) async {
     await doctorCollection.doc(doctor.uid).set(doctor.toJson());
   }
 
-  static Future<void> updateDoctor(DoctorModel doctor) async {
+  static Future<void> updateDoctor(Doctor doctor) async {
     await doctorCollection.doc(doctor.uid).update(doctor.toUpdateData());
   }
 

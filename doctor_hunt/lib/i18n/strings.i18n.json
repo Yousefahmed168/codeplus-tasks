@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "appName": "Doctor Hunt",
     "email": "Email",
@@ -252,8 +252,65 @@
       "success": "Doctor updated successfully",
       "failed": "Failed to update doctor"
     },
+    "doctorDetails": {
+      "title": "Doctor Details",
+      "doctorInfo": "Doctor Info",
+      "specialty": "Specialty",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "editDoctor": "Edit Doctor",
+      "deleteDoctor": "Delete Doctor"
+    },
+    "editProfile": {
+      "title": "Edit Profile",
+      "tapPhotoToChange": "Tap photo to change",
+      "fullName": "FULL NAME",
+      "emailAddress": "EMAIL ADDRESS",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "success": "Profile updated successfully",
+      "failed": "Failed to update profile"
+    },
     "settings": {
-      "title": "Settings"
+      "title": "Settings",
+      "appSettings": "App Settings",
+      "pushNotif": "Push Notifications",
+      "pushNotifDesc": "Enable push notifications for all users",
+      "emailNotif": "Email Notifications",
+      "emailNotifDesc": "Send email notifications for important events",
+      "doctorManagement": "Doctor Management",
+      "autoApprove": "Auto-Approve Doctors",
+      "autoApproveDesc": "Automatically approve new doctor registrations",
+      "system": "System",
+      "maintenance": "Maintenance Mode",
+      "maintenanceDesc": "Put the app in maintenance mode for all users",
+      "darkMode": "Dark Mode",
+      "darkModeDesc": "Enable dark mode for admin interface",
+      "account": "Account",
+      "adminProfile": "Admin Profile",
+      "adminProfileDesc": "Edit admin details & permissions",
+      "changePassword": "Change Password",
+      "changePasswordDesc": "Update admin security credentials",
+      "notificationPreferences": "Notification Preferences",
+      "notificationPreferencesDesc": "Manage notification settings",
+      "appInformation": "App Information",
+      "appVersion": "App version",
+      "helpSupport": "Help & Support",
+      "helpSupportDesc": "Get help with the admin panel",
+      "about": "About",
+      "aboutDesc": "App version and information"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "updating": "Updating...",
+      "success": "Password updated successfully",
+      "failed": "Failed to update password",
+      "currentPasswordRequired": "Please enter your current password"
     }
   }
 }

@@ -7,7 +7,8 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor_model.dart';
+import '../../../../i18n/strings.g.dart';
+import '../../../../features/doctors/models/doctor.dart';
 import '../widgets/admin_doctor_card.dart';
 
 class AdminDoctorsScreen extends StatefulWidget {
@@ -27,12 +28,14 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
     super.dispose();
   }
 
-  void _showDeleteDialog(DoctorModel doctor) {
+  void _showDeleteDialog(Doctor doctor) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Doctor'),
-        content: Text('Are you sure you want to remove Dr. ${doctor.name}?'),
+        title: Text(t.admin.doctors.deleteTitle),
+        content: Text(
+          t.admin.doctors.deleteConfirm.replaceAll('@name', doctor.name ?? ''),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -46,16 +49,21 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Dr. ${doctor.name} deleted'),
+                      content: Text(
+                        t.admin.doctors.deleted.replaceAll(
+                          '@name',
+                          doctor.name ?? '',
+                        ),
+                      ),
                       backgroundColor: AppColors.error,
                     ),
                   );
                 }
               }
             },
-            child: const Text(
+            child: Text(
               'Delete',
-              style: TextStyle(color: AppColors.error),
+              style: context.semiBold14.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -74,13 +82,16 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
           onPressed: () {},
         ),
         title: Text(
-          'Doctors',
-          style: context.bold18.copyWith(color: Colors.white),
+          t.admin.doctors.title,
+          style: context.bold18.copyWith(color: AppColors.background),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.background,
+            ),
             onPressed: () {},
           ),
         ],
@@ -99,7 +110,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
   }
 
   Widget _buildDoctorsList() {
-    return StreamBuilder<List<DoctorModel>>(
+    return StreamBuilder<List<Doctor>>(
       stream: AdminService.instance.streamDoctors(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -136,7 +147,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   child: TextField(
                     controller: _searchCtrl,
                     decoration: InputDecoration(
-                      hintText: 'Search doctors...',
+                      hintText: t.admin.doctors.searchHint,
                       prefixIcon: const Icon(
                         Icons.search,
                         color: AppColors.textHint,
@@ -178,13 +189,13 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
               children: [
                 _buildStatCard(
                   icon: Icons.people_outline,
-                  label: 'Total Doctors',
+                  label: t.admin.doctors.totalDoctors,
                   count: totalDoctors,
                 ),
                 const Gap(16),
                 _buildStatCard(
                   icon: Icons.check_circle_outline,
-                  label: 'Active',
+                  label: t.admin.doctors.active,
                   count: activeDoctors,
                   isGreen: true,
                 ),
@@ -202,7 +213,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                       SvgPicture.asset(AppImages.logo, width: 80, height: 80),
                       const Gap(16),
                       Text(
-                        'No doctors found',
+                        t.admin.doctors.noDoctorsFound,
                         style: context.semiBold16.textSecondary,
                       ),
                     ],
@@ -211,14 +222,18 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
               )
             else
               ...filteredDoctors.map(
-                (doctor) => AdminDoctorCard(
-                  doctor: doctor,
-                  onDelete: () => _showDeleteDialog(doctor),
-                  onEdit: () =>
-                      context.push(AppRoutes.editDoctor, extra: doctor),
+                (doctor) => GestureDetector(
+                  onTap: () =>
+                      context.push(AppRoutes.adminDoctorDetails, extra: doctor),
+                  child: AdminDoctorCard(
+                    doctor: doctor,
+                    onDelete: () => _showDeleteDialog(doctor),
+                    onEdit: () =>
+                        context.push(AppRoutes.adminDoctorDetails, extra: doctor),
+                  ),
                 ),
               ),
-            const Gap(80), // Space for FAB
+            const Gap(80),
           ],
         );
       },

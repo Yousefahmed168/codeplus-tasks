@@ -1,3 +1,5 @@
+import '../../../doctors/models/doctor.dart';
+
 /// States for the AuthCubit.
 abstract class AuthState {}
 
@@ -8,6 +10,16 @@ class AuthLoadingState extends AuthState {}
 class AuthSuccessState extends AuthState {
   final String? message;
   AuthSuccessState({this.message});
+}
+
+class AuthLoginSuccessState extends AuthState {
+  final String? roleName;
+  AuthLoginSuccessState(this.roleName);
+}
+
+class AuthPasswordResetSuccessState extends AuthState {
+  final String message;
+  AuthPasswordResetSuccessState(this.message);
 }
 
 class AuthErrorState extends AuthState {
@@ -22,4 +34,9 @@ class AuthImagePickedState extends AuthState {
 
 class AuthProfileUpdatedState extends AuthState {
   AuthProfileUpdatedState();
+}
+
+class AuthProfileLoadedState extends AuthState {
+  final Doctor doctorData;
+  AuthProfileLoadedState(this.doctorData);
 }

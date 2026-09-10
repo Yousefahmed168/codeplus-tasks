@@ -12,7 +12,7 @@ class CloudinaryService {
 
   static final CloudinaryService instance = CloudinaryService._();
 
-  // ── Configure these with your Cloudinary credentials ──────────────────
+  //    Configure these with your Cloudinary credentials
   /// Your Cloudinary cloud name (found in the dashboard).
   String cloudName = 'dtpohlifc';
 
@@ -22,7 +22,7 @@ class CloudinaryService {
 
   /// Optional: API key for signed uploads. Leave null for unsigned uploads.
   String? apiKey;
-  // ──────────────────────────────────────────────────────────────────────
+  //
 
   String get _uploadUrl =>
       'https://api.cloudinary.com/v1_1/$cloudName/image/upload';

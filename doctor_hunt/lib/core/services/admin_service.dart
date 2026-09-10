@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../../features/doctors/models/doctor_model.dart';
+import '../../features/doctors/models/doctor.dart';
 
 class AdminService {
   AdminService._();
@@ -23,7 +23,7 @@ class AdminService {
     }
   }
 
-  Stream<List<DoctorModel>> streamDoctors() {
+  Stream<List<Doctor>> streamDoctors() {
     return _firestore
         .collection(doctorsCollection)
         .snapshots()
@@ -32,7 +32,7 @@ class AdminService {
               .map((doc) {
                 final data = doc.data();
                 data['uid'] = doc.id;
-                return DoctorModel.fromJson(data);
+                return Doctor.fromJson(data);
               })
               .toList(),
         );
@@ -40,7 +40,7 @@ class AdminService {
 
 
   // The doctor is given a default password '12345678'.
-  Future<String> createDoctor(DoctorModel doctor) async {
+  Future<String> createDoctor(Doctor doctor) async {
     try {
       final tempApp = await Firebase.initializeApp(
         name: 'TempCreateDoctorApp',

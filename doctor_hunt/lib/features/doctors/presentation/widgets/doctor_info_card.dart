@@ -116,7 +116,7 @@ class DoctorInfoCard extends StatelessWidget {
                 onTap: onFavoriteToggle,
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : AppColors.textHint,
+                  color: isFavorite ? AppColors.error : AppColors.textHint,
                   size: 24,
                 ),
               ),

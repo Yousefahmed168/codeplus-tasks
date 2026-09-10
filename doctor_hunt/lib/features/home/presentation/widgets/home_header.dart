@@ -1,16 +1,17 @@
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_text_form_field.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/services/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/app_images.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../i18n/strings.g.dart';
+import '../cubit/home_cubit.dart';
+import '../cubit/home_state.dart';
 
-class HomeHeader extends StatefulWidget {
+class HomeHeader extends StatelessWidget {
   final TextEditingController? searchController;
   final ValueChanged<String>? onSearchChanged;
   final VoidCallback? onClearSearch;
@@ -27,33 +28,19 @@ class HomeHeader extends StatefulWidget {
   });
 
   @override
-  State<HomeHeader> createState() => _HomeHeaderState();
-}
-
-class _HomeHeaderState extends State<HomeHeader> {
-  Stream<DocumentSnapshot<Map<String, dynamic>>>? _patientStream;
-
-  @override
-  void initState() {
-    super.initState();
-    final uid = AuthService.instance.currentUser?.uid;
-    if (uid != null) {
-      _patientStream = FirebaseFirestore.instance
-          .collection('patients')
-          .doc(uid)
-          .snapshots();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: _patientStream,
-      builder: (context, snapshot) {
-        final data = snapshot.data?.data();
-        final name = data?['name'] as String?;
-        final imageUrl = data?['image'] as String?;
-        final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        String? name;
+        String? imageUrl;
+        bool hasImage = false;
+        
+        if (state is HomeLoaded) {
+          name = state.patient?.name;
+          imageUrl = state.patient?.image;
+          hasImage = imageUrl != null && imageUrl.isNotEmpty;
+        }
+
         final firstName = name?.split(' ').first ?? '';
 
         return Stack(
@@ -103,7 +90,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                   ),
                   // User Avatar — taps to open profile tab
                   GestureDetector(
-                    onTap: widget.onAvatarTap,
+                    onTap: onAvatarTap,
                     child: Container(
                       width: 48,
                       height: 48,
@@ -114,7 +101,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                       child: ClipOval(
                         child: hasImage
                             ? CachedNetworkImage(
-                                imageUrl: imageUrl,
+                                imageUrl: imageUrl!,
                                 fit: BoxFit.cover,
                                 placeholder: (_, _) => Container(
                                   color: Colors.white.withValues(alpha: 0.3),
@@ -144,7 +131,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               bottom: -24,
               child: CustomTextFormField(
                 suffixIcon: GestureDetector(
-                  onTap: widget.onClearSearch,
+                  onTap: onClearSearch,
                   child: Icon(
                     Icons.close_rounded,
                     color: AppColors.textSecondary,
@@ -156,8 +143,8 @@ class _HomeHeaderState extends State<HomeHeader> {
                   color: AppColors.success,
                   size: 16,
                 ),
-                controller: widget.searchController,
-                onChange: widget.onSearchChanged,
+                controller: searchController,
+                onChange: onSearchChanged,
                 textInputAction: TextInputAction.search,
                 hintText: t.home.searchHint,
                 onTap: () {

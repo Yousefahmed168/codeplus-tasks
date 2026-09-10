@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../../features/doctors/models/doctor_model.dart';
+import '../../features/doctors/models/doctor.dart';
 import '../../features/auth/data/models/patient_model.dart';
 import '../../features/auth/data/models/user_model.dart';
 
@@ -56,6 +56,23 @@ class AuthService {
     );
   }
 
+  Future<UserCredential> loginAdmin({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.signInWithEmailAndPassword(
+      email: email.trim(),
+      password: password,
+    );
+    final uid = credential.user!.uid;
+    final adminDoc = await _firestore.collection(adminsCollection).doc(uid).get();
+    if (!adminDoc.exists) {
+      await _auth.signOut();
+      throw Exception('Access denied. You are not an admin.');
+    }
+    return credential;
+  }
+
   Future<UserCredential> registerPatient({
     required String name,
     required String email,
@@ -97,7 +114,7 @@ class AuthService {
     final user = credential.user;
     if (user != null) {
       await _firestore.collection(doctorsCollection).doc(user.uid).set(
-            DoctorModel(
+            Doctor(
               uid: user.uid,
               name: name.trim(),
               email: email.trim(),

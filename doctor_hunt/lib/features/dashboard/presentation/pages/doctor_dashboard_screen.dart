@@ -9,7 +9,7 @@ import '../../../../core/services/user_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
-import '../../../../features/doctors/models/doctor_model.dart';
+import '../../../../features/doctors/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 
 class DoctorDashboardScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class DoctorDashboardScreen extends StatefulWidget {
 }
 
 class _DoctorDashboardScreenState extends State<DoctorDashboardScreen> {
-  DoctorModel? _doctor;
+  Doctor? _doctor;
   bool _isLoading = true;
   bool _isAvailable = true;
 
@@ -35,7 +35,7 @@ class _DoctorDashboardScreenState extends State<DoctorDashboardScreen> {
     final profile = await UserService.instance.getUser(user.uid);
     if (mounted) {
       setState(() {
-        _doctor = profile as DoctorModel?;
+        _doctor = profile as Doctor?;
         _isAvailable =
             true; 
         _isLoading = false;

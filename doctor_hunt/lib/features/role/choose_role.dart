@@ -26,7 +26,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
     if (_selectedRole == AppRole.admin) {
       context.go(AppRoutes.adminLogin);
     } else {
-      context.go(AppRoutes.register, extra: _selectedRole!.name);
+      context.go(AppRoutes.login);
     }
   }
 

@@ -46,9 +46,9 @@ class DoctorCard extends StatelessWidget {
                 // Doctor photo
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: doctor.imagePath.startsWith('http')
+                  child: (doctor.imageUrl ?? '').startsWith('http')
                       ? CachedNetworkImage(
-                          imageUrl: doctor.imagePath,
+                          imageUrl: doctor.imageUrl!,
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
@@ -59,7 +59,7 @@ class DoctorCard extends StatelessWidget {
                           ),
                         )
                       : Image.asset(
-                          doctor.imagePath,
+                          doctor.imageUrl ?? 'assets/images/doctor.png',
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
@@ -77,9 +77,9 @@ class DoctorCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(doctor.name, style: context.bold16.textPrimary),
+                      Text(doctor.name ?? 'Unknown', style: context.bold16.textPrimary),
                       Gap(2),
-                      Text(doctor.specialty, style: context.regular14.primary),
+                      Text(doctor.specialization ?? 'General', style: context.regular14.primary),
                       Gap(4),
                       Text(
                         t.findDoctors.yearsExperience(
@@ -116,7 +116,9 @@ class DoctorCard extends StatelessWidget {
                   onTap: onFavoriteToggle,
                   child: Icon(
                     doctor.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: doctor.isFavorite ? Colors.red : AppColors.textHint,
+                    color: doctor.isFavorite
+                        ? AppColors.error
+                        : AppColors.textHint,
                     size: 24,
                   ),
                 ),

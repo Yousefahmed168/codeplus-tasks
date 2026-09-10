@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -11,20 +12,19 @@ import 'i18n/strings.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Disable Firebase App Verification (reCAPTCHA) for local testing
-  try {
-    await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
-  } catch (e) {
-    debugPrint('Could not disable app verification: $e');
+  if (kDebugMode) {
+    try {
+      await FirebaseAuth.instance.setSettings(
+        appVerificationDisabledForTesting: true,
+      );
+    } catch (e) {
+      debugPrint('Could not disable app verification: $e');
+    }
   }
-
 
   // Initialize slang locale
   LocaleSettings.useDeviceLocale();

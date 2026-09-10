@@ -17,8 +17,11 @@ import '../../features/splash/splash_screen.dart';
 import '../../features/admin/presentation/pages/admin_login_screen.dart';
 import '../../features/admin/presentation/pages/admin_main_screen.dart';
 import '../../features/admin/presentation/pages/admin_doctors_screen.dart';
+import '../../features/admin/presentation/pages/admin_doctor_details_screen.dart';
 import '../../features/admin/presentation/pages/create_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
+import '../../features/admin/presentation/pages/edit_admin_profile_screen.dart';
+import '../../features/admin/presentation/pages/change_password_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -40,6 +43,9 @@ class AppRoutes {
   static const String createDoctor = '/admin/create-doctor';
   static const String editDoctor = '/admin/edit-doctor';
   static const String adminSettings = '/admin/settings';
+  static const String adminDoctorDetails = '/admin/doctor-details';
+  static const String editAdminProfile = '/admin/edit-profile';
+  static const String changePassword = '/admin/change-password';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -63,8 +69,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.login,
-      pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const LoginScreen()),
+      pageBuilder: (context, state) => _slidePage(
+        key: state.pageKey,
+        child: BlocProvider(
+          create: (_) => AuthCubit(),
+          child: const LoginScreen(),
+        ),
+      ),
     ),
     GoRoute(
       path: AppRoutes.register,
@@ -72,7 +83,10 @@ final GoRouter appRouter = GoRouter(
         final role = state.extra as String?;
         return _slidePage(
           key: state.pageKey,
-          child: RegisterScreen(role: role),
+          child: BlocProvider(
+            create: (_) => AuthCubit(),
+            child: RegisterScreen(role: role),
+          ),
         );
       },
     ),
@@ -151,6 +165,26 @@ final GoRouter appRouter = GoRouter(
           child: EditDoctorScreen(doctor: doctor),
         );
       },
+    ),
+    GoRoute(
+      path: AppRoutes.adminDoctorDetails,
+      pageBuilder: (context, state) {
+        final doctor = state.extra as Doctor;
+        return _slidePage(
+          key: state.pageKey,
+          child: AdminDoctorDetailsScreen(doctor: doctor),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.editAdminProfile,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const EditAdminProfileScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.changePassword,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const ChangePasswordScreen()),
     ),
   ],
 );

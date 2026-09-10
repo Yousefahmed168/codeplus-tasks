@@ -100,11 +100,12 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                 children: [
                   const Gap(16),
                   DoctorProfileHeader(
-                    name: widget.doctor.name,
+                    name: widget.doctor.name ?? 'Unknown',
                     clinic:
                         'Upasana Dental Clinic, salt lake', // hardcoded mockup
                     rating: widget.doctor.ratingPercentage.toInt(),
-                    imagePath: widget.doctor.imagePath,
+                    imagePath:
+                        widget.doctor.imageUrl ?? 'assets/images/doctor.png',
                     isFavorite: true,
                   ),
                   const Gap(24),
@@ -145,7 +146,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         borderRadius: BorderRadius.circular(8),
                         border: isSelected
                             ? null
-                            : Border.all(color: Colors.grey.shade200),
+                            : Border.all(color: AppColors.textSecondary),
                         boxShadow: isSelected
                             ? [
                                 BoxShadow(
@@ -171,7 +172,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                           Text(
                             slotsCount == 0
                                 ? t.selectTime.noSlotsAvailable
-                                : t.selectTime.slotsAvailable(count: slotsCount),
+                                : t.selectTime.slotsAvailable(
+                                    count: slotsCount,
+                                  ),
                             style: isSelected
                                 ? context.regular12.copyWith(
                                     color: Colors.white,
@@ -209,7 +212,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          t.selectTime.afternoonSlots(count: _afternoonSlots.length),
+                          t.selectTime.afternoonSlots(
+                            count: _afternoonSlots.length,
+                          ),
                           style: context.bold18.textPrimary,
                         ),
                       ),
@@ -230,7 +235,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          t.selectTime.eveningSlots(count: _eveningSlots.length),
+                          t.selectTime.eveningSlots(
+                            count: _eveningSlots.length,
+                          ),
                           style: context.bold18.textPrimary,
                         ),
                       ),
@@ -252,7 +259,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         text: t.selectTime.proceed,
                         bgColor: _selectedTime != null
                             ? AppColors.primary
-                            : Colors.grey,
+                            : AppColors.textSecondary,
                         onPressed: _selectedTime != null
                             ? () {
                                 showDialog(
@@ -289,7 +296,10 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         textColor: AppColors.background,
                       ),
                       const Gap(24),
-                      Text(t.selectTime.or, style: context.regular14.textSecondary),
+                      Text(
+                        t.selectTime.or,
+                        style: context.regular14.textSecondary,
+                      ),
                       const Gap(24),
                       MainButton(
                         text: t.selectTime.contactClinic,

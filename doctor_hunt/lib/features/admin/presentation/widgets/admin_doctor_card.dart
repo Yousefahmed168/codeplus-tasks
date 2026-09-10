@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor_model.dart';
+import '../../../../features/doctors/models/doctor.dart';
 
 class AdminDoctorCard extends StatelessWidget {
   const AdminDoctorCard({
@@ -13,7 +13,7 @@ class AdminDoctorCard extends StatelessWidget {
     required this.onEdit,
   });
 
-  final DoctorModel doctor;
+  final Doctor doctor;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
@@ -93,9 +93,9 @@ class AdminDoctorCard extends StatelessWidget {
             },
             itemBuilder: (context) => [
               const PopupMenuItem(value: 'edit', child: Text('Edit')),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'delete',
-                child: Text('Delete', style: TextStyle(color: AppColors.error)),
+                child: Text('Delete', style: context.regular12.copyWith(color: AppColors.error)),
               ),
             ],
           ),
