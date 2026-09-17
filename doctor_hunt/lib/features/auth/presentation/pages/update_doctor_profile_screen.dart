@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:doctor_hunt/core/routes/app_routes.dart';
+import '../../../../core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';

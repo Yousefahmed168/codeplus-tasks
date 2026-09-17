@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/features/auth/data/models/user_model.dart';
+import '../../../auth/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:doctor_hunt/core/services/image_uploader.dart';
+import '../../../../core/services/image_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

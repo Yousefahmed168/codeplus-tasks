@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:doctor_hunt/core/services/local/shared_pref.dart';
-import 'package:doctor_hunt/features/doctors/models/doctor.dart';
-import 'package:doctor_hunt/features/auth/data/models/patient_model.dart';
+import '../local/shared_pref.dart';
+import '../../../features/doctors/models/doctor.dart';
+import '../../../features/auth/data/models/patient_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -21,9 +21,7 @@ class FirebaseProvider {
     await patientCollection.doc(patient.uid).set(patient.toJson());
   }
 
-  // static Future<void> addBookedAppointment(AppointmentModel appointment) async {
-  //   await appointmentsCollection.add(appointment.toJson());
-  // }
+
 
   static Future<void> deleteBookedAppointment(String id) async {
     await appointmentsCollection.doc(id).delete();

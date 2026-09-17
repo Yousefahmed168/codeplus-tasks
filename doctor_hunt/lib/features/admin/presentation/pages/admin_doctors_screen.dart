@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/utils/app_images.dart';
+import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
