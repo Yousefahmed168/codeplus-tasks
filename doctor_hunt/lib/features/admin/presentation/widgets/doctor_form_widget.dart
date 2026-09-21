@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -67,7 +69,9 @@ class DoctorFormWidget extends StatelessWidget {
                         color: AppColors.primary.withValues(alpha: 0.1),
                         image: imagePath != null
                             ? DecorationImage(
-                                image: FileImage(File(imagePath!)),
+                                image: kIsWeb
+                                    ? NetworkImage(imagePath!) as ImageProvider
+                                    : FileImage(File(imagePath!)),
                                 fit: BoxFit.cover,
                               )
                             : (existingImageUrl != null &&
@@ -213,7 +217,9 @@ class DoctorFormWidget extends StatelessWidget {
                   border: Border.all(color: AppColors.border, width: 2),
                   image: imagePath != null
                       ? DecorationImage(
-                          image: FileImage(File(imagePath!)),
+                          image: kIsWeb
+                              ? NetworkImage(imagePath!) as ImageProvider
+                              : FileImage(File(imagePath!)),
                           fit: BoxFit.cover,
                         )
                       : null,

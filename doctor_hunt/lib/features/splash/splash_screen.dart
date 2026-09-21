@@ -1,10 +1,10 @@
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
-import '../../core/theme/style_atoms.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/routes/app_routes.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/theme/style_atoms.dart';
 import '../../core/utils/app_images.dart';
 import '../../core/widgets/widgets.dart';
 import '../../i18n/strings.g.dart';
@@ -40,8 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go(AppRoutes.role);
       } else if (role.name == 'admin') {
         context.go(AppRoutes.adminMain);
-      } else if (role.name == 'doctor') {
-        context.go(AppRoutes.doctorDashboard);
       } else {
         context.go(AppRoutes.home);
       }

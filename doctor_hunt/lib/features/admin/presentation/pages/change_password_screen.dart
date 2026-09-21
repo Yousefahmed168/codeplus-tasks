@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../core/widgets/password_text_form_field.dart';
 import '../../../../i18n/strings.g.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -19,9 +20,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _currentPasswordCtrl = TextEditingController();
   final _newPasswordCtrl = TextEditingController();
   final _confirmPasswordCtrl = TextEditingController();
-  bool _obscureCurrent = true;
-  bool _obscureNew = true;
-  bool _obscureConfirm = true;
   bool _isSaving = false;
 
   @override
@@ -79,13 +77,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
-          ),
-          onPressed: () => context.pop(),
-        ),
+                leading: CustomBackButton(),
+
         title: Text(
           t.admin.changePassword.title,
           style: context.bold18.textPrimary,
@@ -100,30 +93,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Current Password
-              Text(
-                t.admin.changePassword.currentPassword,
-                style: context.semiBold14.textPrimary,
-              ),
-              const Gap(8),
-              CustomTextFormField(
+              PasswordTextFormField(
                 controller: _currentPasswordCtrl,
                 hintText: '••••••••',
-                obscureText: _obscureCurrent,
                 prefixIcon: const Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
                   size: 20,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureCurrent
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: AppColors.textHint,
-                    size: 20,
-                  ),
-                  onPressed: () =>
-                      setState(() => _obscureCurrent = !_obscureCurrent),
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -131,34 +107,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   }
                   return null;
                 },
+                labelText: t.admin.changePassword.currentPassword,
               ),
               const Gap(20),
 
               // New Password
-              Text(
-                t.admin.changePassword.newPassword,
-                style: context.semiBold14.textPrimary,
-              ),
-              const Gap(8),
-              CustomTextFormField(
+              PasswordTextFormField(
                 controller: _newPasswordCtrl,
                 hintText: '••••••••',
-                obscureText: _obscureNew,
                 prefixIcon: const Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
                   size: 20,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureNew
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: AppColors.textHint,
-                    size: 20,
-                  ),
-                  onPressed: () =>
-                      setState(() => _obscureNew = !_obscureNew),
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -167,34 +127,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   if (v.length < 6) return t.common.validation.minPassword;
                   return null;
                 },
+                labelText: t.admin.changePassword.newPassword,
               ),
               const Gap(20),
 
               // Confirm New Password
-              Text(
-                t.admin.changePassword.confirmNewPassword,
-                style: context.semiBold14.textPrimary,
-              ),
-              const Gap(8),
-              CustomTextFormField(
+              PasswordTextFormField(
                 controller: _confirmPasswordCtrl,
                 hintText: '••••••••',
-                obscureText: _obscureConfirm,
                 prefixIcon: const Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
                   size: 20,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureConfirm
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: AppColors.textHint,
-                    size: 20,
-                  ),
-                  onPressed: () =>
-                      setState(() => _obscureConfirm = !_obscureConfirm),
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -205,6 +149,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   }
                   return null;
                 },
+                labelText: t.admin.changePassword.confirmNewPassword,
               ),
               const Gap(32),
 

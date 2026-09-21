@@ -34,7 +34,7 @@ class HomeHeader extends StatelessWidget {
         String? name;
         String? imageUrl;
         bool hasImage = false;
-        
+
         if (state is HomeLoaded) {
           name = state.patient?.name;
           imageUrl = state.patient?.image;

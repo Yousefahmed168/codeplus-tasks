@@ -1,3 +1,4 @@
+import '../../../../core/widgets/password_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,8 +31,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _specialtyCtrl = TextEditingController();
   final _bioCtrl = TextEditingController();
   final _experienceCtrl = TextEditingController();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
   bool _agreeToTerms = false;
   bool get _isDoctor => widget.role == 'doctor';
 
@@ -177,20 +176,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const Gap(16),
-                  CustomTextFormField(
+                  PasswordTextFormField(
                     controller: _passwordCtrl,
                     hintText: t.common.password,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.textHint,
-                        size: 20,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                    ),
+
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return t.common.validation.enterPassword;
@@ -200,22 +189,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   const Gap(16),
-                  CustomTextFormField(
+                  PasswordTextFormField(
                     controller: _confirmPasswordCtrl,
                     hintText: t.common.confirmPassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.textHint,
-                        size: 20,
-                      ),
-                      onPressed: () => setState(
-                        () =>
-                            _obscureConfirmPassword = !_obscureConfirmPassword,
-                      ),
-                    ),
+
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return t.common.validation.enterConfirmPassword;

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import '../../../../features/auth/data/models/patient_model.dart';
 import '../../../../features/doctors/models/doctor.dart';
 

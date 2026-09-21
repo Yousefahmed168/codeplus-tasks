@@ -20,20 +20,21 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = meta ?? TranslationMetadata(
+		  _meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
 		  ) {
-		$meta.setFlatMapFunction(_flatMapFunction);
+		_meta.setFlatMapFunction(_flatMapFunction);
 	}
 
 	/// Metadata for the translations of <en>.
-	@override final TranslationMetadata<AppLocale, Translations> $meta;
+	final TranslationMetadata<AppLocale, Translations> _meta;
+	@override TranslationMetadata<AppLocale, Translations> get $meta => _meta;
 
 	/// Access flat map
-	dynamic operator[](String key) => $meta.getTranslation(key);
+	dynamic operator[](String key) => _meta.getTranslation(key);
 
 	late final Translations _root = this; // ignore: unused_field
 
@@ -51,8 +52,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$appointment$en appointment = Translations$appointment$en._(_root);
 	late final Translations$updateProfile$en updateProfile = Translations$updateProfile$en._(_root);
 	late final Translations$selectTime$en selectTime = Translations$selectTime$en._(_root);
-	late final Translations$dashboard$en dashboard = Translations$dashboard$en._(_root);
 	late final Translations$admin$en admin = Translations$admin$en._(_root);
+	late final Translations$patientProfile$en patientProfile = Translations$patientProfile$en._(_root);
+	late final Translations$patientSettings$en patientSettings = Translations$patientSettings$en._(_root);
+	late final Translations$privacyPolicy$en privacyPolicy = Translations$privacyPolicy$en._(_root);
+	late final Translations$helpCenter$en helpCenter = Translations$helpCenter$en._(_root);
+	late final Translations$logoutDialog$en logoutDialog = Translations$logoutDialog$en._(_root);
 }
 
 // Path: common
@@ -465,57 +470,6 @@ class Translations$selectTime$en {
 	String get contactClinic => 'Contact Clinic';
 }
 
-// Path: dashboard
-class Translations$dashboard$en {
-	Translations$dashboard$en._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Doctor Dashboard'
-	String get title => 'Doctor Dashboard';
-
-	/// en: 'My Profile'
-	String get profile => 'My Profile';
-
-	/// en: 'Appointments'
-	String get appointments => 'Appointments';
-
-	/// en: 'My Patients'
-	String get myPatients => 'My Patients';
-
-	/// en: 'Availability'
-	String get availability => 'Availability';
-
-	/// en: 'Settings'
-	String get settings => 'Settings';
-
-	/// en: 'Update Profile'
-	String get updateProfile => 'Update Profile';
-
-	/// en: 'Profile updated successfully'
-	String get updateProfileSuccess => 'Profile updated successfully';
-
-	/// en: 'Total Patients'
-	String get totalPatients => 'Total Patients';
-
-	/// en: 'Completed Consultations'
-	String get completedConsultations => 'Completed Consultations';
-
-	/// en: 'Rating'
-	String get rating => 'Rating';
-
-	/// en: 'Available'
-	String get available => 'Available';
-
-	/// en: 'Unavailable'
-	String get unavailable => 'Unavailable';
-
-	/// en: 'Doctor Info'
-	String get doctorInfo => 'Doctor Info';
-}
-
 // Path: admin
 class Translations$admin$en {
 	Translations$admin$en._(this._root);
@@ -532,6 +486,144 @@ class Translations$admin$en {
 	late final Translations$admin$editProfile$en editProfile = Translations$admin$editProfile$en._(_root);
 	late final Translations$admin$settings$en settings = Translations$admin$settings$en._(_root);
 	late final Translations$admin$changePassword$en changePassword = Translations$admin$changePassword$en._(_root);
+}
+
+// Path: patientProfile
+class Translations$patientProfile$en {
+	Translations$patientProfile$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Profile'
+	String get title => 'Profile';
+
+	/// en: 'Set up your profile'
+	String get setupProfile => 'Set up your profile';
+
+	/// en: 'Update your profile to connect your doctor with better impression.'
+	String get setupSubtitle => 'Update your profile to connect your doctor with better impression.';
+
+	/// en: 'Personal information'
+	String get personalInfo => 'Personal information';
+
+	/// en: 'Contact Number'
+	String get contactNumber => 'Contact Number';
+
+	/// en: 'Date of birth'
+	String get dateOfBirth => 'Date of birth';
+
+	/// en: 'Location'
+	String get location => 'Location';
+
+	/// en: 'My Doctors'
+	String get myDoctors => 'My Doctors';
+
+	/// en: 'Medical Records'
+	String get medicalRecords => 'Medical Records';
+
+	/// en: 'Payments'
+	String get payments => 'Payments';
+
+	/// en: 'Privacy & Policy'
+	String get privacyPolicy => 'Privacy & Policy';
+
+	/// en: 'Help Center'
+	String get helpCenter => 'Help Center';
+
+	/// en: 'Settings'
+	String get settings => 'Settings';
+}
+
+// Path: patientSettings
+class Translations$patientSettings$en {
+	Translations$patientSettings$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+
+	/// en: 'Account settings'
+	String get accountSettings => 'Account settings';
+
+	/// en: 'Change Password'
+	String get changePassword => 'Change Password';
+
+	/// en: 'Notifications'
+	String get notifications => 'Notifications';
+
+	/// en: 'Statistics'
+	String get statistics => 'Statistics';
+
+	/// en: 'About us'
+	String get aboutUs => 'About us';
+
+	/// en: 'More options'
+	String get moreOptions => 'More options';
+
+	/// en: 'Text messages'
+	String get textMessages => 'Text messages';
+
+	/// en: 'Phone calls'
+	String get phoneCalls => 'Phone calls';
+
+	/// en: 'Languages'
+	String get languages => 'Languages';
+
+	/// en: 'Currency'
+	String get currency => 'Currency';
+
+	/// en: 'Linked accounts'
+	String get linkedAccounts => 'Linked accounts';
+}
+
+// Path: privacyPolicy
+class Translations$privacyPolicy$en {
+	Translations$privacyPolicy$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Privacy policy'
+	String get title => 'Privacy policy';
+
+	/// en: 'Doctor Hunt Apps Privacy Policy'
+	String get heading => 'Doctor Hunt Apps Privacy Policy';
+}
+
+// Path: helpCenter
+class Translations$helpCenter$en {
+	Translations$helpCenter$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Help center'
+	String get title => 'Help center';
+
+	/// en: 'I have an issue with'
+	String get issueHeader => 'I have an issue with';
+}
+
+// Path: logoutDialog
+class Translations$logoutDialog$en {
+	Translations$logoutDialog$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Log Out'
+	String get title => 'Log Out';
+
+	/// en: 'Are you sure you want to logout?'
+	String get confirmMessage => 'Are you sure you want to logout?';
 }
 
 // Path: common.validation
@@ -1259,20 +1351,6 @@ extension on Translations {
 			'selectTime.nextAvailability' => 'Next availability on Wed, 24 Feb',
 			'selectTime.or' => 'OR',
 			'selectTime.contactClinic' => 'Contact Clinic',
-			'dashboard.title' => 'Doctor Dashboard',
-			'dashboard.profile' => 'My Profile',
-			'dashboard.appointments' => 'Appointments',
-			'dashboard.myPatients' => 'My Patients',
-			'dashboard.availability' => 'Availability',
-			'dashboard.settings' => 'Settings',
-			'dashboard.updateProfile' => 'Update Profile',
-			'dashboard.updateProfileSuccess' => 'Profile updated successfully',
-			'dashboard.totalPatients' => 'Total Patients',
-			'dashboard.completedConsultations' => 'Completed Consultations',
-			'dashboard.rating' => 'Rating',
-			'dashboard.available' => 'Available',
-			'dashboard.unavailable' => 'Unavailable',
-			'dashboard.doctorInfo' => 'Doctor Info',
 			'admin.chooseRole.title' => 'Admin',
 			'admin.chooseRole.description' => 'Manage doctors and app settings',
 			'admin.login.title' => 'Welcome Back!',
@@ -1364,6 +1442,37 @@ extension on Translations {
 			'admin.changePassword.success' => 'Password updated successfully',
 			'admin.changePassword.failed' => 'Failed to update password',
 			'admin.changePassword.currentPasswordRequired' => 'Please enter your current password',
+			'patientProfile.title' => 'Profile',
+			'patientProfile.setupProfile' => 'Set up your profile',
+			'patientProfile.setupSubtitle' => 'Update your profile to connect your doctor with better impression.',
+			'patientProfile.personalInfo' => 'Personal information',
+			'patientProfile.contactNumber' => 'Contact Number',
+			'patientProfile.dateOfBirth' => 'Date of birth',
+			'patientProfile.location' => 'Location',
+			'patientProfile.myDoctors' => 'My Doctors',
+			'patientProfile.medicalRecords' => 'Medical Records',
+			'patientProfile.payments' => 'Payments',
+			'patientProfile.privacyPolicy' => 'Privacy & Policy',
+			'patientProfile.helpCenter' => 'Help Center',
+			'patientProfile.settings' => 'Settings',
+			'patientSettings.title' => 'Settings',
+			'patientSettings.accountSettings' => 'Account settings',
+			'patientSettings.changePassword' => 'Change Password',
+			'patientSettings.notifications' => 'Notifications',
+			'patientSettings.statistics' => 'Statistics',
+			'patientSettings.aboutUs' => 'About us',
+			'patientSettings.moreOptions' => 'More options',
+			'patientSettings.textMessages' => 'Text messages',
+			'patientSettings.phoneCalls' => 'Phone calls',
+			'patientSettings.languages' => 'Languages',
+			'patientSettings.currency' => 'Currency',
+			'patientSettings.linkedAccounts' => 'Linked accounts',
+			'privacyPolicy.title' => 'Privacy policy',
+			'privacyPolicy.heading' => 'Doctor Hunt Apps Privacy Policy',
+			'helpCenter.title' => 'Help center',
+			'helpCenter.issueHeader' => 'I have an issue with',
+			'logoutDialog.title' => 'Log Out',
+			'logoutDialog.confirmMessage' => 'Are you sure you want to logout?',
 			_ => null,
 		};
 	}

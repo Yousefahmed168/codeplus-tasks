@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -80,13 +81,7 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
-          ),
-          onPressed: () => context.pop(),
-        ),
+        leading: CustomBackButton(),
         title: Text(
           t.admin.doctorDetails.title,
           style: context.bold18.textPrimary,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme/colors.dart';
+
 import '../../i18n/strings.g.dart';
+import '../theme/colors.dart';
 
 /// Shows a modal loading dialog with a circular progress indicator.
 void showLoadingDialog(BuildContext context) {

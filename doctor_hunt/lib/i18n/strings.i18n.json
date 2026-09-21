@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "appName": "Doctor Hunt",
     "email": "Email",
@@ -186,22 +186,6 @@
     "or": "OR",
     "contactClinic": "Contact Clinic"
   },
-  "dashboard": {
-    "title": "Doctor Dashboard",
-    "profile": "My Profile",
-    "appointments": "Appointments",
-    "myPatients": "My Patients",
-    "availability": "Availability",
-    "settings": "Settings",
-    "updateProfile": "Update Profile",
-    "updateProfileSuccess": "Profile updated successfully",
-    "totalPatients": "Total Patients",
-    "completedConsultations": "Completed Consultations",
-    "rating": "Rating",
-    "available": "Available",
-    "unavailable": "Unavailable",
-    "doctorInfo": "Doctor Info"
-  },
   "admin": {
     "chooseRole": {
       "title": "Admin",
@@ -312,5 +296,47 @@
       "failed": "Failed to update password",
       "currentPasswordRequired": "Please enter your current password"
     }
+  },
+  "patientProfile": {
+    "title": "Profile",
+    "setupProfile": "Set up your profile",
+    "setupSubtitle": "Update your profile to connect your doctor with better impression.",
+    "personalInfo": "Personal information",
+    "contactNumber": "Contact Number",
+    "dateOfBirth": "Date of birth",
+    "location": "Location",
+    "myDoctors": "My Doctors",
+    "medicalRecords": "Medical Records",
+    "payments": "Payments",
+    "privacyPolicy": "Privacy & Policy",
+    "helpCenter": "Help Center",
+    "settings": "Settings"
+  },
+  "patientSettings": {
+    "title": "Settings",
+    "accountSettings": "Account settings",
+    "changePassword": "Change Password",
+    "notifications": "Notifications",
+    "statistics": "Statistics",
+    "aboutUs": "About us",
+    "moreOptions": "More options",
+    "textMessages": "Text messages",
+    "phoneCalls": "Phone calls",
+    "languages": "Languages",
+    "currency": "Currency",
+    "linkedAccounts": "Linked accounts"
+  },
+  "privacyPolicy": {
+    "title": "Privacy policy",
+    "heading": "Doctor Hunt Apps Privacy Policy"
+  },
+  "helpCenter": {
+    "title": "Help center",
+    "issueHeader": "I have an issue with"
+  },
+  "logoutDialog": {
+    "title": "Log Out",
+    "confirmMessage": "Are you sure you want to logout?"
   }
 }
+

@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import '../../../../core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
@@ -110,8 +107,6 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
                   backgroundColor: AppColors.error,
                 ),
               );
-            } else if (state is AuthSuccessState) {
-              context.go(AppRoutes.doctorDashboard);
             }
           },
           builder: (context, state) {

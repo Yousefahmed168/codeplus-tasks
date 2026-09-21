@@ -6,7 +6,7 @@ import '../../../../features/home/presentation/pages/home_screen.dart';
 import '../../../../features/home/presentation/widgets/home_bottom_nav_bar.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../doctors/presentation/pages/favorite_doctors_screen.dart';
-import '../../../auth/presentation/pages/patient_profile_screen.dart';
+import '../../../patient_profile/presentation/pages/patient_profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,8 +18,6 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   String? get _patientUid => AuthService.instance.currentUser?.uid;
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +32,7 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            HomeScreen(
-              onAvatarTap: () => setState(() => _currentIndex = 4),
-            ),
+            HomeScreen(onAvatarTap: () => setState(() => _currentIndex = 4)),
             const FavoriteDoctorsScreen(),
             Center(child: Text(t.home.mapBookingsPlaceholder)),
             Center(child: Text(t.home.chatPlaceholder)),

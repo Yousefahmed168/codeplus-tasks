@@ -1,3 +1,6 @@
+import 'package:doctor_hunt/features/patient_profile/presentation/pages/help_center_screen.dart';
+import 'package:doctor_hunt/features/patient_profile/presentation/pages/patient_settings_screen.dart';
+import 'package:doctor_hunt/features/patient_profile/presentation/pages/privacy_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +8,6 @@ import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/pages/update_doctor_profile_screen.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
-import '../../features/dashboard/presentation/pages/doctor_dashboard_screen.dart';
 import '../../features/doctors/models/doctor.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
 import '../../features/doctors/presentation/pages/select_time_screen.dart';
@@ -31,11 +33,14 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
-  static const String doctorDashboard = '/doctor-dashboard';
   static const String doctorDetails = '/doctor-details';
   static const String search = '/search';
   static const String selectTime = '/select-time';
   static const String updateDoctorProfile = '/update-doctor-profile';
+  static const String patientSettings = '/patient-settings';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String helpCenter = '/help-center';
+
   // Admin routes
   static const String adminLogin = '/admin/login';
   static const String adminMain = '/admin/main';
@@ -95,11 +100,7 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const MainScreen()),
     ),
-    GoRoute(
-      path: AppRoutes.doctorDashboard,
-      pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const DoctorDashboardScreen()),
-    ),
+
     GoRoute(
       path: AppRoutes.doctorDetails,
       pageBuilder: (context, state) {
@@ -135,6 +136,22 @@ final GoRouter appRouter = GoRouter(
         ),
       ),
     ),
+    GoRoute(
+      path: AppRoutes.patientSettings,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const PatientSettingsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.privacyPolicy,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const PrivacyPolicyScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.helpCenter,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const HelpCenterScreen()),
+    ),
+
     // Admin routes
     GoRoute(
       path: AppRoutes.adminLogin,

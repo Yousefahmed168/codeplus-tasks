@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../local/shared_pref.dart';
-import '../../../features/doctors/models/doctor.dart';
-import '../../../features/auth/data/models/patient_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../../features/auth/data/models/patient_model.dart';
+import '../../../features/doctors/models/doctor.dart';
+import '../local/shared_pref.dart';
 
 
 class FirebaseProvider {

@@ -1,3 +1,5 @@
+import '../../../../core/widgets/password_text_form_field.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -22,9 +24,12 @@ class AdminLoginScreen extends StatefulWidget {
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  bool _obscurePassword = true;
+  final _emailCtrl = TextEditingController(
+    text: kDebugMode ? "admin@gmail.com" : "",
+  );
+  final _passwordCtrl = TextEditingController(
+    text: kDebugMode ? "12345678" : "",
+  );
   bool _rememberMe = false;
 
   @override
@@ -133,7 +138,10 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       alignment: Alignment.centerLeft,
                       child: GestureDetector(
                         onTap: () => context.go(AppRoutes.role),
-                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 20,
+                        ),
                       ),
                     ),
                     const Gap(24),
@@ -169,39 +177,25 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         if (v == null || v.isEmpty) {
                           return t.common.validation.enterEmail;
                         }
-                        if (!v.contains('@')) return t.common.validation.validEmail;
+                        if (!v.contains('@')) {
+                          return t.common.validation.validEmail;
+                        }
                         return null;
                       },
                     ),
-                    const Gap(16),
 
-                    // Password
-                    Text(t.common.password, style: context.semiBold14.textPrimary),
                     const Gap(8),
-                    CustomTextFormField(
+                    PasswordTextFormField(
+                      labelText: t.common.password,
                       controller: _passwordCtrl,
                       hintText: t.common.password,
-                      prefixIcon: const Icon(
-                        Icons.lock_outline_rounded,
-                        color: AppColors.textHint,
-                        size: 20,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                          color: AppColors.textHint,
-                          size: 20,
-                        ),
-                        onPressed: () =>
-                            setState(() => _obscurePassword = !_obscurePassword),
-                      ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
                           return t.common.validation.enterPassword;
                         }
-                        if (v.length < 6) return t.common.validation.minPassword;
+                        if (v.length < 6) {
+                          return t.common.validation.minPassword;
+                        }
                         return null;
                       },
                     ),
@@ -212,7 +206,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       children: [
                         Checkbox(
                           value: _rememberMe,
-                          onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                          onChanged: (v) =>
+                              setState(() => _rememberMe = v ?? false),
                           activeColor: AppColors.primary,
                         ),
                         Text(
@@ -233,7 +228,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
                     // Login button
                     MainButton(
-                      text: isLoading ? t.common.loading : t.admin.login.loginBtn,
+                      text: isLoading
+                          ? t.common.loading
+                          : t.admin.login.loginBtn,
                       onPressed: isLoading ? null : () => _login(context),
                     ),
                     const Gap(24),

@@ -1,12 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'i18n/strings.g.dart';
 
 void main() async {

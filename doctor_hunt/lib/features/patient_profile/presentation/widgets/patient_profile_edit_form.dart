@@ -1,11 +1,11 @@
+import 'package:doctor_hunt/features/auth/data/models/patient_model.dart';
+import 'package:doctor_hunt/features/auth/presentation/cubit/patient_profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../data/models/patient_model.dart';
-import '../cubit/patient_profile_cubit.dart';
 
 class PatientProfileEditForm extends StatelessWidget {
   final PatientModel? patient;

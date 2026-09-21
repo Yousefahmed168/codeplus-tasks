@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -35,7 +35,7 @@ class CloudinaryService {
   Future<String> uploadImage({required String filePath, String? folder}) async {
     final dio = Dio();
 
-    final fileName = filePath.split(Platform.pathSeparator).last;
+    final fileName = filePath.split(RegExp(r'[/\\]')).last;
 
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),

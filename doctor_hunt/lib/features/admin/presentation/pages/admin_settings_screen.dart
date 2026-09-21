@@ -1,3 +1,4 @@
+import 'package:doctor_hunt/features/auth/presentation/widgets/logout_dialog.dart' show LogoutDialog;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -211,9 +212,12 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             height: 50,
             child: OutlinedButton.icon(
               onPressed: () async {
-                await AuthService.instance.logout();
-                if (!context.mounted) return;
-                context.go(AppRoutes.role);
+                final confirmed = await LogoutDialog.show(context);
+                if (confirmed == true) {
+                  await AuthService.instance.logout();
+                  if (!context.mounted) return;
+                  context.go(AppRoutes.role);
+                }
               },
               icon: const Icon(Icons.logout, color: AppColors.error),
               label: Text(

@@ -1,3 +1,5 @@
+import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
+
 import '../../../doctors/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
@@ -25,7 +27,6 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   String _searchQuery = "";
-
 
   @override
   void initState() {
@@ -111,16 +112,13 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                 ),
               ),
               Gap(24),
-              Expanded(
-                child: _buildSearchResults(),
-              ),
+              Expanded(child: _buildSearchResults()),
             ],
           ),
         ),
       ),
     );
   }
-
 
   Widget _buildSearchResults() {
     return StreamBuilder<List<Doctor>>(
@@ -194,10 +192,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   Widget _buildDoctorResultCard(BuildContext context, Doctor doctor) {
     return GestureDetector(
       onTap: () {
-        context.push(
-          AppRoutes.doctorDetails,
-          extra: doctor,
-        );
+        context.push(AppRoutes.doctorDetails, extra: doctor);
       },
       child: Container(
         padding: const EdgeInsets.all(16),

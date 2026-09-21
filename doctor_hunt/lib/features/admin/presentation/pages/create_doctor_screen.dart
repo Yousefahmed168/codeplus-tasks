@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/services/admin_service.dart';
@@ -20,7 +21,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
-  String? _imagePath;
+  XFile? _imageFile;
   String? _uploadedImageUrl;
   bool _isSubmitting = false;
 
@@ -37,7 +38,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
         source: ImageSource.gallery,
       );
       if (pickedFile != null) {
-        setState(() => _imagePath = pickedFile.path);
+        setState(() => _imageFile = pickedFile);
       }
     } catch (e) {
       if (mounted) {
@@ -55,9 +56,11 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
     try {
-      if (_imagePath != null) {
-        _uploadedImageUrl = await CloudinaryService.instance.uploadImage(
-          filePath: _imagePath!,
+      if (_imageFile != null) {
+        final bytes = await _imageFile!.readAsBytes();
+        _uploadedImageUrl = await CloudinaryService.instance.uploadImageBytes(
+          bytes: bytes,
+          fileName: _imageFile!.name,
           folder: 'doctors',
         );
       }
@@ -98,15 +101,14 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.primaryLight,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
-          ),
-          onPressed: () => context.pop(),
+        leadingWidth: 70,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: CustomBackButton(),
         ),
+
         title: Text(
           t.admin.createDoctor.title,
           style: context.bold18.textPrimary,
@@ -119,7 +121,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
           formKey: _formKey,
           nameCtrl: _nameCtrl,
           emailCtrl: _emailCtrl,
-          imagePath: _imagePath,
+          imagePath: _imageFile?.path,
           onPickImage: _pickImage,
           isSubmitting: _isSubmitting,
           submitLabel: t.admin.createDoctor.createBtn,

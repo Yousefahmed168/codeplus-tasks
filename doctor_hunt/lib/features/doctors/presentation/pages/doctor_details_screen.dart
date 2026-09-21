@@ -1,19 +1,21 @@
+import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/favorite_service.dart';
+import '../../../../core/services/user_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../core/services/favorite_service.dart';
-import '../../../../core/services/auth_service.dart';
-import '../../../../core/services/user_service.dart';
+import '../../../../core/widgets/app_background.dart';
+import '../../../../i18n/strings.g.dart';
 import '../../models/doctor.dart';
 import '../widgets/doctor_info_card.dart';
 import '../widgets/map_preview.dart';
 import '../widgets/services_section.dart';
 import '../widgets/stats_row.dart';
-import '../../../../i18n/strings.g.dart';
-import '../../../../core/widgets/app_background.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class DoctorDetailsScreen extends StatefulWidget {
   const DoctorDetailsScreen({super.key, required this.doctor});
@@ -48,12 +50,11 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
     try {
       // We need the doctor UID from Firestore. Since Doctor model doesn't have uid,
       // we look it up by streaming all doctors and matching by name + image.
-      final allDoctors = await UserService.instance
-          .streamDoctors()
-          .first;
+      final allDoctors = await UserService.instance.streamDoctors().first;
 
-      final matched = allDoctors.where((d) =>
-          d.name == _doctor.name && d.imageUrl == _doctor.imageUrl);
+      final matched = allDoctors.where(
+        (d) => d.name == _doctor.name && d.imageUrl == _doctor.imageUrl,
+      );
 
       if (matched.isNotEmpty) {
         final doctorUid = matched.first.uid;
@@ -171,7 +172,8 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                             ? 5
                             : _doctor.ratingPercentage.round(),
                         hourlyRate: _doctor.hourlyRate,
-                        imagePath: _doctor.imageUrl ?? 'assets/images/doctor.png',
+                        imagePath:
+                            _doctor.imageUrl ?? 'assets/images/doctor.png',
                         isFavorite: _isFavorite,
                         onFavoriteToggle: _toggleFavorite,
                         onBookNow: () {

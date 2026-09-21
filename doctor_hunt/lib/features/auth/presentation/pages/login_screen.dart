@@ -1,3 +1,4 @@
+import '../../../../core/widgets/password_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   final _forgotPasswordEmailCtrl = TextEditingController();
-  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -104,8 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
           } else if (state is AuthLoginSuccessState) {
             if (state.roleName == null) {
               context.go(AppRoutes.role);
-            } else if (state.roleName == 'doctor') {
-              context.go(AppRoutes.doctorDashboard);
             } else {
               context.go(AppRoutes.home);
             }
@@ -161,6 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const Gap(28),
                   CustomTextFormField(
+                    textInputAction: TextInputAction.next,
+
                     controller: _emailCtrl,
                     hintText: t.common.email,
                     keyboardType: TextInputType.emailAddress,
@@ -180,20 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const Gap(16),
-                  CustomTextFormField(
+                  PasswordTextFormField(
                     controller: _passwordCtrl,
                     hintText: t.common.password,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.textHint,
-                        size: 20,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                    ),
+
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return t.common.validation.enterPassword;
@@ -201,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (v.length < 6) return t.common.validation.minPassword;
                       return null;
                     },
+                    
                   ),
                   const Gap(28),
                   MainButton(

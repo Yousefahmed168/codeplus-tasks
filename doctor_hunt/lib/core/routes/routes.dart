@@ -6,9 +6,12 @@ abstract class Routes {
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
-  static const String doctorMainApp = '/doctor-dashboard';
   static const String doctorDetails = '/doctor-details';
   static const String search = '/search';
   static const String selectTime = '/select-time';
   static const String updateDoctorProfile = '/update-doctor-profile';
+  static const String patientSettings = '/patient-settings';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String helpCenter = '/help-center';
 }
+

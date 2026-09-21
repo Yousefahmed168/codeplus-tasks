@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import '../../../../core/services/image_uploader.dart';
+import '../../../../core/services/cloudinary_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,9 +16,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   final _authService = AuthService.instance;
   final _userService = UserService.instance;
-  final _cloudinary = uploadImageToCloudinary;
+  final _cloudinary = CloudinaryService.instance;
 
-  //  State fields 
+  //  State fields
   File? imageFile;
   String? _existingImageUrl;
 
@@ -30,6 +31,15 @@ class AuthCubit extends Cubit<AuthState> {
       final user = _authService.currentUser;
       if (user != null) {
         final role = await _authService.getUserRole(user.uid);
+        if (role == UserRole.admin) {
+          _authService.logout();
+          emit(
+            AuthErrorState(
+              'You cannot log in here. Please use the admin login screen.',
+            ),
+          );
+          return;
+        }
         emit(AuthLoginSuccessState(role?.name));
       } else {
         emit(AuthErrorState('User not found after login'));
@@ -78,7 +88,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (imageFile == null) return _existingImageUrl;
 
     try {
-      final url = await _cloudinary(imageFile!);
+      final url = await _cloudinary.uploadImage(filePath: imageFile!.path);
       return url;
     } catch (e) {
       debugPrint('Cloudinary upload failed: $e');
@@ -122,11 +132,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       // 3. Write to Firestore
-      await _userService.updateUser(
-        _uid!,
-        updateData,
-        role: UserRole.doctor,
-      );
+      await _userService.updateUser(_uid!, updateData, role: UserRole.doctor);
 
       emit(AuthSuccessState(message: 'Profile updated successfully'));
     } catch (e) {
@@ -179,5 +185,4 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
     }
   }
-
 }

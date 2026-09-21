@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -130,15 +132,14 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
-          ),
-          onPressed: () => context.pop(),
+        backgroundColor: AppColors.primaryLight,
+        // elevation: 0,
+        // leadingWidth: 70,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: const CustomBackButton(),
         ),
+
         title: Text(
           t.admin.editProfile.title,
           style: context.bold18.textPrimary,
@@ -179,15 +180,15 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                           _imagePath == null &&
                               (user?.photoURL == null ||
                                   user!.photoURL!.isEmpty)
-                              ? Center(
-                                  child: Text(
-                                    initials,
-                                    style: context.bold28.copyWith(
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                )
-                              : null,
+                          ? Center(
+                              child: Text(
+                                initials,
+                                style: context.bold28.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            )
+                          : null,
                     ),
                     Positioned(
                       bottom: 0,
