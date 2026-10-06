@@ -1,8 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -17,7 +18,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final patientUid = AuthService.instance.currentUser?.uid;
+    final patientUid = sl<AuthService>().currentUser?.uid;
 
     if (patientUid == null) {
       return Scaffold(

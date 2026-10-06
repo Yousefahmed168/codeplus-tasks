@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../features/doctors/models/doctor.dart';
 import '../../features/auth/data/models/patient_model.dart';
 import '../../features/auth/data/models/user_model.dart';
@@ -11,6 +12,7 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   static const String patientsCollection = 'patients';
   static const String doctorsCollection = 'doctors';
@@ -23,6 +25,43 @@ class AuthService {
   User? get currentUser => _auth.currentUser;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  /// Signs in with Google and returns the [UserRole] detected for the account.
+  /// New Google users are registered as patients automatically.
+  Future<UserRole?> signInWithGoogle() async {
+    final googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) {
+      // User cancelled the sign-in dialog
+      return null;
+    }
+
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential = await _auth.signInWithCredential(credential);
+    final user = userCredential.user;
+    if (user == null) throw Exception('Google sign-in failed: no user returned');
+
+    // Determine if the account already exists in Firestore
+    final role = await getUserRole(user.uid);
+    if (role == null) {
+      // New user — register as a patient
+      await _firestore.collection(patientsCollection).doc(user.uid).set(
+            PatientModel(
+              uid: user.uid,
+              name: user.displayName ?? googleUser.displayName ?? '',
+              email: user.email ?? googleUser.email,
+              phone: '',
+            ).toJson(),
+          );
+      return UserRole.patient;
+    }
+    return role;
+  }
+
 
 
   Future<UserRole?> getUserRole(String uid) async {
@@ -117,10 +156,8 @@ class AuthService {
             Doctor(
               uid: user.uid,
               name: name.trim(),
-              email: email.trim(),
-              phone1: phone.trim(),
+             
               specialization: specialty.trim(),
-              bio: bio.trim(),
               rating: 0,
             ).toJson(),
           );
@@ -134,6 +171,12 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    // Sign out from Google to clear the cached OAuth token.
+    // disconnect() revokes access so the account-picker is shown on next sign-in.
+    if (await _googleSignIn.isSignedIn()) {
+      await _googleSignIn.signOut();
+      await _googleSignIn.disconnect();
+    }
     await _auth.signOut();
   }
 

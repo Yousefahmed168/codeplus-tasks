@@ -102,18 +102,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
           } else if (state is AuthLoginSuccessState) {
-            if (state.roleName == null) {
-              context.go(AppRoutes.role);
-            } else {
-              context.go(AppRoutes.home);
-            }
+            context.go(AppRoutes.home);
           }
         },
         builder: (context, state) {
           final isLoading = state is AuthLoadingState;
-          return Container(
-            padding: const EdgeInsets.all(24),
-            child: Form(
+          return SafeArea(
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              child: Form(
               key: _formKey,
               child: ListView(
                 children: [
@@ -140,7 +137,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 20,
                             height: 20,
                           ),
-                          onTap: () {},
+                          onTap: isLoading
+                              ? () {}
+                              : () => context
+                                  .read<AuthCubit>()
+                                  .loginWithGoogle(),
                         ),
                       ),
                       const Gap(12),
@@ -226,6 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ],
+                ),
               ),
             ),
           );

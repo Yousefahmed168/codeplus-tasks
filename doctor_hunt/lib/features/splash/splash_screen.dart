@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/di/service_locator.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/theme/style_atoms.dart';
@@ -27,13 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
     if (!mounted) return;
 
-    final currentUser = AuthService.instance.currentUser;
+    final currentUser = sl<AuthService>().currentUser;
     if (currentUser == null) {
       // Not logged in → go to role selection (which leads to login/register)
       context.go(AppRoutes.role);
     } else {
       // Logged in → check role
-      final role = await AuthService.instance.getUserRole(currentUser.uid);
+      final role = await sl<AuthService>().getUserRole(currentUser.uid);
       if (!mounted) return;
 
       if (role == null) {

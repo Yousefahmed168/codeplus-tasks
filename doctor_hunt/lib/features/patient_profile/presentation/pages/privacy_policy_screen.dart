@@ -43,7 +43,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 Text(
                   t.privacyPolicy.heading,
                   style: context.bold18.copyWith(
-                    color: const Color(0xFF1B3D54),
+                    color: AppColors.policyBackground,
                   ),
                 ),
                 const Gap(16),

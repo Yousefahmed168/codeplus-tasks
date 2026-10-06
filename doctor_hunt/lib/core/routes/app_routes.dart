@@ -20,6 +20,7 @@ import '../../features/admin/presentation/pages/admin_login_screen.dart';
 import '../../features/admin/presentation/pages/admin_main_screen.dart';
 import '../../features/admin/presentation/pages/admin_doctors_screen.dart';
 import '../../features/admin/presentation/pages/admin_doctor_details_screen.dart';
+import '../../features/admin/presentation/pages/admin_doctor_availability_screen.dart';
 import '../../features/admin/presentation/pages/create_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_admin_profile_screen.dart';
@@ -49,6 +50,7 @@ class AppRoutes {
   static const String editDoctor = '/admin/edit-doctor';
   static const String adminSettings = '/admin/settings';
   static const String adminDoctorDetails = '/admin/doctor-details';
+  static const String adminDoctorAvailability = '/admin/doctor-availability';
   static const String editAdminProfile = '/admin/edit-profile';
   static const String changePassword = '/admin/change-password';
 }
@@ -190,6 +192,16 @@ final GoRouter appRouter = GoRouter(
         return _slidePage(
           key: state.pageKey,
           child: AdminDoctorDetailsScreen(doctor: doctor),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.adminDoctorAvailability,
+      pageBuilder: (context, state) {
+        final doctor = state.extra as Doctor;
+        return _slidePage(
+          key: state.pageKey,
+          child: AdminDoctorAvailabilityScreen(doctor: doctor),
         );
       },
     ),

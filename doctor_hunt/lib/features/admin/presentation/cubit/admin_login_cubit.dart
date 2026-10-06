@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import 'admin_login_state.dart';
 
 class AdminLoginCubit extends Cubit<AdminLoginState> {
-  final AuthService _authService = AuthService.instance;
+  final AuthService _authService = sl<AuthService>();
 
   AdminLoginCubit() : super(AdminLoginInitial());
 

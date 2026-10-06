@@ -1,11 +1,11 @@
 import 'package:doctor_hunt/core/widgets/widgets.dart';
-import 'package:doctor_hunt/features/auth/data/models/specializations.dart';
 
 import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -30,87 +30,13 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
   @override
   void initState() {
     super.initState();
-    _doctorsStream = AdminService.instance.streamDoctors();
+    _doctorsStream = sl<AdminService>().streamDoctors();
   }
 
   @override
   void dispose() {
     _searchCtrl.dispose();
     super.dispose();
-  }
-
-  void _showFilterBottomSheet() {
-    final categories = ['All', ...specializations];
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Filter by Specialization',
-                    style: context.bold18.textPrimary,
-                  ),
-                  if (_selectedCategory != null && _selectedCategory != 'All')
-                    TextButton(
-                      onPressed: () {
-                        setState(() => _selectedCategory = null);
-                        Navigator.pop(ctx);
-                      },
-                      child: const Text(
-                        'Reset',
-                        style: TextStyle(color: AppColors.error),
-                      ),
-                    ),
-                ],
-              ),
-              const Gap(12),
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final cat = categories[index];
-                    final isSelected =
-                        (_selectedCategory == cat) ||
-                        (_selectedCategory == null && cat == 'All');
-                    return ListTile(
-                      title: Text(
-                        cat,
-                        style: isSelected
-                            ? context.bold16.primary
-                            : context.regular14.textPrimary,
-                      ),
-                      trailing: isSelected
-                          ? const Icon(
-                              Icons.check_circle_rounded,
-                              color: AppColors.primary,
-                            )
-                          : null,
-                      onTap: () {
-                        setState(
-                          () => _selectedCategory = cat == 'All' ? null : cat,
-                        );
-                        Navigator.pop(ctx);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   void _showDeleteDialog(Doctor doctor) {
@@ -130,7 +56,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
             onPressed: () async {
               Navigator.pop(ctx);
               if (doctor.uid != null) {
-                await AdminService.instance.deleteDoctor(doctor.uid!);
+                await sl<AdminService>().deleteDoctor(doctor.uid!);
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -247,6 +173,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
               children: [
                 Expanded(
                   child: CustomTextFormField(
+                    maxLines: 1,
                     hintText: 'Search by name ',
                     prefixIcon: const Icon(Icons.search),
                     controller: _searchCtrl,
@@ -254,28 +181,6 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   ),
                 ),
                 const Gap(12),
-                GestureDetector(
-                  onTap: _showFilterBottomSheet,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color:
-                          _selectedCategory != null &&
-                              _selectedCategory != 'All'
-                          ? AppColors.primary
-                          : AppColors.surfaceVariant,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.filter_list_rounded,
-                      color:
-                          _selectedCategory != null &&
-                              _selectedCategory != 'All'
-                          ? Colors.white
-                          : AppColors.textSecondary,
-                    ),
-                  ),
-                ),
               ],
             ),
             const Gap(14),

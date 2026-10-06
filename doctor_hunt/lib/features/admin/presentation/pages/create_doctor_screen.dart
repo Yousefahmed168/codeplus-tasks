@@ -2,6 +2,7 @@ import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -20,7 +21,8 @@ class CreateDoctorScreen extends StatefulWidget {
 class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
-  final _emailCtrl = TextEditingController();
+  final _feeCtrl = TextEditingController();
+  String? _selectedSpecialty;
   XFile? _imageFile;
   String? _uploadedImageUrl;
   bool _isSubmitting = false;
@@ -28,7 +30,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
   @override
   void dispose() {
     _nameCtrl.dispose();
-    _emailCtrl.dispose();
+    _feeCtrl.dispose();
     super.dispose();
   }
 
@@ -58,7 +60,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
     try {
       if (_imageFile != null) {
         final bytes = await _imageFile!.readAsBytes();
-        _uploadedImageUrl = await CloudinaryService.instance.uploadImageBytes(
+        _uploadedImageUrl = await sl<CloudinaryService>().uploadImageBytes(
           bytes: bytes,
           fileName: _imageFile!.name,
           folder: 'doctors',
@@ -67,11 +69,12 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
 
       final doctor = Doctor(
         name: _nameCtrl.text.trim(),
-        email: _emailCtrl.text.trim(),
         imageUrl: _uploadedImageUrl,
+        specialization: _selectedSpecialty,
+        consultationFee: double.tryParse(_feeCtrl.text.trim()) ?? 0.0,
       );
 
-      await AdminService.instance.createDoctor(doctor);
+      await sl<AdminService>().createDoctor(doctor);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +123,9 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
         child: DoctorFormWidget(
           formKey: _formKey,
           nameCtrl: _nameCtrl,
-          emailCtrl: _emailCtrl,
+          feeCtrl: _feeCtrl,
+          selectedSpecialty: _selectedSpecialty,
+          onSpecialtyChanged: (v) => setState(() => _selectedSpecialty = v),
           imagePath: _imageFile?.path,
           onPickImage: _pickImage,
           isSubmitting: _isSubmitting,

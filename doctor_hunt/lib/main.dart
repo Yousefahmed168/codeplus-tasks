@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'core/di/service_locator.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
@@ -26,6 +27,9 @@ void main() async {
       debugPrint('Could not disable app verification: $e');
     }
   }
+
+  // Register services with get_it
+  setupServiceLocator();
 
   // Initialize slang locale
   LocaleSettings.useDeviceLocale();

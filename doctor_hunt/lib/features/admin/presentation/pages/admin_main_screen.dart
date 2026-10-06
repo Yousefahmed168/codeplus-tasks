@@ -23,10 +23,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: IndexedStack(
-        index: _currentTab,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentTab, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentTab,
         onTap: (i) => setState(() => _currentTab = i),

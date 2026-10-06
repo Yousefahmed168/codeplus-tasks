@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -214,7 +215,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
               onPressed: () async {
                 final confirmed = await LogoutDialog.show(context);
                 if (confirmed == true) {
-                  await AuthService.instance.logout();
+                  await sl<AuthService>().logout();
                   if (!context.mounted) return;
                   context.go(AppRoutes.role);
                 }

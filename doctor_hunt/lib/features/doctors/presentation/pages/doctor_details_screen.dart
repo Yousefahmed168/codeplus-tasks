@@ -1,8 +1,8 @@
-import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
@@ -13,9 +13,7 @@ import '../../../../core/widgets/app_background.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../models/doctor.dart';
 import '../widgets/doctor_info_card.dart';
-import '../widgets/map_preview.dart';
 import '../widgets/services_section.dart';
-import '../widgets/stats_row.dart';
 
 class DoctorDetailsScreen extends StatefulWidget {
   const DoctorDetailsScreen({super.key, required this.doctor});
@@ -30,7 +28,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
   late Doctor _doctor;
   bool _isFavorite = false;
 
-  String? get _patientUid => AuthService.instance.currentUser?.uid;
+  String? get _patientUid => sl<AuthService>().currentUser?.uid;
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
     try {
       // We need the doctor UID from Firestore. Since Doctor model doesn't have uid,
       // we look it up by streaming all doctors and matching by name + image.
-      final allDoctors = await UserService.instance.streamDoctors().first;
+      final allDoctors = await sl<UserService>().streamDoctors().first;
 
       final matched = allDoctors.where(
         (d) => d.name == _doctor.name && d.imageUrl == _doctor.imageUrl,
@@ -59,7 +57,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       if (matched.isNotEmpty) {
         final doctorUid = matched.first.uid;
         if (doctorUid != null) {
-          await FavoriteService.instance.toggleFavorite(
+          await sl<FavoriteService>().toggleFavorite(
             patientUid: _patientUid!,
             doctorUid: doctorUid,
           );
@@ -79,7 +77,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 if (matched.isNotEmpty) {
                   final doctorUid = matched.first.uid;
                   if (doctorUid != null) {
-                    await FavoriteService.instance.addFavorite(
+                    await sl<FavoriteService>().addFavorite(
                       patientUid: _patientUid!,
                       doctorUid: doctorUid,
                     );
@@ -171,7 +169,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                         rating: _doctor.ratingPercentage.round() > 5
                             ? 5
                             : _doctor.ratingPercentage.round(),
-                        hourlyRate: _doctor.hourlyRate,
+                        hourlyRate: _doctor.consultationFee,
                         imagePath:
                             _doctor.imageUrl ?? 'assets/images/doctor.png',
                         isFavorite: _isFavorite,
@@ -182,10 +180,6 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                       ),
                       Gap(20),
 
-                      // Stats row
-                      StatsRow(running: 100, ongoing: 500, patients: 700),
-                      Gap(24),
-
                       // Services section
                       ServicesSection(
                         services: [
@@ -194,10 +188,6 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                           t.doctorDetails.service3,
                         ],
                       ),
-                      Gap(20),
-
-                      // Map preview
-                      const MapPreview(),
                       Gap(32),
                     ],
                   ),

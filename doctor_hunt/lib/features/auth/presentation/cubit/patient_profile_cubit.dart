@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
@@ -8,9 +9,9 @@ import '../../data/models/user_model.dart';
 import 'patient_profile_state.dart';
 
 class PatientProfileCubit extends Cubit<PatientProfileState> {
-  final UserService _userService = UserService.instance;
-  final AuthService _authService = AuthService.instance;
-  final CloudinaryService _cloudinaryService = CloudinaryService.instance;
+  final UserService _userService = sl<UserService>();
+  final AuthService _authService = sl<AuthService>();
+  final CloudinaryService _cloudinaryService = sl<CloudinaryService>();
   
   StreamSubscription<PatientModel?>? _patientSubscription;
 

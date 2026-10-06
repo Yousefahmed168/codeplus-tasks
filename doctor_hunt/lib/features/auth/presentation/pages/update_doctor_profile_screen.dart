@@ -91,12 +91,7 @@ class _UpdateDoctorProfileScreenState extends State<UpdateDoctorProfileScreen> {
           listener: (context, state) {
             if (state is AuthProfileLoadedState) {
               final user = state.doctorData;
-              _bioController.text = user.bio ?? '';
-              _addressController.text = user.address ?? '';
-              _openHourController.text = user.openHour ?? '';
-              _closeHourController.text = user.closeHour ?? '';
-              _phone1Controller.text = user.phone1 ?? '';
-              _phone2Controller.text = user.phone2 ?? '';
+            
               setState(() {
                 _specialization = user.specialization;
               });

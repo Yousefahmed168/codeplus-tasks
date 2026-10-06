@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
-import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../features/doctors/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/widgets/main_button.dart';
 
 class AdminDoctorDetailsScreen extends StatefulWidget {
   final Doctor doctor;
@@ -22,56 +22,11 @@ class AdminDoctorDetailsScreen extends StatefulWidget {
 
 class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
   late Doctor _doctor;
-  bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
     _doctor = widget.doctor;
-  }
-
-  void _showDeleteDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(t.admin.doctors.deleteTitle),
-        content: Text(
-          t.admin.doctors.deleteConfirm.replaceAll('@name', _doctor.name ?? ''),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(ctx);
-              if (_doctor.uid != null) {
-                await AdminService.instance.deleteDoctor(_doctor.uid!);
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        t.admin.doctors.deleted.replaceAll(
-                          '@name',
-                          _doctor.name ?? '',
-                        ),
-                      ),
-                      backgroundColor: AppColors.error,
-                    ),
-                  );
-                  context.pop();
-                }
-              }
-            },
-            child: Text(
-              'Delete',
-              style: context.semiBold14.copyWith(color: AppColors.error),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -81,126 +36,84 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: CustomBackButton(),
+        leadingWidth: 70,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: CustomBackButton(),
+        ),
         title: Text(
           t.admin.doctorDetails.title,
           style: context.bold18.textPrimary,
         ),
         centerTitle: true,
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'edit') {
-                context.push(AppRoutes.editDoctor, extra: _doctor);
-              }
-              if (value == 'delete') _showDeleteDialog();
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'edit', child: Text('Edit')),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text(
-                  'Delete',
-                  style: context.regular12.copyWith(color: AppColors.error),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Doctor photo with camera overlay
+            // Doctor photo
             Center(
-              child: Stack(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      image:
-                          _doctor.imageUrl != null &&
-                              _doctor.imageUrl!.isNotEmpty
-                          ? DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                _doctor.imageUrl!,
-                              ),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                    ),
-                    child: _doctor.imageUrl == null || _doctor.imageUrl!.isEmpty
-                        ? Icon(Icons.person, color: AppColors.primary, size: 48)
-                        : null,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  image:
+                      _doctor.imageUrl != null && _doctor.imageUrl!.isNotEmpty
+                      ? DecorationImage(
+                          image: CachedNetworkImageProvider(_doctor.imageUrl!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                child: _doctor.imageUrl == null || _doctor.imageUrl!.isEmpty
+                    ? const Icon(
+                        Icons.person,
                         color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ],
+                        size: 48,
+                      )
+                    : null,
               ),
             ),
             const Gap(16),
 
-            // Doctor name
+            // Doctor Name
             Text(
-              'Dr. ${_doctor.name ?? 'Unknown'}',
+              _doctor.name ?? 'Unknown Doctor',
               style: context.bold20.textPrimary,
-              textAlign: TextAlign.center,
-            ),
-            const Gap(4),
-
-            // Specialization + experience
-            Text(
-              _doctor.specialization ?? 'General',
-              style: context.regular14.textSecondary,
-              textAlign: TextAlign.center,
             ),
             const Gap(8),
 
-            // Active status badge
+            // Active status pill
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: _isActive
+                color: _doctor.isActive
                     ? AppColors.success.withValues(alpha: 0.1)
                     : AppColors.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 8,
-                    height: 8,
+                    width: 6,
+                    height: 6,
                     decoration: BoxDecoration(
+                      color: _doctor.isActive
+                          ? AppColors.success
+                          : AppColors.error,
                       shape: BoxShape.circle,
-                      color: _isActive ? AppColors.success : AppColors.error,
                     ),
                   ),
                   const Gap(6),
                   Text(
-                    _isActive
-                        ? t.admin.doctorDetails.active
-                        : t.admin.doctorDetails.inactive,
+                    _doctor.isActive ? 'Active' : 'Inactive',
                     style: context.semiBold12.copyWith(
-                      color: _isActive ? AppColors.success : AppColors.error,
+                      color: _doctor.isActive
+                          ? AppColors.success
+                          : AppColors.error,
                     ),
                   ),
                 ],
@@ -208,50 +121,36 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
             ),
             const Gap(24),
 
-            // Doctor Info section
+            // Info section
             _buildInfoSection(),
-            const Gap(20),
-
-            // Account Status
-            _buildAccountStatus(),
             const Gap(32),
 
             // Edit Doctor button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  await context.push(
-                    AppRoutes.editDoctor,
-                    extra: _doctor,
-                  );
-                  // Refresh doctor data when coming back
-                  if (mounted) setState(() {});
-                },
-                icon: const Icon(Icons.edit, color: Colors.white),
-                label: Text(
-                  t.admin.doctorDetails.editDoctor,
-                  style: context.semiBold16.copyWith(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-              ),
+            MainButton(
+              text:
+                  'Edit Doctor', // MVP text or t.admin.doctorDetails.editDoctor
+              onPressed: () async {
+                await context.push(AppRoutes.editDoctor, extra: _doctor);
+                if (mounted) setState(() {});
+              },
+              bgColor: AppColors.primary,
             ),
-            const Gap(12),
+            const Gap(16),
 
-            // Delete Doctor button
-            TextButton(
-              onPressed: _showDeleteDialog,
-              child: Text(
-                t.admin.doctorDetails.deleteDoctor,
-                style: context.semiBold14.copyWith(color: AppColors.error),
-              ),
+            // Manage Availability button
+            MainButton(
+              text: 'Manage Availability',
+              onPressed: () async {
+                await context.push(
+                  AppRoutes.adminDoctorAvailability,
+                  extra: _doctor,
+                );
+                if (mounted) setState(() {});
+              },
+              bgColor: AppColors.background,
+              textColor: AppColors.primary,
             ),
+            const Gap(32),
           ],
         ),
       ),
@@ -276,148 +175,55 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            t.admin.doctorDetails.doctorInfo,
-            style: context.semiBold16.textPrimary,
-          ),
-          const Gap(16),
-          // Specialty chip
           _buildInfoRow(
-            label: t.admin.doctorDetails.specialty,
-            child: Wrap(
-              spacing: 8,
-              children: [
-                _buildChip(_doctor.specialization ?? 'General'),
-                if (_doctor.bio != null && _doctor.bio!.isNotEmpty)
-                  _buildChip(_doctor.bio!),
-              ],
-            ),
+            icon: Icons.medical_services_outlined,
+            label: 'Specialty',
+            value: _doctor.specialization ?? 'General',
           ),
-          if (_doctor.email != null && _doctor.email!.isNotEmpty) ...[
-            const Gap(12),
-            _buildInfoRow(
-              label: t.common.email,
-              child: Text(
-                _doctor.email!,
-                style: context.regular14.textSecondary,
-              ),
-            ),
-          ],
-          if (_doctor.phone1 != null && _doctor.phone1!.isNotEmpty) ...[
-            const Gap(12),
-            _buildInfoRow(
-              label: t.common.phone,
-              child: Text(
-                _doctor.phone1!,
-                style: context.regular14.textSecondary,
-              ),
-            ),
-          ],
-          if (_doctor.address != null && _doctor.address!.isNotEmpty) ...[
-            const Gap(12),
-            _buildInfoRow(
-              label: 'Address',
-              child: Text(
-                _doctor.address!,
-                style: context.regular14.textSecondary,
-              ),
-            ),
-          ],
+          const Divider(height: 32, color: AppColors.border),
+          _buildInfoRow(
+            icon: Icons.star_border,
+            label: 'Rating',
+            value: '${_doctor.rating ?? 0.0} • 128 reviews', // Mock reviews
+          ),
+          const Divider(height: 32, color: AppColors.border),
+          _buildInfoRow(
+            icon: Icons.attach_money,
+            label: 'Consultation Fee',
+            value: '\$${_doctor.consultationFee.toStringAsFixed(2)}',
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow({required String label, required Widget child}) {
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 100,
-          child: Text(label, style: context.semiBold12.textSecondary),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: AppColors.primary, size: 20),
         ),
-        Expanded(child: child),
+        const Gap(16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: context.regular12.textSecondary),
+              const Gap(4),
+              Text(value, style: context.semiBold14.textPrimary),
+            ],
+          ),
+        ),
       ],
-    );
-  }
-
-  Widget _buildChip(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: context.semiBold12.copyWith(color: AppColors.primary),
-      ),
-    );
-  }
-
-  Widget _buildAccountStatus() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.person_outline,
-              color: AppColors.primary,
-              size: 22,
-            ),
-          ),
-          const Gap(12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.admin.doctorDetails.accountStatus,
-                  style: context.semiBold14.textPrimary,
-                ),
-                const Gap(2),
-                Text(
-                  _isActive
-                      ? t.admin.doctorDetails.active
-                      : t.admin.doctorDetails.inactive,
-                  style: context.regular12.textSecondary,
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: _isActive,
-            onChanged: (value) {
-              setState(() => _isActive = value);
-              if (_doctor.uid != null) {
-                AdminService.instance.updateDoctor(_doctor.uid!, {
-                  'isActive': value,
-                });
-              }
-            },
-            activeThumbColor: AppColors.primary,
-          ),
-        ],
-      ),
     );
   }
 }

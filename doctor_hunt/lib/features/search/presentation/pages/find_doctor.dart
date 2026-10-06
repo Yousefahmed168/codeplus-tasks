@@ -1,9 +1,9 @@
-import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
 
 import '../../../doctors/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -122,7 +122,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
   Widget _buildSearchResults() {
     return StreamBuilder<List<Doctor>>(
-      stream: UserService.instance.streamDoctors(),
+      stream: sl<UserService>().streamDoctors(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

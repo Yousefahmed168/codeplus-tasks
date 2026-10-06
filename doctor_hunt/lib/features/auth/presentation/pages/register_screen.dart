@@ -96,6 +96,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             } else {
               context.go(AppRoutes.home);
             }
+          } else if (state is AuthLoginSuccessState) {
+            // Emitted after Google sign-in on the register screen
+            if (state.roleName == null) {
+              context.go(AppRoutes.role);
+            } else {
+              context.go(AppRoutes.home);
+            }
           }
         },
         builder: (context, state) {
@@ -129,7 +136,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: 20,
                             height: 20,
                           ),
-                          onTap: () {},
+                          onTap: isLoading
+                              ? () {}
+                              : () => context
+                                  .read<AuthCubit>()
+                                  .loginWithGoogle(),
                         ),
                       ),
                       const Gap(12),

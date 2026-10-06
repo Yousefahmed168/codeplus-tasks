@@ -1,14 +1,15 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import 'favorite_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
-  final _userService = UserService.instance;
-  final _authService = AuthService.instance;
-  final _favoriteService = FavoriteService.instance;
+  final _userService = sl<UserService>();
+  final _authService = sl<AuthService>();
+  final _favoriteService = sl<FavoriteService>();
 
   StreamSubscription? _doctorsSub;
   StreamSubscription? _favoritesSub;

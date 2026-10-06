@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -79,7 +80,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               final email = emailCtrl.text.trim();
               if (mounted) Navigator.pop(ctx);
               try {
-                await AuthService.instance.sendPasswordResetEmail(email);
+                await sl<AuthService>().sendPasswordResetEmail(email);
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

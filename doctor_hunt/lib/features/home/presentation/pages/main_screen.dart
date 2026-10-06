@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/widgets/app_background.dart';
@@ -17,13 +18,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  String? get _patientUid => AuthService.instance.currentUser?.uid;
+  String? get _patientUid => sl<AuthService>().currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
     // Stream favorite count for the badge
     final Stream<Set<String>> favoriteStream = _patientUid != null
-        ? FavoriteService.instance.streamFavoriteIds(_patientUid!)
+        ? sl<FavoriteService>().streamFavoriteIds(_patientUid!)
         : Stream.value(<String>{});
 
     return AppBackground(

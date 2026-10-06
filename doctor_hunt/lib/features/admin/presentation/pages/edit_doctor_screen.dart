@@ -1,7 +1,7 @@
-﻿import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -22,43 +22,26 @@ class EditDoctorScreen extends StatefulWidget {
 class _EditDoctorScreenState extends State<EditDoctorScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
-  late final TextEditingController _emailCtrl;
-  late final TextEditingController _phone1Ctrl;
-  late final TextEditingController _phone2Ctrl;
-  late final TextEditingController _bioCtrl;
-  late final TextEditingController _addressCtrl;
-  late final TextEditingController _openHourCtrl;
-  late final TextEditingController _closeHourCtrl;
+  late final TextEditingController _feeCtrl;
   String? _selectedSpecialty;
   String? _imagePath;
   String? _uploadedImageUrl;
   bool _isSubmitting = false;
+  late bool _isActive;
 
   @override
   void initState() {
     super.initState();
-    final d = widget.doctor;
-    _nameCtrl = TextEditingController(text: d.name ?? '');
-    _emailCtrl = TextEditingController(text: d.email ?? '');
-    _phone1Ctrl = TextEditingController(text: d.phone1 ?? '');
-    _phone2Ctrl = TextEditingController(text: d.phone2 ?? '');
-    _bioCtrl = TextEditingController(text: d.bio ?? '');
-    _addressCtrl = TextEditingController(text: d.address ?? '');
-    _openHourCtrl = TextEditingController(text: d.openHour ?? '');
-    _closeHourCtrl = TextEditingController(text: d.closeHour ?? '');
-    _selectedSpecialty = d.specialization;
+    _nameCtrl = TextEditingController(text: widget.doctor.name ?? '');
+    _feeCtrl = TextEditingController(text: widget.doctor.consultationFee.toStringAsFixed(2));
+    _selectedSpecialty = widget.doctor.specialization;
+    _isActive = widget.doctor.isActive;
   }
 
   @override
   void dispose() {
     _nameCtrl.dispose();
-    _emailCtrl.dispose();
-    _phone1Ctrl.dispose();
-    _phone2Ctrl.dispose();
-    _bioCtrl.dispose();
-    _addressCtrl.dispose();
-    _openHourCtrl.dispose();
-    _closeHourCtrl.dispose();
+    _feeCtrl.dispose();
     super.dispose();
   }
 
@@ -82,12 +65,67 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     }
   }
 
+  Future<void> _deleteDoctor() async {
+    if (widget.doctor.uid == null) return;
+    try {
+      await sl<AdminService>().deleteDoctor(widget.doctor.uid!);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Doctor deleted successfully'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        // Pop back to list
+        context.pop();
+        context.pop(); 
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${t.admin.editDoctor.failed}: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showDeleteConfirm() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(t.admin.doctors.deleteTitle),
+        content: Text(
+          t.admin.doctors.deleteConfirm.replaceAll('@name', widget.doctor.name ?? ''),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _deleteDoctor();
+            },
+            child: Text(
+              'Delete',
+              style: context.semiBold14.copyWith(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
     try {
       if (_imagePath != null) {
-        _uploadedImageUrl = await CloudinaryService.instance.uploadImage(
+        _uploadedImageUrl = await sl<CloudinaryService>().uploadImage(
           filePath: _imagePath!,
           folder: 'doctors',
         );
@@ -95,21 +133,16 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
 
       final data = <String, dynamic>{
         'name': _nameCtrl.text.trim(),
-        'email': _emailCtrl.text.trim(),
-        'phone1': _phone1Ctrl.text.trim(),
-        'phone2': _phone2Ctrl.text.trim(),
         'specialization': _selectedSpecialty,
-        'bio': _bioCtrl.text.trim(),
-        'address': _addressCtrl.text.trim(),
-        'openHour': _openHourCtrl.text.trim(),
-        'closeHour': _closeHourCtrl.text.trim(),
+        'consultationFee': double.tryParse(_feeCtrl.text.trim()) ?? 0.0,
+        'isActive': _isActive,
       };
 
       if (_uploadedImageUrl != null) data['image'] = _uploadedImageUrl;
       data.removeWhere((_, value) => value == null);
 
       if (widget.doctor.uid != null) {
-        await AdminService.instance.updateDoctor(widget.doctor.uid!, data);
+        await sl<AdminService>().updateDoctor(widget.doctor.uid!, data);
       }
 
       if (mounted) {
@@ -150,7 +183,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          t.admin.editDoctor.title,
+          'Edit Doctor', // using string for MVP, or t.admin.editDoctor.title
           style: context.bold18.textPrimary,
         ),
         centerTitle: true,
@@ -160,17 +193,19 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         child: DoctorFormWidget(
           formKey: _formKey,
           nameCtrl: _nameCtrl,
-          emailCtrl: _emailCtrl,
-         
+          feeCtrl: _feeCtrl,
+          selectedSpecialty: _selectedSpecialty,
+          onSpecialtyChanged: (v) => setState(() => _selectedSpecialty = v),
           imagePath: _imagePath,
           existingImageUrl: widget.doctor.imageUrl,
           onPickImage: _pickImage,
+          isActive: _isActive,
+          onStatusChanged: (v) => setState(() => _isActive = v),
           isSubmitting: _isSubmitting,
-          submitLabel: t.admin.editDoctor.updateBtn,
-          submittingLabel: t.admin.editDoctor.updatingBtn,
+          submitLabel: 'Save Changes',
+          submittingLabel: 'Saving...',
           onSubmit: _submit,
-          openHourCtrl: _openHourCtrl,
-          closeHourCtrl: _closeHourCtrl,
+          onDelete: _showDeleteConfirm,
         ),
       ),
     );

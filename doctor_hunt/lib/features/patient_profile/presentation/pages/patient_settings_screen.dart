@@ -69,7 +69,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
           _buildActionItem(
             context,
             icon: Icons.lock_outline_rounded,
-            iconBgColor: const Color(0xFFFF6B6B),
+            iconBgColor: AppColors.settingsIconRed,
             title: t.patientSettings.changePassword,
             onTap: () => context.push(AppRoutes.changePassword),
           ),
@@ -77,7 +77,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
           _buildActionItem(
             context,
             icon: Icons.notifications_none_rounded,
-            iconBgColor: const Color(0xFF0EBE7E),
+            iconBgColor: AppColors.primary,
             title: t.patientSettings.notifications,
             onTap: () {},
           ),
@@ -85,7 +85,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
           _buildActionItem(
             context,
             icon: Icons.bar_chart_rounded,
-            iconBgColor: const Color(0xFF4C84FF),
+            iconBgColor: AppColors.settingsIconBlue,
             title: t.patientSettings.statistics,
             onTap: () {},
           ),
@@ -93,7 +93,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
           _buildActionItem(
             context,
             icon: Icons.person_outline_rounded,
-            iconBgColor: const Color(0xFFFF9F43),
+            iconBgColor: AppColors.settingsIconOrange,
             title: t.patientSettings.aboutUs,
             onTap: () {},
           ),

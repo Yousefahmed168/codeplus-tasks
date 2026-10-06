@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/cloudinary_service.dart';
 
 import 'package:flutter/material.dart';
@@ -14,9 +15,9 @@ import 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitialState());
 
-  final _authService = AuthService.instance;
-  final _userService = UserService.instance;
-  final _cloudinary = CloudinaryService.instance;
+  final _authService = sl<AuthService>();
+  final _userService = sl<UserService>();
+  final _cloudinary = sl<CloudinaryService>();
 
   //  State fields
   File? imageFile;
@@ -31,8 +32,13 @@ class AuthCubit extends Cubit<AuthState> {
       final user = _authService.currentUser;
       if (user != null) {
         final role = await _authService.getUserRole(user.uid);
+        if (role == null) {
+          await _authService.logout();
+          emit(AuthErrorState('No account found with this email.'));
+          return;
+        }
         if (role == UserRole.admin) {
-          _authService.logout();
+          await _authService.logout();
           emit(
             AuthErrorState(
               'You cannot log in here. Please use the admin login screen.',
@@ -40,7 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
           );
           return;
         }
-        emit(AuthLoginSuccessState(role?.name));
+        emit(AuthLoginSuccessState(role.name));
       } else {
         emit(AuthErrorState('User not found after login'));
       }
@@ -54,6 +60,30 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _authService.sendPasswordResetEmail(email);
       emit(AuthPasswordResetSuccessState('Password reset email sent'));
+    } catch (e) {
+      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    emit(AuthLoadingState());
+    try {
+      final role = await _authService.signInWithGoogle();
+      if (role == null) {
+        // User cancelled — silently return to initial state
+        emit(AuthInitialState());
+        return;
+      }
+      if (role == UserRole.admin) {
+        await _authService.logout();
+        emit(
+          AuthErrorState(
+            'You cannot log in here. Please use the admin login screen.',
+          ),
+        );
+        return;
+      }
+      emit(AuthLoginSuccessState(role.name));
     } catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
     }

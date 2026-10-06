@@ -8,6 +8,11 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/models/appointment_model.dart';
+import '../../../../core/services/admin_service.dart';
+import '../../../../core/services/appointment_service.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
@@ -28,6 +33,8 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   late List<DateTime> _availableDates;
   DateTime? _selectedDate;
   String? _selectedTime;
+  String _clinicLocation = 'Central Clinic';
+  bool _isBooking = false;
 
   final List<String> _afternoonSlots = [
     '1:00 PM',
@@ -58,6 +65,14 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
     ];
     _selectedDate =
         _availableDates[1]; // default to Tomorrow (as in screenshot)
+
+    sl<AdminService>().getCentralClinicLocation().then((loc) {
+      if (mounted) {
+        setState(() {
+          _clinicLocation = loc;
+        });
+      }
+    });
   }
 
   String _getDateLabel(DateTime date) {
@@ -95,7 +110,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                 const Gap(16),
                 DoctorProfileHeader(
                   name: widget.doctor.name ?? 'Unknown',
-                  clinic: 'Upasana Dental Clinic, salt lake',
+                  clinic: _clinicLocation,
                   rating: widget.doctor.ratingPercentage.toInt(),
                   imagePath:
                       widget.doctor.imageUrl ?? 'assets/images/doctor.png',
@@ -239,28 +254,67 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
 
                     // Proceed Button
                     MainButton(
-                      text: t.selectTime.proceed,
-                      bgColor: _selectedTime != null
+                      text: _isBooking ? 'Booking...' : t.selectTime.proceed,
+                      bgColor: (_selectedTime != null && !_isBooking)
                           ? AppColors.primary
                           : AppColors.textSecondary,
-                      onPressed: _selectedTime != null
-                          ? () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AppointmentSuccessDialog(
-                                    onDone: () {
-                                      context.go(AppRoutes.home);
-                                    },
-                                    doctorName: 'Dr. ${widget.doctor.name}',
-                                    date: _selectedDate!.toIso8601String(),
-                                    time: _selectedTime!,
-                                    onEdit: () {
-                                      context.pop();
+                      onPressed: (_selectedTime != null && !_isBooking)
+                          ? () async {
+                              final currentUser = sl<AuthService>().currentUser;
+                              if (currentUser == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Please log in to book an appointment')),
+                                );
+                                return;
+                              }
+
+                              setState(() => _isBooking = true);
+                              try {
+                                final appt = AppointmentModel(
+                                  id: '',
+                                  patientId: currentUser.uid,
+                                  patientName: currentUser.displayName ?? 'Patient',
+                                  patientEmail: currentUser.email ?? '',
+                                  doctorId: widget.doctor.uid ?? '',
+                                  doctorName: widget.doctor.name ?? 'Doctor',
+                                  doctorSpecialty: widget.doctor.specialization,
+                                  doctorImageUrl: widget.doctor.imageUrl,
+                                  clinicLocation: _clinicLocation,
+                                  date: _selectedDate!,
+                                  timeSlot: _selectedTime!,
+                                  status: AppointmentStatus.upcoming,
+                                );
+
+                                await sl<AppointmentService>().createAppointment(appt);
+
+                                if (mounted) {
+                                  showDialog(
+                                    // ignore: use_build_context_synchronously
+                                    context: context,
+                                    builder: (context) {
+                                      return AppointmentSuccessDialog(
+                                        onDone: () {
+                                          context.go(AppRoutes.home);
+                                        },
+                                        doctorName: 'Dr. ${widget.doctor.name}',
+                                        date: DateFormat('d MMM yyyy').format(_selectedDate!),
+                                        time: _selectedTime!,
+                                        onEdit: () {
+                                          context.pop();
+                                        },
+                                      );
                                     },
                                   );
-                                },
-                              );
+                                }
+                              } catch (e) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Booking failed: $e')),
+                                  );
+                                }
+                              } finally {
+                                if (mounted) setState(() => _isBooking = false);
+                              }
                             }
                           : null,
                     ),

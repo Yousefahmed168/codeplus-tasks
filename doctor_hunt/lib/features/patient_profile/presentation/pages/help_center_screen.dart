@@ -106,13 +106,13 @@ class HelpCenterScreen extends StatelessWidget {
                             child: Text(
                               issue,
                               style: context.regular14.copyWith(
-                                color: const Color(0xFF6B779A),
+                                color: AppColors.helpText,
                               ),
                             ),
                           ),
                           const Icon(
                             Icons.chevron_right_rounded,
-                            color: Color(0xFF6B779A),
+                            color: AppColors.helpText,
                             size: 22,
                           ),
                         ],

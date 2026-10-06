@@ -6,11 +6,14 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../i18n/strings.g.dart';
+
+import '../../../../core/services/admin_service.dart';
 
 class EditAdminProfileScreen extends StatefulWidget {
   const EditAdminProfileScreen({super.key});
@@ -23,6 +26,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _emailCtrl;
+  late final TextEditingController _locationCtrl;
   String? _imagePath;
   bool _isSaving = false;
 
@@ -33,12 +37,19 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
     super.initState();
     _nameCtrl = TextEditingController(text: _user?.displayName ?? '');
     _emailCtrl = TextEditingController(text: _user?.email ?? '');
+    _locationCtrl = TextEditingController();
+    sl<AdminService>().getCentralClinicLocation().then((loc) {
+      if (mounted) {
+        _locationCtrl.text = loc;
+      }
+    });
   }
 
   @override
   void dispose() {
     _nameCtrl.dispose();
     _emailCtrl.dispose();
+    _locationCtrl.dispose();
     super.dispose();
   }
 
@@ -71,7 +82,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
 
       String? photoUrl;
       if (_imagePath != null) {
-        photoUrl = await CloudinaryService.instance.uploadImage(
+        photoUrl = await sl<CloudinaryService>().uploadImage(
           filePath: _imagePath!,
           folder: 'admin_profiles',
         );
@@ -99,6 +110,11 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
             ),
           );
         }
+      }
+
+      // Update central clinic location
+      if (_locationCtrl.text.trim().isNotEmpty) {
+        await sl<AdminService>().updateCentralClinicLocation(_locationCtrl.text.trim());
       }
 
       if (mounted) {
@@ -265,6 +281,32 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                     return t.common.validation.enterEmail;
                   }
                   if (!v.contains('@')) return t.common.validation.validEmail;
+                  return null;
+                },
+              ),
+              const Gap(20),
+
+              // Clinic Central Location (Inherited by all doctors)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'CLINIC LOCATION',
+                  style: context.semiBold12.textSecondary,
+                ),
+              ),
+              const Gap(8),
+              CustomTextFormField(
+                controller: _locationCtrl,
+                hintText: 'e.g. 123 Healthcare Ave, Medical District',
+                prefixIcon: const Icon(
+                  Icons.location_on_outlined,
+                  color: AppColors.textHint,
+                  size: 20,
+                ),
+                validator: (v) {
+                  if (v == null || v.isEmpty) {
+                    return 'Please enter central clinic location';
+                  }
                   return null;
                 },
               ),

@@ -70,7 +70,7 @@ class DoctorCard extends StatelessWidget {
                           ),
                         ),
                 ),
-                Gap(12),
+                const Gap(12),
 
                 // Info
                 Expanded(
@@ -78,34 +78,23 @@ class DoctorCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(doctor.name ?? 'Unknown', style: context.bold16.textPrimary),
-                      Gap(2),
+                      const Gap(2),
                       Text(doctor.specialization ?? 'General', style: context.regular14.primary),
-                      Gap(4),
-                      Text(
-                        t.findDoctors.yearsExperience(
-                          count: doctor.yearsExperience.toString(),
-                        ),
-                        style: context.regular12.textSecondary,
-                      ),
-                      Gap(6),
+                      const Gap(6),
                       Row(
                         children: [
-                          Icon(Icons.circle, size: 6, color: AppColors.primary),
-                          Gap(4),
+                          const Icon(Icons.star, size: 14, color: Colors.amber),
+                          const Gap(4),
                           Text(
-                            '${doctor.ratingPercentage.round()}%',
-                            style: context.regular12.textSecondary,
-                          ),
-                          Gap(8),
-                          Icon(Icons.circle, size: 6, color: AppColors.primary),
-                          Gap(4),
-                          Text(
-                            t.findDoctors.patientStories(
-                              count: doctor.patientStories.toString(),
-                            ),
+                            '${doctor.rating ?? 0.0}',
                             style: context.regular12.textSecondary,
                           ),
                         ],
+                      ),
+                      const Gap(4),
+                      Text(
+                        '\$${doctor.consultationFee.toStringAsFixed(2)}',
+                        style: context.semiBold14.textPrimary,
                       ),
                     ],
                   ),
@@ -125,7 +114,7 @@ class DoctorCard extends StatelessWidget {
               ],
             ),
 
-            Gap(12),
+            const Gap(12),
             Row(
               children: [
                 // Next Available
@@ -137,13 +126,8 @@ class DoctorCard extends StatelessWidget {
                         t.common.nextAvailable,
                         style: context.regular12.textSecondary,
                       ),
-                      Gap(2),
-                      Text(
-                        t.findDoctors.timeTomorrow(
-                          time: doctor.nextAvailableTime,
-                        ),
-                        style: context.medium14.textPrimary,
-                      ),
+                      const Gap(2),
+                      Text('8:00 AM', style: context.medium14.textPrimary),
                     ],
                   ),
                 ),

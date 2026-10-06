@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
+  // Settings & Features
+  static const Color settingsIconRed = Color(0xFFFF6B6B);
+  static const Color settingsIconBlue = Color(0xFF4C84FF);
+  static const Color settingsIconOrange = Color(0xFFFF9F43);
+  static const Color policyBackground = Color(0xFF1B3D54);
+  static const Color helpText = Color(0xFF6B779A);
+
   //  Brand / Primary
 
   /// Main CTA green — buttons, selected states, onboarding arc
