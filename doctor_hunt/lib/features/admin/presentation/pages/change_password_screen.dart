@@ -75,13 +75,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.primary,
         elevation: 0,
-                leading: CustomBackButton(),
+        scrolledUnderElevation: 0,
+        leading: const CustomBackButton(),
 
         title: Text(
           t.admin.changePassword.title,
-          style: context.bold18.textPrimary,
+          style: context.bold18.textLight,
         ),
         centerTitle: true,
       ),

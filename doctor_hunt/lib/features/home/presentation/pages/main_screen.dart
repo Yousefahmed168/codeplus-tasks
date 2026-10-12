@@ -1,3 +1,4 @@
+import '../../../appointments/views/appointments_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
@@ -5,7 +6,6 @@ import '../../../../core/services/favorite_service.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../features/home/presentation/pages/home_screen.dart';
 import '../../../../features/home/presentation/widgets/home_bottom_nav_bar.dart';
-import '../../../../i18n/strings.g.dart';
 import '../../../doctors/presentation/pages/favorite_doctors_screen.dart';
 import '../../../patient_profile/presentation/pages/patient_profile_screen.dart';
 
@@ -33,10 +33,9 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            HomeScreen(onAvatarTap: () => setState(() => _currentIndex = 4)),
+            HomeScreen(onAvatarTap: () => setState(() => _currentIndex = 3)),
             const FavoriteDoctorsScreen(),
-            Center(child: Text(t.home.mapBookingsPlaceholder)),
-            Center(child: Text(t.home.chatPlaceholder)),
+            const AppointmentsScreen(),
             const PatientProfileScreen(),
           ],
         ),

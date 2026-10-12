@@ -58,6 +58,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$privacyPolicy$en privacyPolicy = Translations$privacyPolicy$en._(_root);
 	late final Translations$helpCenter$en helpCenter = Translations$helpCenter$en._(_root);
 	late final Translations$logoutDialog$en logoutDialog = Translations$logoutDialog$en._(_root);
+	late final Translations$menu$en menu = Translations$menu$en._(_root);
+	late final Translations$appointments$en appointments = Translations$appointments$en._(_root);
 }
 
 // Path: common
@@ -484,6 +486,7 @@ class Translations$admin$en {
 	late final Translations$admin$editDoctor$en editDoctor = Translations$admin$editDoctor$en._(_root);
 	late final Translations$admin$doctorDetails$en doctorDetails = Translations$admin$doctorDetails$en._(_root);
 	late final Translations$admin$editProfile$en editProfile = Translations$admin$editProfile$en._(_root);
+	late final Translations$admin$appointments$en appointments = Translations$admin$appointments$en._(_root);
 	late final Translations$admin$settings$en settings = Translations$admin$settings$en._(_root);
 	late final Translations$admin$changePassword$en changePassword = Translations$admin$changePassword$en._(_root);
 }
@@ -626,6 +629,102 @@ class Translations$logoutDialog$en {
 	String get confirmMessage => 'Are you sure you want to logout?';
 }
 
+// Path: menu
+class Translations$menu$en {
+	Translations$menu$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Home'
+	String get home => 'Home';
+
+	/// en: 'Favourites'
+	String get favourites => 'Favourites';
+
+	/// en: 'My Appointments'
+	String get myAppointments => 'My Appointments';
+
+	/// en: 'Settings'
+	String get settings => 'Settings';
+
+	/// en: 'Logout'
+	String get logout => 'Logout';
+}
+
+// Path: appointments
+class Translations$appointments$en {
+	Translations$appointments$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Appointments'
+	String get title => 'Appointments';
+
+	/// en: 'Upcoming'
+	String get upcoming => 'Upcoming';
+
+	/// en: 'Completed'
+	String get completed => 'Completed';
+
+	/// en: 'Cancelled'
+	String get cancelled => 'Cancelled';
+
+	/// en: 'Patient'
+	String get patient => 'Patient';
+
+	/// en: 'Appointment date'
+	String get appointmentDate => 'Appointment date';
+
+	/// en: 'Appointment time'
+	String get appointmentTime => 'Appointment time';
+
+	/// en: 'Consultation fee'
+	String get consultationFee => 'Consultation fee';
+
+	/// en: 'View Details'
+	String get viewDetails => 'View Details';
+
+	/// en: 'Cancel Appointment'
+	String get cancelAppointment => 'Cancel Appointment';
+
+	/// en: 'Rate Doctor'
+	String get rateDoctor => 'Rate Doctor';
+
+	/// en: 'Tap to rate your visit'
+	String get tapToRate => 'Tap to rate your visit';
+
+	/// en: 'No upcoming appointments'
+	String get noUpcoming => 'No upcoming appointments';
+
+	/// en: 'No completed appointments'
+	String get noCompleted => 'No completed appointments';
+
+	/// en: 'No cancelled appointments'
+	String get noCancelled => 'No cancelled appointments';
+
+	/// en: 'Cancel Appointment'
+	String get cancelConfirmTitle => 'Cancel Appointment';
+
+	/// en: 'Are you sure you want to cancel this appointment?'
+	String get cancelConfirmMessage => 'Are you sure you want to cancel this appointment?';
+
+	/// en: 'Appointment cancelled'
+	String get cancelSuccess => 'Appointment cancelled';
+
+	/// en: 'Failed to cancel appointment'
+	String get cancelFailed => 'Failed to cancel appointment';
+
+	/// en: 'Thank you for your review!'
+	String get reviewSuccess => 'Thank you for your review!';
+
+	/// en: 'Failed to submit review'
+	String get reviewFailed => 'Failed to submit review';
+}
+
 // Path: common.validation
 class Translations$common$validation$en {
 	Translations$common$validation$en._(this._root);
@@ -735,11 +834,41 @@ class Translations$auth$login$en {
 	/// en: 'Forgot password'
 	String get forgotPassword => 'Forgot password';
 
-	/// en: 'Reset Password'
-	String get forgotPasswordTitle => 'Reset Password';
+	/// en: 'Forgot password'
+	String get forgotPasswordTitle => 'Forgot password';
 
-	/// en: 'Enter your email to receive a password reset link'
-	String get forgotPasswordSubtitle => 'Enter your email to receive a password reset link';
+	/// en: 'Enter your email for the verification process, we will send 4 digits code to your email.'
+	String get forgotPasswordSubtitle => 'Enter your email for the verification process, we will send 4 digits code to your email.';
+
+	/// en: 'Enter 4 Digits Code'
+	String get enterCodeTitle => 'Enter 4 Digits Code';
+
+	/// en: 'Enter the 4 digits code that you received on your email.'
+	String get enterCodeSubtitle => 'Enter the 4 digits code that you received on your email.';
+
+	/// en: 'Reset Password'
+	String get resetPasswordTitle => 'Reset Password';
+
+	/// en: 'Set the new password for your account so you can login and access all the features.'
+	String get resetPasswordSubtitle => 'Set the new password for your account so you can login and access all the features.';
+
+	/// en: 'New Password'
+	String get newPassword => 'New Password';
+
+	/// en: 'Re-enter Password'
+	String get reenterPassword => 'Re-enter Password';
+
+	/// en: 'Update Password'
+	String get updatePassword => 'Update Password';
+
+	/// en: 'Password updated successfully!'
+	String get passwordUpdatedSuccess => 'Password updated successfully!';
+
+	/// en: 'Passwords do not match'
+	String get passwordsDoNotMatch => 'Passwords do not match';
+
+	/// en: 'Please enter the 4-digit code'
+	String get invalidCode => 'Please enter the 4-digit code';
 
 	/// en: 'Send Reset Link'
 	String get forgotPasswordSend => 'Send Reset Link';
@@ -903,8 +1032,8 @@ class Translations$admin$createDoctor$en {
 	/// en: 'Doctor Name'
 	String get nameLabel => 'Doctor Name';
 
-	/// en: 'Enter doctor name'
-	String get nameHint => 'Enter doctor name';
+	/// en: 'e.g. Dr. Ahmed Ali'
+	String get nameHint => 'e.g. Dr. Ahmed Ali';
 
 	/// en: 'doctor@email.com'
 	String get emailHint => 'doctor@email.com';
@@ -917,6 +1046,18 @@ class Translations$admin$createDoctor$en {
 
 	/// en: 'Select specialty'
 	String get specialtyHint => 'Select specialty';
+
+	/// en: 'Consultation Fee'
+	String get feeLabel => 'Consultation Fee';
+
+	/// en: 'e.g. $28.00'
+	String feeHint({required Object price}) => 'e.g. ${price}.00';
+
+	/// en: 'Doctor Status'
+	String get statusLabel => 'Doctor Status';
+
+	/// en: 'Active & Available'
+	String get statusSubtitle => 'Active & Available';
 
 	/// en: 'Bio'
 	String get bioLabel => 'Bio';
@@ -938,6 +1079,12 @@ class Translations$admin$createDoctor$en {
 
 	/// en: 'Tap to pick an image'
 	String get imageTapHint => 'Tap to pick an image';
+
+	/// en: 'Add photo'
+	String get addPhoto => 'Add photo';
+
+	/// en: 'Tap photo to change'
+	String get tapPhotoToChange => 'Tap photo to change';
 
 	/// en: 'Create Doctor'
 	String get createBtn => 'Create Doctor';
@@ -963,11 +1110,14 @@ class Translations$admin$editDoctor$en {
 	/// en: 'Edit Doctor'
 	String get title => 'Edit Doctor';
 
-	/// en: 'Update Doctor'
-	String get updateBtn => 'Update Doctor';
+	/// en: 'Save Changes'
+	String get updateBtn => 'Save Changes';
 
-	/// en: 'Updating...'
-	String get updatingBtn => 'Updating...';
+	/// en: 'Saving...'
+	String get updatingBtn => 'Saving...';
+
+	/// en: 'Delete Doctor'
+	String get deleteBtn => 'Delete Doctor';
 
 	/// en: 'Doctor updated successfully'
 	String get success => 'Doctor updated successfully';
@@ -1040,6 +1190,90 @@ class Translations$admin$editProfile$en {
 
 	/// en: 'Failed to update profile'
 	String get failed => 'Failed to update profile';
+}
+
+// Path: admin.appointments
+class Translations$admin$appointments$en {
+	Translations$admin$appointments$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Appointments'
+	String get title => 'Appointments';
+
+	/// en: 'Appointment Details'
+	String get detailsTitle => 'Appointment Details';
+
+	/// en: 'Mark as Completed'
+	String get markCompleted => 'Mark as Completed';
+
+	/// en: 'Cancel Appointment'
+	String get cancelAppointment => 'Cancel Appointment';
+
+	/// en: 'View Details'
+	String get viewDetails => 'View Details';
+
+	/// en: 'Patient'
+	String get patient => 'Patient';
+
+	/// en: 'Doctor'
+	String get doctor => 'Doctor';
+
+	/// en: 'Appointment'
+	String get appointment => 'Appointment';
+
+	/// en: 'Upcoming'
+	String get upcoming => 'Upcoming';
+
+	/// en: 'Completed'
+	String get completed => 'Completed';
+
+	/// en: 'Cancelled'
+	String get cancelled => 'Cancelled';
+
+	/// en: 'Date'
+	String get date => 'Date';
+
+	/// en: 'Time'
+	String get time => 'Time';
+
+	/// en: 'Fee'
+	String get fee => 'Fee';
+
+	/// en: 'Consultation fee'
+	String get consultationFee => 'Consultation fee';
+
+	/// en: 'Clinic location'
+	String get clinicLocation => 'Clinic location';
+
+	/// en: 'Complete Appointment'
+	String get completeConfirmTitle => 'Complete Appointment';
+
+	/// en: 'Are you sure you want to mark this appointment as completed?'
+	String get completeConfirmMessage => 'Are you sure you want to mark this appointment as completed?';
+
+	/// en: 'Cancel Appointment'
+	String get cancelConfirmTitle => 'Cancel Appointment';
+
+	/// en: 'Are you sure you want to cancel this appointment?'
+	String get cancelConfirmMessage => 'Are you sure you want to cancel this appointment?';
+
+	/// en: 'Appointment marked as completed'
+	String get completeSuccess => 'Appointment marked as completed';
+
+	/// en: 'Appointment cancelled successfully'
+	String get cancelSuccess => 'Appointment cancelled successfully';
+
+	/// en: 'No upcoming appointments'
+	String get noUpcoming => 'No upcoming appointments';
+
+	/// en: 'No completed appointments'
+	String get noCompleted => 'No completed appointments';
+
+	/// en: 'No cancelled appointments'
+	String get noCancelled => 'No cancelled appointments';
 }
 
 // Path: admin.settings
@@ -1254,8 +1488,18 @@ extension on Translations {
 			'auth.login.title' => 'Welcome back',
 			'auth.login.subtitle' => 'You can search doctors, book appointments and manage your health',
 			'auth.login.forgotPassword' => 'Forgot password',
-			'auth.login.forgotPasswordTitle' => 'Reset Password',
-			'auth.login.forgotPasswordSubtitle' => 'Enter your email to receive a password reset link',
+			'auth.login.forgotPasswordTitle' => 'Forgot password',
+			'auth.login.forgotPasswordSubtitle' => 'Enter your email for the verification process, we will send 4 digits code to your email.',
+			'auth.login.enterCodeTitle' => 'Enter 4 Digits Code',
+			'auth.login.enterCodeSubtitle' => 'Enter the 4 digits code that you received on your email.',
+			'auth.login.resetPasswordTitle' => 'Reset Password',
+			'auth.login.resetPasswordSubtitle' => 'Set the new password for your account so you can login and access all the features.',
+			'auth.login.newPassword' => 'New Password',
+			'auth.login.reenterPassword' => 'Re-enter Password',
+			'auth.login.updatePassword' => 'Update Password',
+			'auth.login.passwordUpdatedSuccess' => 'Password updated successfully!',
+			'auth.login.passwordsDoNotMatch' => 'Passwords do not match',
+			'auth.login.invalidCode' => 'Please enter the 4-digit code',
 			'auth.login.forgotPasswordSend' => 'Send Reset Link',
 			'auth.login.forgotPasswordSuccess' => 'Reset link sent! Check your email',
 			'auth.login.noAccount' => 'Dont have an account? ',
@@ -1369,11 +1613,15 @@ extension on Translations {
 			'admin.doctors.deleted' => 'Dr. @name deleted',
 			'admin.createDoctor.title' => 'Create Doctor',
 			'admin.createDoctor.nameLabel' => 'Doctor Name',
-			'admin.createDoctor.nameHint' => 'Enter doctor name',
+			'admin.createDoctor.nameHint' => 'e.g. Dr. Ahmed Ali',
 			'admin.createDoctor.emailHint' => 'doctor@email.com',
 			'admin.createDoctor.phoneHint' => '+20xxxxxxxxxx',
 			'admin.createDoctor.specialtyLabel' => 'Specialty',
 			'admin.createDoctor.specialtyHint' => 'Select specialty',
+			'admin.createDoctor.feeLabel' => 'Consultation Fee',
+			'admin.createDoctor.feeHint' => ({required Object price}) => 'e.g. ${price}.00',
+			'admin.createDoctor.statusLabel' => 'Doctor Status',
+			'admin.createDoctor.statusSubtitle' => 'Active & Available',
 			'admin.createDoctor.bioLabel' => 'Bio',
 			'admin.createDoctor.bioHint' => 'Brief description about the doctor...',
 			'admin.createDoctor.addressLabel' => 'Clinic Address',
@@ -1381,13 +1629,16 @@ extension on Translations {
 			'admin.createDoctor.imageLabel' => 'Doctor Image',
 			'admin.createDoctor.imageUpload' => 'Upload doctor image',
 			'admin.createDoctor.imageTapHint' => 'Tap to pick an image',
+			'admin.createDoctor.addPhoto' => 'Add photo',
+			'admin.createDoctor.tapPhotoToChange' => 'Tap photo to change',
 			'admin.createDoctor.createBtn' => 'Create Doctor',
 			'admin.createDoctor.creatingBtn' => 'Creating...',
 			'admin.createDoctor.success' => 'Doctor created successfully',
 			'admin.createDoctor.failed' => 'Failed to create doctor',
 			'admin.editDoctor.title' => 'Edit Doctor',
-			'admin.editDoctor.updateBtn' => 'Update Doctor',
-			'admin.editDoctor.updatingBtn' => 'Updating...',
+			'admin.editDoctor.updateBtn' => 'Save Changes',
+			'admin.editDoctor.updatingBtn' => 'Saving...',
+			'admin.editDoctor.deleteBtn' => 'Delete Doctor',
 			'admin.editDoctor.success' => 'Doctor updated successfully',
 			'admin.editDoctor.failed' => 'Failed to update doctor',
 			'admin.doctorDetails.title' => 'Doctor Details',
@@ -1406,6 +1657,31 @@ extension on Translations {
 			'admin.editProfile.saving' => 'Saving...',
 			'admin.editProfile.success' => 'Profile updated successfully',
 			'admin.editProfile.failed' => 'Failed to update profile',
+			'admin.appointments.title' => 'Appointments',
+			'admin.appointments.detailsTitle' => 'Appointment Details',
+			'admin.appointments.markCompleted' => 'Mark as Completed',
+			'admin.appointments.cancelAppointment' => 'Cancel Appointment',
+			'admin.appointments.viewDetails' => 'View Details',
+			'admin.appointments.patient' => 'Patient',
+			'admin.appointments.doctor' => 'Doctor',
+			'admin.appointments.appointment' => 'Appointment',
+			'admin.appointments.upcoming' => 'Upcoming',
+			'admin.appointments.completed' => 'Completed',
+			'admin.appointments.cancelled' => 'Cancelled',
+			'admin.appointments.date' => 'Date',
+			'admin.appointments.time' => 'Time',
+			'admin.appointments.fee' => 'Fee',
+			'admin.appointments.consultationFee' => 'Consultation fee',
+			'admin.appointments.clinicLocation' => 'Clinic location',
+			'admin.appointments.completeConfirmTitle' => 'Complete Appointment',
+			'admin.appointments.completeConfirmMessage' => 'Are you sure you want to mark this appointment as completed?',
+			'admin.appointments.cancelConfirmTitle' => 'Cancel Appointment',
+			'admin.appointments.cancelConfirmMessage' => 'Are you sure you want to cancel this appointment?',
+			'admin.appointments.completeSuccess' => 'Appointment marked as completed',
+			'admin.appointments.cancelSuccess' => 'Appointment cancelled successfully',
+			'admin.appointments.noUpcoming' => 'No upcoming appointments',
+			'admin.appointments.noCompleted' => 'No completed appointments',
+			'admin.appointments.noCancelled' => 'No cancelled appointments',
 			'admin.settings.title' => 'Settings',
 			'admin.settings.appSettings' => 'App Settings',
 			'admin.settings.pushNotif' => 'Push Notifications',
@@ -1473,6 +1749,32 @@ extension on Translations {
 			'helpCenter.issueHeader' => 'I have an issue with',
 			'logoutDialog.title' => 'Log Out',
 			'logoutDialog.confirmMessage' => 'Are you sure you want to logout?',
+			'menu.home' => 'Home',
+			'menu.favourites' => 'Favourites',
+			'menu.myAppointments' => 'My Appointments',
+			'menu.settings' => 'Settings',
+			'menu.logout' => 'Logout',
+			'appointments.title' => 'Appointments',
+			'appointments.upcoming' => 'Upcoming',
+			'appointments.completed' => 'Completed',
+			'appointments.cancelled' => 'Cancelled',
+			'appointments.patient' => 'Patient',
+			'appointments.appointmentDate' => 'Appointment date',
+			'appointments.appointmentTime' => 'Appointment time',
+			'appointments.consultationFee' => 'Consultation fee',
+			'appointments.viewDetails' => 'View Details',
+			'appointments.cancelAppointment' => 'Cancel Appointment',
+			'appointments.rateDoctor' => 'Rate Doctor',
+			'appointments.tapToRate' => 'Tap to rate your visit',
+			'appointments.noUpcoming' => 'No upcoming appointments',
+			'appointments.noCompleted' => 'No completed appointments',
+			'appointments.noCancelled' => 'No cancelled appointments',
+			'appointments.cancelConfirmTitle' => 'Cancel Appointment',
+			'appointments.cancelConfirmMessage' => 'Are you sure you want to cancel this appointment?',
+			'appointments.cancelSuccess' => 'Appointment cancelled',
+			'appointments.cancelFailed' => 'Failed to cancel appointment',
+			'appointments.reviewSuccess' => 'Thank you for your review!',
+			'appointments.reviewFailed' => 'Failed to submit review',
 			_ => null,
 		};
 	}

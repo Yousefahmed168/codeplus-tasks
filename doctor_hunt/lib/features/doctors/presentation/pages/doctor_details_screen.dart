@@ -10,6 +10,7 @@ import '../../../../core/services/user_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
+import '../../../../core/widgets/custom_back_button.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../models/doctor.dart';
 import '../widgets/doctor_info_card.dart';
@@ -122,7 +123,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    GestureDetector(
+                    CustomBackButton(
                       onTap: () {
                         if (context.canPop()) {
                           context.pop();
@@ -130,11 +131,6 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                           context.go(AppRoutes.home);
                         }
                       },
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        size: 20,
-                        color: AppColors.textPrimary,
-                      ),
                     ),
                     Gap(12),
                     Text(

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
+import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -72,6 +72,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   }
 
   Future<void> _handleLogout(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     final confirmed = await LogoutDialog.show(context);
     if (confirmed == true) {
       if (!context.mounted) return;
@@ -122,6 +123,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                     child: CircularProgressIndicator(color: AppColors.primary),
                   )
                 : CustomScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     slivers: [
                       _buildHeader(context, patient),
                       SliverToBoxAdapter(

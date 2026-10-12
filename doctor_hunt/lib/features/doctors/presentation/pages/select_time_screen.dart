@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/features/doctors/presentation/widgets/doctor_profile_header.dart';
+import '../widgets/doctor_profile_header.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_back_button.dart';
@@ -294,7 +294,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                                     builder: (context) {
                                       return AppointmentSuccessDialog(
                                         onDone: () {
-                                          context.go(AppRoutes.home);
+                                          context.go(AppRoutes.patientAppointments);
                                         },
                                         doctorName: 'Dr. ${widget.doctor.name}',
                                         date: DateFormat('d MMM yyyy').format(_selectedDate!),
@@ -308,6 +308,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                                 }
                               } catch (e) {
                                 if (mounted) {
+                                  // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text('Booking failed: $e')),
                                   );

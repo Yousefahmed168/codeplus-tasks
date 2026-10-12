@@ -113,7 +113,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: ListView(
                 children: [
-                  const Gap(50),
+                  // Back button
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: CustomBackButton(
+                      onTap: () => context.go(AppRoutes.role),
+                    ),
+                  ),
+                  const Gap(10),
                   Text(
                     t.auth.register.title,
                     style: context.bold24.textPrimary,
@@ -138,9 +145,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onTap: isLoading
                               ? () {}
-                              : () => context
-                                  .read<AuthCubit>()
-                                  .loginWithGoogle(),
+                              : () =>
+                                    context.read<AuthCubit>().loginWithGoogle(),
                         ),
                       ),
                       const Gap(12),
@@ -293,7 +299,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onTap: () => context.go(AppRoutes.login),
                         child: Text(
                           t.auth.register.loginLink,
-                          style: context.bold16.textPrimary,
+                          style: context.medium14Primary,
                         ),
                       ),
                     ],

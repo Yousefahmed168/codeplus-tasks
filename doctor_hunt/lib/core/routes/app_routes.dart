@@ -1,17 +1,18 @@
-import 'package:doctor_hunt/features/patient_profile/presentation/pages/help_center_screen.dart';
-import 'package:doctor_hunt/features/patient_profile/presentation/pages/patient_settings_screen.dart';
-import 'package:doctor_hunt/features/patient_profile/presentation/pages/privacy_policy_screen.dart';
+import '../../features/patient_profile/presentation/pages/help_center_screen.dart';
+import '../../features/patient_profile/presentation/pages/patient_settings_screen.dart';
+import '../../features/patient_profile/presentation/pages/privacy_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/appointments/views/appointments_screen.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
-import '../../features/auth/presentation/pages/update_doctor_profile_screen.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/doctors/models/doctor.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
 import '../../features/doctors/presentation/pages/select_time_screen.dart';
-import '../../features/home/presentation/pages/main_screen.dart';
+import '../../features/doctors/presentation/pages/favorite_doctors_screen.dart';
+import '../../features/home/presentation/pages/drawer_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/role/choose_role.dart';
 import '../../features/search/presentation/pages/find_doctor.dart';
@@ -25,6 +26,7 @@ import '../../features/admin/presentation/pages/create_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_admin_profile_screen.dart';
 import '../../features/admin/presentation/pages/change_password_screen.dart';
+import '../../features/admin/presentation/pages/admin_appointment_details_screen.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -41,6 +43,8 @@ class AppRoutes {
   static const String patientSettings = '/patient-settings';
   static const String privacyPolicy = '/privacy-policy';
   static const String helpCenter = '/help-center';
+  static const String patientAppointments = '/patient-appointments';
+  static const String favoriteDoctors = '/favorite-doctors';
 
   // Admin routes
   static const String adminLogin = '/admin/login';
@@ -53,6 +57,7 @@ class AppRoutes {
   static const String adminDoctorAvailability = '/admin/doctor-availability';
   static const String editAdminProfile = '/admin/edit-profile';
   static const String changePassword = '/admin/change-password';
+  static const String adminAppointmentDetails = '/admin/appointment-details';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -100,7 +105,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const MainScreen()),
+          _slidePage(key: state.pageKey, child: const DrawerScreen()),
     ),
 
     GoRoute(
@@ -128,16 +133,7 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(
-      path: AppRoutes.updateDoctorProfile,
-      pageBuilder: (context, state) => _slidePage(
-        key: state.pageKey,
-        child: BlocProvider(
-          create: (_) => AuthCubit()..loadCurrentProfile(),
-          child: const UpdateDoctorProfileScreen(),
-        ),
-      ),
-    ),
+    
     GoRoute(
       path: AppRoutes.patientSettings,
       pageBuilder: (context, state) =>
@@ -152,6 +148,16 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.helpCenter,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const HelpCenterScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.favoriteDoctors,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const FavoriteDoctorsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.patientAppointments,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const AppointmentsScreen()),
     ),
 
     // Admin routes
@@ -214,6 +220,15 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.changePassword,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const ChangePasswordScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.adminAppointmentDetails,
+      pageBuilder: (context, state) {
+        return _slidePage(
+          key: state.pageKey,
+          child: AdminAppointmentDetailsScreen(),
+        );
+      },
     ),
   ],
 );

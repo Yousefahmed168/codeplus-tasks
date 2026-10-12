@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/colors.dart';
+import '../../../../i18n/strings.g.dart';
+import 'admin_appointments_screen.dart';
 import 'admin_doctors_screen.dart';
 import 'admin_settings_screen.dart';
-import '../../../../i18n/strings.g.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -16,6 +18,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
 
   final List<Widget> _screens = [
     const AdminDoctorsScreen(),
+    const AdminAppointmentsScreen(),
     const AdminSettingsScreen(),
   ];
 
@@ -34,6 +37,11 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
             icon: const Icon(Icons.people_outline),
             activeIcon: const Icon(Icons.people),
             label: t.admin.doctors.title,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.menu_book_outlined),
+            activeIcon: const Icon(Icons.menu_book),
+            label: t.admin.appointments.title,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.settings_outlined),

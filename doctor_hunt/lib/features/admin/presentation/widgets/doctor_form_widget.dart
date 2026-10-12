@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:doctor_hunt/core/widgets/custom_dropdown.dart';
+import '../../../../core/widgets/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';

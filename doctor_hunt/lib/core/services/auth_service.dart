@@ -173,9 +173,13 @@ class AuthService {
   Future<void> logout() async {
     // Sign out from Google to clear the cached OAuth token.
     // disconnect() revokes access so the account-picker is shown on next sign-in.
-    if (await _googleSignIn.isSignedIn()) {
-      await _googleSignIn.signOut();
-      await _googleSignIn.disconnect();
+    try {
+      if (await _googleSignIn.isSignedIn()) {
+        await _googleSignIn.signOut();
+        await _googleSignIn.disconnect();
+      }
+    } catch (e) {
+      debugPrint('AuthService.logout Google sign-out error: $e');
     }
     await _auth.signOut();
   }

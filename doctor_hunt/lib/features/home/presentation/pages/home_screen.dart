@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const Gap(24),
-                  
+
                   // Popular Doctors (using BlocBuilder)
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) {
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }
-                      
+
                       if (state is HomeLoaded) {
                         final doctors = state.doctors;
                         if (doctors.isEmpty) {
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           state.favoriteIds,
                         );
                       }
-                      
+
                       return const SizedBox.shrink();
                     },
                   ),
@@ -239,12 +239,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (isFav && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('${doctor.name ?? 'Doctor'} removed from favorites'),
+                        content: Text(
+                          '${doctor.name ?? 'Doctor'} removed from favorites',
+                        ),
                         action: SnackBarAction(
                           label: t.common.undo,
                           textColor: AppColors.primary,
                           onPressed: () async {
-                            await context.read<HomeCubit>().toggleFavorite(doctor.uid!);
+                            await context.read<HomeCubit>().toggleFavorite(
+                              doctor.uid!,
+                            );
                           },
                         ),
                         duration: const Duration(seconds: 3),

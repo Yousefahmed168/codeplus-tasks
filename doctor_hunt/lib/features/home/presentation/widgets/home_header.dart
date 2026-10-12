@@ -2,6 +2,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_text_form_field.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../pages/drawer_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -73,18 +74,32 @@ class HomeHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        firstName.isNotEmpty
-                            ? 'Hello, $firstName 👋'
-                            : t.home.findYourDoctor,
-                        style: context.bold24.copyWith(
+                      GestureDetector(
+                        onTap: () => DrawerScreen.of(context)?.toggleDrawer(),
+                        child: const Icon(
+                          Icons.menu_rounded,
                           color: Colors.white,
-                          fontSize: 22,
+                          size: 28,
                         ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            firstName.isNotEmpty
+                                ? 'Hello, $firstName 👋'
+                                : t.home.findYourDoctor,
+                            style: context.bold24.copyWith(
+                              color: Colors.white,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -99,9 +114,9 @@ class HomeHeader extends StatelessWidget {
                         border: Border.all(color: Colors.white, width: 2),
                       ),
                       child: ClipOval(
-                        child: hasImage
+                        child: hasImage && imageUrl!.isNotEmpty
                             ? CachedNetworkImage(
-                                imageUrl: imageUrl!,
+                                imageUrl: imageUrl,
                                 fit: BoxFit.cover,
                                 placeholder: (_, _) => Container(
                                   color: Colors.white.withValues(alpha: 0.3),
@@ -110,10 +125,6 @@ class HomeHeader extends StatelessWidget {
                                     color: Colors.white,
                                     size: 26,
                                   ),
-                                ),
-                                errorWidget: (_, _, _) => Image.asset(
-                                  AppImages.doctor,
-                                  fit: BoxFit.cover,
                                 ),
                               )
                             : Image.asset(AppImages.doctor, fit: BoxFit.cover),

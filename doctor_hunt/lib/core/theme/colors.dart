@@ -11,6 +11,7 @@ class AppColors {
   static const Color settingsIconOrange = Color(0xFFFF9F43);
   static const Color policyBackground = Color(0xFF1B3D54);
   static const Color helpText = Color(0xFF6B779A);
+  static const Color menuBackground = Color(0xFF6B779A);
 
   //  Brand / Primary
 
@@ -93,6 +94,15 @@ class AppColors {
   static const Color warning = Color(0xFFFDAA5D);
   static const Color error = Color(0xFFE74C3C);
   static const Color info = Color(0xFF74B9FF);
+
+  //  Appointment Details Design Tokens
+  static const Color mintBackground = Color(0xFFF1F8F3);
+  static const Color emeraldGreen = Color(0xFF10C98A);
+  static const Color destructiveRed = Color(0xFFE5484D);
+  static const Color destructiveRedLight = Color(0xFFFFF0F0);
+  static const Color mintTileBackground = Color(0xFFE8F6ED);
+  static const Color tileBackground = Color(0xFFF7FAF8);
+  static const Color tileBorder = Color(0xFFEDF2EE);
 
   //  Star / Rating
 

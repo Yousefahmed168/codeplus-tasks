@@ -2,6 +2,7 @@
 import '../../../doctors/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
+import '../../../../core/widgets/custom_back_button.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -57,7 +58,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    GestureDetector(
+                    CustomBackButton(
                       onTap: () {
                         if (context.canPop()) {
                           context.pop();
@@ -65,11 +66,6 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                           context.go(AppRoutes.home);
                         }
                       },
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        size: 20,
-                        color: AppColors.textPrimary,
-                      ),
                     ),
                     Gap(12),
                     Text(

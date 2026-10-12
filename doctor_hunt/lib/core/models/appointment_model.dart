@@ -42,6 +42,8 @@ class AppointmentModel {
   final AppointmentStatus status;
   final DateTime? createdAt;
   final bool hasReviewed;
+  final double? reviewRating;
+  final String? reviewComment;
 
   const AppointmentModel({
     required this.id,
@@ -60,6 +62,8 @@ class AppointmentModel {
     this.status = AppointmentStatus.upcoming,
     this.createdAt,
     this.hasReviewed = false,
+    this.reviewRating,
+    this.reviewComment,
   });
 
   /// True strictly if consultation concluded and not yet reviewed.
@@ -106,6 +110,10 @@ class AppointmentModel {
       status: AppointmentStatus.fromString(json['status']?.toString()),
       createdAt: parsedCreatedAt,
       hasReviewed: json['hasReviewed'] == true,
+      reviewRating: (json['reviewRating'] is num)
+          ? (json['reviewRating'] as num).toDouble()
+          : double.tryParse(json['reviewRating']?.toString() ?? ''),
+      reviewComment: json['reviewComment']?.toString(),
     );
   }
 
@@ -127,6 +135,8 @@ class AppointmentModel {
       'status': status.toValue(),
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
       'hasReviewed': hasReviewed,
+      if (reviewRating != null) 'reviewRating': reviewRating,
+      if (reviewComment != null) 'reviewComment': reviewComment,
     };
   }
 
@@ -147,6 +157,8 @@ class AppointmentModel {
     AppointmentStatus? status,
     DateTime? createdAt,
     bool? hasReviewed,
+    double? reviewRating,
+    String? reviewComment,
   }) {
     return AppointmentModel(
       id: id ?? this.id,
@@ -165,6 +177,8 @@ class AppointmentModel {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       hasReviewed: hasReviewed ?? this.hasReviewed,
+      reviewRating: reviewRating ?? this.reviewRating,
+      reviewComment: reviewComment ?? this.reviewComment,
     );
   }
 }

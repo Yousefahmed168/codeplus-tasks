@@ -1,9 +1,9 @@
-import 'package:doctor_hunt/features/auth/presentation/widgets/logout_dialog.dart' show LogoutDialog;
+import '../../../auth/presentation/widgets/logout_dialog.dart'
+    show LogoutDialog;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
@@ -19,8 +19,6 @@ class AdminSettingsScreen extends StatefulWidget {
 }
 
 class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
-  bool _notifications = true;
-
   User? get _user => FirebaseAuth.instance.currentUser;
 
   @override
@@ -30,15 +28,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
   }
 
   Future<void> _load() async {
-    final p = await SharedPreferences.getInstance();
-    setState(() {
-      _notifications = p.getBool('admin_notifications') ?? true;
-    });
-  }
-
-  Future<void> _saveNotifications(bool v) async {
-    final p = await SharedPreferences.getInstance();
-    await p.setBool('admin_notifications', v);
+    setState(() {});
   }
 
   String _getInitials(String name) {
@@ -68,13 +58,6 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: AppColors.background,
-            ),
-            onPressed: () {},
-          ),
           const Gap(4),
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -95,9 +78,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   ? Center(
                       child: Text(
                         initials,
-                        style: context.semiBold12.copyWith(
-                          color: Colors.white,
-                        ),
+                        style: context.semiBold12.copyWith(color: Colors.white),
                       ),
                     )
                   : null,
@@ -138,11 +119,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                         : null,
                   ),
                   child: user?.photoURL == null || user!.photoURL!.isEmpty
-                      ? Icon(
-                          Icons.person,
-                          color: AppColors.primary,
-                          size: 24,
-                        )
+                      ? Icon(Icons.person, color: AppColors.primary, size: 24)
                       : null,
                 ),
                 const Gap(12),
@@ -150,15 +127,9 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        displayName,
-                        style: context.semiBold16.textPrimary,
-                      ),
+                      Text(displayName, style: context.semiBold16.textPrimary),
                       const Gap(2),
-                      Text(
-                        email,
-                        style: context.regular12.textSecondary,
-                      ),
+                      Text(email, style: context.regular12.textSecondary),
                     ],
                   ),
                 ),
@@ -182,19 +153,6 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             title: t.admin.settings.changePassword,
             subtitle: t.admin.settings.changePasswordDesc,
             onTap: () => context.push(AppRoutes.changePassword),
-          ),
-          const Gap(12),
-
-          // Notification Preferences
-          _buildSwitchRow(
-            icon: Icons.notifications_outlined,
-            title: t.admin.settings.notificationPreferences,
-            subtitle: t.admin.settings.notificationPreferencesDesc,
-            value: _notifications,
-            onChanged: (v) {
-              setState(() => _notifications = v);
-              _saveNotifications(v);
-            },
           ),
           const Gap(12),
 
@@ -293,57 +251,6 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
     );
   }
 
-  Widget _buildSwitchRow({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 22),
-          ),
-          const Gap(12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: context.semiBold14.textPrimary),
-                const Gap(2),
-                Text(subtitle, style: context.regular12.textSecondary),
-              ],
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: AppColors.primary,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildInfoRow({
     required IconData icon,
@@ -387,10 +294,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             ),
           ),
           if (version != null)
-            Text(
-              version,
-              style: context.regular12.textSecondary,
-            ),
+            Text(version, style: context.regular12.textSecondary),
         ],
       ),
     );

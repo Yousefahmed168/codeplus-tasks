@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/widgets/custom_back_button.dart';
+import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
-import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../auth/presentation/widgets/forgot_password_dialog.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -48,65 +47,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     );
   }
 
-  void _showForgotPasswordDialog() {
-    final emailCtrl = TextEditingController(text: _emailCtrl.text);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(t.auth.login.forgotPasswordTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              t.auth.login.forgotPasswordSubtitle,
-              style: context.regular14.textSecondary,
-            ),
-            const Gap(16),
-            CustomTextFormField(
-              controller: emailCtrl,
-              hintText: t.common.email,
-              keyboardType: TextInputType.emailAddress,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(t.common.cancel),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (emailCtrl.text.isEmpty) return;
-              final email = emailCtrl.text.trim();
-              if (mounted) Navigator.pop(ctx);
-              try {
-                await sl<AuthService>().sendPasswordResetEmail(email);
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(t.auth.login.forgotPasswordSuccess),
-                      backgroundColor: AppColors.success,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(t.common.errorGeneric),
-                      backgroundColor: AppColors.error,
-                    ),
-                  );
-                }
-              }
-            },
-            child: Text(t.auth.login.forgotPasswordSend),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -133,16 +73,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    const Gap(40),
+                    const Gap(3),
                     // Back button
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: GestureDetector(
+                      child: CustomBackButton(
                         onTap: () => context.go(AppRoutes.role),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 20,
-                        ),
                       ),
                     ),
                     const Gap(24),
@@ -216,12 +152,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                           style: context.regular14.textSecondary,
                         ),
                         const Spacer(),
-                        TextButton(
-                          onPressed: _showForgotPasswordDialog,
-                          child: Text(
-                            t.auth.login.forgotPassword,
-                            style: context.semiBold14.primary,
-                          ),
+                        ForgotPasswordButton(
+                          emailController: _emailCtrl,
                         ),
                       ],
                     ),

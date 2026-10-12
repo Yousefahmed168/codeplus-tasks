@@ -6,6 +6,7 @@ import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/widgets/custom_back_button.dart';
 import '../../../../features/doctors/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 import '../widgets/doctor_form_widget.dart';
@@ -175,13 +176,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textPrimary,
-          ),
-          onPressed: () => context.pop(),
-        ),
+        leading: const CustomBackButton(),
         title: Text(
           'Edit Doctor', // using string for MVP, or t.admin.editDoctor.title
           style: context.bold18.textPrimary,

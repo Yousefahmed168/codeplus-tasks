@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/features/auth/data/models/patient_model.dart';
+import '../../../auth/data/models/patient_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';

@@ -114,7 +114,9 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
 
       // Update central clinic location
       if (_locationCtrl.text.trim().isNotEmpty) {
-        await sl<AdminService>().updateCentralClinicLocation(_locationCtrl.text.trim());
+        await sl<AdminService>().updateCentralClinicLocation(
+          _locationCtrl.text.trim(),
+        );
       }
 
       if (mounted) {
@@ -149,12 +151,9 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primaryLight,
-        // elevation: 0,
-        // leadingWidth: 70,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: const CustomBackButton(),
-        ),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: const CustomBackButton(),
 
         title: Text(
           t.admin.editProfile.title,

@@ -1,4 +1,4 @@
-import 'package:doctor_hunt/core/widgets/widgets.dart';
+import '../../../../core/widgets/widgets.dart';
 
 import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
@@ -88,24 +88,12 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        leading: IconButton(
-          icon: const Icon(Icons.menu_rounded, color: Colors.white),
-          onPressed: () {},
-        ),
+
         title: Text(
           t.admin.doctors.title,
           style: context.bold18.copyWith(color: AppColors.background),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: AppColors.background,
-            ),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: _buildDoctorsList(),
       floatingActionButton: FloatingActionButton.extended(

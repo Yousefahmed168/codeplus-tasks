@@ -18,7 +18,7 @@ class LogoutDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       elevation: 8,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -42,7 +42,7 @@ class LogoutDialog extends StatelessWidget {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   style: TextButton.styleFrom(
-                    foregroundColor: AppColors.primary,
+                    foregroundColor: AppColors.textSecondary,
                     textStyle: context.semiBold14,
                   ),
                   child: Text(t.common.cancel),
@@ -51,10 +51,10 @@ class LogoutDialog extends StatelessWidget {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   style: TextButton.styleFrom(
-                    foregroundColor: AppColors.primary,
+                    foregroundColor: AppColors.error,
                     textStyle: context.semiBold14,
                   ),
-                  child: Text(t.common.ok),
+                  child: Text(t.common.logout),
                 ),
               ],
             ),

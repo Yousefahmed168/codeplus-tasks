@@ -87,6 +87,17 @@ class AppointmentService {
     });
   }
 
+  /// Stream a single appointment by id from Firestore.
+  Stream<AppointmentModel?> streamAppointmentById(String appointmentId) {
+    return _firestore
+        .collection(appointmentsCollection)
+        .doc(appointmentId)
+        .snapshots()
+        .map((doc) => doc.exists && doc.data() != null
+            ? AppointmentModel.fromJson(doc.data()!, doc.id)
+            : null);
+  }
+
   /// Submit a doctor review. Strictly requires appointment to be completed.
   Future<void> submitReview({
     required String appointmentId,
@@ -122,6 +133,8 @@ class AppointmentService {
       // Mark appointment as reviewed
       await _firestore.collection(appointmentsCollection).doc(appointmentId).update({
         'hasReviewed': true,
+        'reviewRating': rating,
+        'reviewComment': comment?.trim() ?? '',
       });
 
       // Recalculate doctor rating and review count
