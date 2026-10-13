@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -69,7 +69,11 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       if (wasFavorited && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${_doctor.name} removed from favorites'),
+            content: Text(
+              t.doctorDetails.removedFromFavorites(
+                doctorName: _doctor.name ?? 'Doctor',
+              ),
+            ),
             action: SnackBarAction(
               label: t.common.undo,
               textColor: AppColors.primary,
@@ -94,7 +98,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
             duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
           ),
         );
@@ -118,9 +122,9 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
           child: Column(
             children: [
               // Header
-              Gap(16),
+              16.verticalSpace,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     CustomBackButton(
@@ -132,7 +136,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                         }
                       },
                     ),
-                    Gap(12),
+                    12.horizontalSpace,
                     Text(
                       t.doctorDetails.title,
                       style: context.bold20.textPrimary,
@@ -140,21 +144,21 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () => context.go(AppRoutes.search),
-                      child: const Icon(
+                      child: Icon(
                         Icons.search_rounded,
-                        size: 24,
+                        size: 24.r,
                         color: AppColors.textPrimary,
                       ),
                     ),
                   ],
                 ),
               ),
-              Gap(20),
+              20.verticalSpace,
 
               // Scrollable content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -174,7 +178,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                           context.push(AppRoutes.selectTime, extra: _doctor);
                         },
                       ),
-                      Gap(20),
+                      20.verticalSpace,
 
                       // Services section
                       ServicesSection(
@@ -184,7 +188,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                           t.doctorDetails.service3,
                         ],
                       ),
-                      Gap(32),
+                      32.verticalSpace,
                     ],
                   ),
                 ),

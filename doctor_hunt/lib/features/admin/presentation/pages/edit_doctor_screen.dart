@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/di/service_locator.dart';
@@ -60,6 +61,10 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           SnackBar(
             content: Text('${t.admin.editDoctor.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -73,8 +78,12 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Doctor deleted successfully'),
+            content: Text(t.admin.editDoctor.deletedSuccess),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         // Pop back to list
@@ -87,6 +96,10 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           SnackBar(
             content: Text('${t.admin.editDoctor.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -97,6 +110,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(t.admin.doctors.deleteTitle),
         content: Text(
           t.admin.doctors.deleteConfirm.replaceAll('@name', widget.doctor.name ?? ''),
@@ -104,7 +118,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            child: Text(t.common.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -112,7 +126,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
               _deleteDoctor();
             },
             child: Text(
-              'Delete',
+              t.common.delete,
               style: context.semiBold14.copyWith(color: AppColors.error),
             ),
           ),
@@ -151,6 +165,10 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           SnackBar(
             content: Text(t.admin.editDoctor.success),
             backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         context.pop();
@@ -161,6 +179,10 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           SnackBar(
             content: Text('${t.admin.editDoctor.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -176,15 +198,19 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: const CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
+        ),
         title: Text(
-          'Edit Doctor', // using string for MVP, or t.admin.editDoctor.title
+          t.admin.editDoctor.title,
           style: context.bold18.textPrimary,
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.r),
         child: DoctorFormWidget(
           formKey: _formKey,
           nameCtrl: _nameCtrl,
@@ -197,8 +223,8 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           isActive: _isActive,
           onStatusChanged: (v) => setState(() => _isActive = v),
           isSubmitting: _isSubmitting,
-          submitLabel: 'Save Changes',
-          submittingLabel: 'Saving...',
+          submitLabel: t.admin.editDoctor.updateBtn,
+          submittingLabel: t.admin.editDoctor.updatingBtn,
           onSubmit: _submit,
           onDelete: _showDeleteConfirm,
         ),

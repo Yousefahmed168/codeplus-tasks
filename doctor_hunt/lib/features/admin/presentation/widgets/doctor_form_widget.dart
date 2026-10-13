@@ -2,13 +2,14 @@ import 'dart:io';
 
 import '../../../../core/widgets/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../i18n/strings.g.dart';
 
 class DoctorFormWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -78,8 +79,8 @@ class DoctorFormWidget extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 100.r,
+                    height: 100.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.primary.withValues(alpha: 0.1),
@@ -104,10 +105,10 @@ class DoctorFormWidget extends StatelessWidget {
                         imagePath == null &&
                             (existingImageUrl == null ||
                                 existingImageUrl!.isEmpty)
-                        ? const Icon(
+                        ? Icon(
                             Icons.person,
                             color: AppColors.primary,
-                            size: 40,
+                            size: 40.r,
                           )
                         : null,
                   ),
@@ -115,15 +116,15 @@ class DoctorFormWidget extends StatelessWidget {
                     bottom: 0,
                     right: 0,
                     child: Container(
-                      padding: const EdgeInsets.all(6),
+                      padding: EdgeInsets.all(6.r),
                       decoration: const BoxDecoration(
                         color: AppColors.primary,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.camera_alt,
-                        color: Colors.white,
-                        size: 16,
+                        color: AppColors.textOnPrimary,
+                        size: 16.r,
                       ),
                     ),
                   ),
@@ -131,81 +132,83 @@ class DoctorFormWidget extends StatelessWidget {
               ),
             ),
           ),
-          const Gap(8),
+          8.verticalSpace,
           Center(
             child: TextButton(
               onPressed: onPickImage,
               child: Text(
-                _isEditMode ? 'Tap photo to change' : 'Add photo',
+                _isEditMode
+                    ? t.admin.createDoctor.tapPhotoToChange
+                    : t.admin.createDoctor.addPhoto,
                 style: context.semiBold14.copyWith(color: AppColors.primary),
               ),
             ),
           ),
-          const Gap(24),
+          24.verticalSpace,
 
           //    Name
-          Text('DOCTOR NAME', style: context.semiBold12.textSecondary),
-          const Gap(8),
+          Text(t.admin.createDoctor.nameLabel.toUpperCase(), style: context.semiBold12.textSecondary),
+          8.verticalSpace,
           CustomTextFormField(
             controller: nameCtrl,
-            hintText: 'e.g. Dr. Ahmed Ali',
-            prefixIcon: const Icon(
+            hintText: t.admin.createDoctor.nameHint,
+            prefixIcon: Icon(
               Icons.person_outline,
               color: AppColors.textHint,
-              size: 20,
+              size: 20.r,
             ),
             validator: (v) {
               if (v == null || v.isEmpty) {
-                return 'Please enter name';
+                return t.common.validation.fieldRequired(field: t.admin.createDoctor.nameLabel);
               }
               return null;
             },
           ),
-          const Gap(16),
+          16.verticalSpace,
 
           //    Specialty
-          Text('SPECIALTY', style: context.semiBold12.textSecondary),
-          const Gap(8),
+          Text(t.admin.createDoctor.specialtyLabel.toUpperCase(), style: context.semiBold12.textSecondary),
+          8.verticalSpace,
           CustomDropdown<String>(
             value: selectedSpecialty,
-            hintText: 'Select specialty',
+            hintText: t.admin.createDoctor.specialtyHint,
             items: specialties,
             onChanged: onSpecialtyChanged,
-            validator: (v) => v == null ? 'Please select a specialty' : null,
+            validator: (v) => v == null ? t.admin.createDoctor.specialtyHint : null,
           ),
-          const Gap(16),
+          16.verticalSpace,
 
           //    Consultation Fee
-          Text('CONSULTATION FEE', style: context.semiBold12.textSecondary),
-          const Gap(8),
+          Text(t.admin.createDoctor.feeLabel.toUpperCase(), style: context.semiBold12.textSecondary),
+          8.verticalSpace,
           CustomTextFormField(
             controller: feeCtrl,
-            hintText: 'e.g. \$28.00',
+            hintText: t.admin.createDoctor.feeHint,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             validator: (v) {
               if (v == null || v.isEmpty) {
-                return 'Please enter fee';
+                return t.common.validation.fieldRequired(field: t.admin.createDoctor.feeLabel);
               }
               if (double.tryParse(v) == null) {
-                return 'Please enter a valid number';
+                return t.common.validation.invalidNumber;
               }
               return null;
             },
           ),
-          const Gap(16),
+          16.verticalSpace,
 
           if (_isEditMode && isActive != null && onStatusChanged != null) ...[
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(color: AppColors.border),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
                       color: isActive!
                           ? AppColors.success.withValues(alpha: 0.1)
@@ -217,20 +220,20 @@ class DoctorFormWidget extends StatelessWidget {
                           ? Icons.check_circle_outline
                           : Icons.cancel_outlined,
                       color: isActive! ? AppColors.success : AppColors.error,
-                      size: 20,
+                      size: 20.r,
                     ),
                   ),
-                  const Gap(12),
+                  12.horizontalSpace,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Doctor Status',
+                          t.admin.createDoctor.statusLabel,
                           style: context.semiBold14.textPrimary,
                         ),
                         Text(
-                          isActive! ? 'Active & Available' : 'Inactive',
+                          isActive! ? t.admin.createDoctor.statusSubtitle : t.admin.doctorDetails.inactive,
                           style: context.regular12.textSecondary,
                         ),
                       ],
@@ -244,26 +247,26 @@ class DoctorFormWidget extends StatelessWidget {
                 ],
               ),
             ),
-            const Gap(24),
+            24.verticalSpace,
           ],
 
           //    Submit
-          const Gap(16),
+          16.verticalSpace,
           MainButton(
             text: isSubmitting ? submittingLabel : submitLabel,
             onPressed: isSubmitting ? null : onSubmit,
           ),
 
           if (_isEditMode && onDelete != null) ...[
-            const Gap(12),
+            12.verticalSpace,
             MainButton(
-              text: 'Delete Doctor',
+              text: t.admin.editDoctor.deleteBtn,
               onPressed: onDelete,
               bgColor: AppColors.error,
-              textColor: Colors.white,
+              textColor: AppColors.textOnPrimary,
             ),
           ],
-          const Gap(32),
+          32.verticalSpace,
         ],
       ),
     );

@@ -2,7 +2,7 @@ import '../../../auth/presentation/widgets/logout_dialog.dart'
     show LogoutDialog;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -54,16 +54,16 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           t.admin.settings.title,
-          style: context.bold18.copyWith(color: AppColors.background),
+          style: context.bold18.copyWith(color: AppColors.textOnPrimary),
         ),
         centerTitle: true,
         actions: [
-          const Gap(4),
+          4.horizontalSpace,
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            padding: EdgeInsets.only(right: 12.w),
             child: Container(
-              width: 32,
-              height: 32,
+              width: 32.r,
+              height: 32.r,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.primary.withValues(alpha: 0.2),
@@ -78,7 +78,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   ? Center(
                       child: Text(
                         initials,
-                        style: context.semiBold12.copyWith(color: Colors.white),
+                        style: context.semiBold12.copyWith(color: AppColors.textOnPrimary),
                       ),
                     )
                   : null,
@@ -87,27 +87,27 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         children: [
           // Admin profile card
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
+                  color: AppColors.textPrimary.withValues(alpha: 0.05),
+                  blurRadius: 10.r,
+                  offset: Offset(0, 2.h),
                 ),
               ],
             ),
             child: Row(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 48.r,
+                  height: 48.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.primary.withValues(alpha: 0.1),
@@ -119,16 +119,16 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                         : null,
                   ),
                   child: user?.photoURL == null || user!.photoURL!.isEmpty
-                      ? Icon(Icons.person, color: AppColors.primary, size: 24)
+                      ? Icon(Icons.person, color: AppColors.primary, size: 24.r)
                       : null,
                 ),
-                const Gap(12),
+                12.horizontalSpace,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(displayName, style: context.semiBold16.textPrimary),
-                      const Gap(2),
+                      2.verticalSpace,
                       Text(email, style: context.regular12.textSecondary),
                     ],
                   ),
@@ -136,7 +136,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
               ],
             ),
           ),
-          const Gap(20),
+          20.verticalSpace,
 
           // Admin Profile
           _buildNavRow(
@@ -145,7 +145,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             subtitle: t.admin.settings.adminProfileDesc,
             onTap: () => context.push(AppRoutes.editAdminProfile),
           ),
-          const Gap(12),
+          12.verticalSpace,
 
           // Change Password
           _buildNavRow(
@@ -154,7 +154,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             subtitle: t.admin.settings.changePasswordDesc,
             onTap: () => context.push(AppRoutes.changePassword),
           ),
-          const Gap(12),
+          12.verticalSpace,
 
           // App Information
           _buildInfoRow(
@@ -163,12 +163,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             subtitle: t.admin.settings.appVersion,
             version: 'v1.0.0',
           ),
-          const Gap(24),
+          24.verticalSpace,
 
           // Logout button
           SizedBox(
             width: double.infinity,
-            height: 50,
             child: OutlinedButton.icon(
               onPressed: () async {
                 final confirmed = await LogoutDialog.show(context);
@@ -178,20 +177,21 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   context.go(AppRoutes.role);
                 }
               },
-              icon: const Icon(Icons.logout, color: AppColors.error),
+              icon: Icon(Icons.logout, color: AppColors.error, size: 20.r),
               label: Text(
                 t.common.logout,
                 style: context.semiBold16.copyWith(color: AppColors.error),
               ),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.error, width: 1.5),
+                side: BorderSide(color: AppColors.error, width: 1.5.w),
+                padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
               ),
             ),
           ),
-          const Gap(32),
+          32.verticalSpace,
         ],
       ),
     );
@@ -206,51 +206,50 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: AppColors.textPrimary.withValues(alpha: 0.05),
+              blurRadius: 10.r,
+              offset: Offset(0, 2.h),
             ),
           ],
         ),
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 40.r,
+              height: 40.r,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
-              child: Icon(icon, color: AppColors.primary, size: 22),
+              child: Icon(icon, color: AppColors.primary, size: 22.r),
             ),
-            const Gap(12),
+            12.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: context.semiBold14.textPrimary),
-                  const Gap(2),
+                  2.verticalSpace,
                   Text(subtitle, style: context.regular12.textSecondary),
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right_rounded,
               color: AppColors.textHint,
-              size: 24,
+              size: 24.r,
             ),
           ],
         ),
       ),
     );
   }
-
 
   Widget _buildInfoRow({
     required IconData icon,
@@ -259,36 +258,36 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
     String? version,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 10.r,
+            offset: Offset(0, 2.h),
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 40.r,
+            height: 40.r,
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 22),
+            child: Icon(icon, color: AppColors.primary, size: 22.r),
           ),
-          const Gap(12),
+          12.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: context.semiBold14.textPrimary),
-                const Gap(2),
+                2.verticalSpace,
                 Text(subtitle, style: context.regular12.textSecondary),
               ],
             ),

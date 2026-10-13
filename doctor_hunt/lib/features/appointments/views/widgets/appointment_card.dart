@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 import 'appointment_status_chip.dart';
 
@@ -37,12 +38,12 @@ class _AppointmentCardState extends State<AppointmentCard> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.textPrimary.withValues(alpha: 0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            blurRadius: 12.r,
+            offset: Offset(0, 4.h),
           ),
         ],
       ),
@@ -50,47 +51,40 @@ class _AppointmentCardState extends State<AppointmentCard> {
         children: [
           //   Header
           Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14.r),
             child: Row(
               children: [
                 // Doctor avatar
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   child:
                       appt.doctorImageUrl != null &&
-                          appt.doctorImageUrl!.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: appt.doctorImageUrl!,
-                          width: 58,
-                          height: 58,
-                          fit: BoxFit.cover,
-                          placeholder: (_, _) => _avatarPlaceholder(),
-                          errorWidget: (_, _, _) => _avatarPlaceholder(),
-                        )
-                      : _avatarPlaceholder(),
+                              appt.doctorImageUrl!.isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: appt.doctorImageUrl!,
+                              width: 58.r,
+                              height: 58.r,
+                              fit: BoxFit.cover,
+                              placeholder: (_, _) => _avatarPlaceholder(),
+                              errorWidget: (_, _, _) => _avatarPlaceholder(),
+                            )
+                          : _avatarPlaceholder(),
                 ),
-                const Gap(12),
+                12.horizontalSpace,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         appt.doctorName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
+                        style: context.bold16.textPrimary,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const Gap(3),
+                      3.verticalSpace,
                       Text(
                         appt.doctorSpecialty ?? '',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
-                        ),
+                        style: context.regular12.textSecondary,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -102,11 +96,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
             ),
           ),
 
-          const Divider(height: 1, color: AppColors.divider),
+          Divider(height: 1.h, color: AppColors.divider),
 
           //   Details grid
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
+            padding: EdgeInsets.fromLTRB(14.w, 12.h, 14.w, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,7 +111,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       t.appointments.appointmentDate,
                       dateStr,
                     ),
-                    const Gap(20),
+                    20.horizontalSpace,
                     _detailItem(
                       Icons.access_time_rounded,
                       t.appointments.appointmentTime,
@@ -125,7 +119,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     ),
                   ],
                 ),
-                const Gap(8),
+                8.verticalSpace,
                 Row(
                   children: [
                     _detailItem(
@@ -133,7 +127,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       t.appointments.patient,
                       appt.patientName,
                     ),
-                    const Gap(20),
+                    20.horizontalSpace,
                     _detailItem(
                       Icons.attach_money_rounded,
                       t.appointments.consultationFee,
@@ -148,20 +142,17 @@ class _AppointmentCardState extends State<AppointmentCard> {
           //   Star rating (completed & not reviewed)
           if (appt.status == AppointmentStatus.completed && !appt.hasReviewed)
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
+              padding: EdgeInsets.fromLTRB(14.w, 12.h, 14.w, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Divider(height: 1, color: AppColors.divider),
-                  const Gap(10),
+                  Divider(height: 1.h, color: AppColors.divider),
+                  10.verticalSpace,
                   Text(
                     t.appointments.tapToRate,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
-                    ),
+                    style: context.regular12.textSecondary,
                   ),
-                  const Gap(6),
+                  6.verticalSpace,
                   _StarRatingRow(
                     rating: _hoverRating,
                     onRatingChanged: (r) => setState(() => _hoverRating = r),
@@ -173,7 +164,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
           //   Action buttons
           Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14.r),
             child: Row(
               children: [
                 if (appt.status == AppointmentStatus.upcoming) ...[
@@ -183,7 +174,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       onTap: widget.onViewDetails,
                     ),
                   ),
-                  const Gap(10),
+                  10.horizontalSpace,
                   Expanded(
                     child: _OutlinedBtn(
                       label: t.appointments.cancelAppointment,
@@ -199,7 +190,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     ),
                   ),
                   if (!appt.hasReviewed) ...[
-                    const Gap(10),
+                    10.horizontalSpace,
                     Expanded(
                       child: _FilledBtn(
                         label: t.appointments.rateDoctor,
@@ -226,33 +217,29 @@ class _AppointmentCardState extends State<AppointmentCard> {
   }
 
   Widget _avatarPlaceholder() => Container(
-    width: 58,
-    height: 58,
+    width: 58.r,
+    height: 58.r,
     color: AppColors.primary.withValues(alpha: 0.1),
-    child: const Icon(Icons.person_rounded, color: AppColors.primary, size: 30),
+    child: Icon(Icons.person_rounded, color: AppColors.primary, size: 30.r),
   );
 
   Widget _detailItem(IconData icon, String label, String value) => Expanded(
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 14, color: AppColors.textSecondary),
-        const Gap(5),
+        Icon(icon, size: 14.r, color: AppColors.textSecondary),
+        5.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: const TextStyle(fontSize: 10, color: AppColors.textHint),
+                style: context.regular11.textHint,
               ),
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
+                style: context.semiBold12.textPrimary,
               ),
             ],
           ),
@@ -279,18 +266,15 @@ class _StarRatingRow extends StatelessWidget {
       children: List.generate(5, (i) {
         final starValue = (i + 1).toDouble();
         return GestureDetector(
-          onTap: () {
-            onRatingChanged(starValue);
-            onRatingSubmitted?.call(starValue);
-          },
+          onTap: () => onRatingChanged(starValue),
           child: Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: EdgeInsets.only(right: 4.w),
             child: Icon(
               rating >= starValue
                   ? Icons.star_rounded
                   : Icons.star_outline_rounded,
               color: AppColors.star,
-              size: 26,
+              size: 26.r,
             ),
           ),
         );
@@ -315,19 +299,15 @@ class _OutlinedBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 11),
+        padding: EdgeInsets.symmetric(vertical: 11.h),
         decoration: BoxDecoration(
           border: Border.all(color: color),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: color,
-          ),
+          style: context.semiBold14.copyWith(color: color),
         ),
       ),
     );
@@ -345,20 +325,16 @@ class _FilledBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 11),
+        padding: EdgeInsets.symmetric(vertical: 11.h),
         decoration: BoxDecoration(
           gradient: onTap != null ? AppColors.primaryGradient : null,
           color: onTap == null ? AppColors.textHint : null,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textOnPrimary,
-          ),
+          style: context.semiBold14.textOnPrimary,
         ),
       ),
     );

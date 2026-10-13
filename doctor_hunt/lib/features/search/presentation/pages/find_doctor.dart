@@ -12,8 +12,9 @@ import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../i18n/strings.g.dart';
 
@@ -53,9 +54,9 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gap(16),
+              16.verticalSpace,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     CustomBackButton(
@@ -67,7 +68,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                         }
                       },
                     ),
-                    Gap(12),
+                    12.horizontalSpace,
                     Text(
                       t.findDoctors.title,
                       style: context.bold20.textPrimary,
@@ -75,9 +76,9 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                   ],
                 ),
               ),
-              Gap(20),
+              20.verticalSpace,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -90,13 +91,13 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                           child: Icon(
                             Icons.close_rounded,
                             color: AppColors.textSecondary,
-                            size: 20,
+                            size: 20.r,
                           ),
                         ),
-                        prefixIcon: const Icon(
+                        prefixIcon: Icon(
                           Icons.search_rounded,
                           color: AppColors.success,
-                          size: 16,
+                          size: 16.r,
                         ),
                         controller: _searchController,
                         onChange: (v) => setState(() => _searchQuery = v),
@@ -107,7 +108,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                   ],
                 ),
               ),
-              Gap(24),
+              24.verticalSpace,
               Expanded(child: _buildSearchResults()),
             ],
           ),
@@ -121,8 +122,21 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
       stream: sl<UserService>().streamDoctors(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
+          return ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            itemCount: 4,
+            separatorBuilder: (_, _) => 16.verticalSpace,
+            itemBuilder: (_, _) => Shimmer.fromColors(
+              baseColor: AppColors.border.withValues(alpha: 0.3),
+              highlightColor: AppColors.surface,
+              child: Container(
+                height: 112.h,
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+              ),
+            ),
           );
         }
         if (snapshot.hasError) {
@@ -154,15 +168,15 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
               children: [
                 Icon(
                   Icons.search_off_rounded,
-                  size: 64,
+                  size: 64.r,
                   color: AppColors.textHint.withValues(alpha: 0.5),
                 ),
-                Gap(16),
+                16.verticalSpace,
                 Text(
                   t.findDoctors.noDoctorsFound,
                   style: context.bold16.textSecondary,
                 ),
-                Gap(8),
+                8.verticalSpace,
                 Text(
                   t.findDoctors.tryDifferentSearchTerm,
                   style: context.regular14.textHint,
@@ -173,9 +187,9 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
         }
 
         return ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           itemCount: results.length,
-          separatorBuilder: (_, _) => Gap(16),
+          separatorBuilder: (_, _) => 16.verticalSpace,
           itemBuilder: (context, index) {
             final doctor = results[index];
             return _buildDoctorResultCard(context, doctor);
@@ -191,14 +205,14 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
         context.push(AppRoutes.doctorDetails, extra: doctor);
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 12,
+              blurRadius: 12.r,
               offset: const Offset(0, 4),
             ),
           ],
@@ -207,28 +221,37 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               child: (doctor.imageUrl != null && doctor.imageUrl!.isNotEmpty)
                   ? CachedNetworkImage(
                       imageUrl: doctor.imageUrl!,
-                      width: 80,
-                      height: 80,
+                      width: 80.r,
+                      height: 80.r,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: AppColors.border.withValues(alpha: 0.3),
+                        highlightColor: AppColors.surface,
+                        child: Container(
+                          width: 80.r,
+                          height: 80.r,
+                          color: AppColors.surface,
+                        ),
+                      ),
                       errorWidget: (_, _, _) => Image.asset(
                         AppImages.doctor,
-                        width: 80,
-                        height: 80,
+                        width: 80.r,
+                        height: 80.r,
                         fit: BoxFit.cover,
                       ),
                     )
                   : Image.asset(
                       AppImages.doctor,
-                      width: 80,
-                      height: 80,
+                      width: 80.r,
+                      height: 80.r,
                       fit: BoxFit.cover,
                     ),
             ),
-            Gap(12),
+            12.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,21 +260,21 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                     doctor.name ?? 'Unknown',
                     style: context.bold16.textPrimary,
                   ),
-                  Gap(2),
+                  2.verticalSpace,
                   Text(
                     doctor.specialization ?? 'General',
                     style: context.regular14.primary,
                   ),
-                  Gap(4),
+                  4.verticalSpace,
                   Text(
                     t.findDoctors.tenYearsExperience,
                     style: context.regular12.textSecondary,
                   ),
-                  Gap(6),
+                  6.verticalSpace,
                   Row(
                     children: [
-                      Icon(Icons.star_rounded, size: 14, color: AppColors.star),
-                      Gap(4),
+                      Icon(Icons.star_rounded, size: 14.r, color: AppColors.star),
+                      4.horizontalSpace,
                       Text(
                         (doctor.rating ?? 0).toStringAsFixed(1),
                         style: context.regular12.textSecondary,

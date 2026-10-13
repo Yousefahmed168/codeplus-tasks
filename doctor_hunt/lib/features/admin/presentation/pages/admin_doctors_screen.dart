@@ -2,8 +2,8 @@ import '../../../../core/widgets/widgets.dart';
 
 import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -43,6 +43,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(t.admin.doctors.deleteTitle),
         content: Text(
           t.admin.doctors.deleteConfirm.replaceAll('@name', doctor.name ?? ''),
@@ -50,7 +51,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            child: Text(t.common.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -67,13 +68,17 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                         ),
                       ),
                       backgroundColor: AppColors.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
                   );
                 }
               }
             },
             child: Text(
-              'Delete',
+              t.common.delete,
               style: context.semiBold14.copyWith(color: AppColors.error),
             ),
           ),
@@ -88,10 +93,9 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-
         title: Text(
           t.admin.doctors.title,
-          style: context.bold18.copyWith(color: AppColors.background),
+          style: context.bold18.copyWith(color: AppColors.textOnPrimary),
         ),
         centerTitle: true,
       ),
@@ -99,10 +103,10 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(AppRoutes.createDoctor),
         backgroundColor: AppColors.primary,
-        icon: const Icon(Icons.add, color: Colors.white),
+        icon: Icon(Icons.add, color: AppColors.textOnPrimary, size: 20.r),
         label: Text(
-          'Add Doctor',
-          style: context.semiBold14.copyWith(color: Colors.white),
+          t.admin.doctors.addDoctor,
+          style: context.semiBold14.copyWith(color: AppColors.textOnPrimary),
         ),
       ),
     );
@@ -154,32 +158,25 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
         ];
 
         return ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.r),
           children: [
-            // Search bar & Filter button
-            Row(
-              children: [
-                Expanded(
-                  child: CustomTextFormField(
-                    maxLines: 1,
-                    hintText: 'Search by name ',
-                    prefixIcon: const Icon(Icons.search),
-                    controller: _searchCtrl,
-                    onChange: (v) => setState(() => _searchQuery = v),
-                  ),
-                ),
-                const Gap(12),
-              ],
+            // Search bar
+            CustomTextFormField(
+              maxLines: 1,
+              hintText: t.admin.doctors.searchHint,
+              prefixIcon: Icon(Icons.search, size: 20.r),
+              controller: _searchCtrl,
+              onChange: (v) => setState(() => _searchQuery = v),
             ),
-            const Gap(14),
+            14.verticalSpace,
 
             // Horizontal Category Pills
             SizedBox(
-              height: 38,
+              height: 38.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: categoryPills.length,
-                separatorBuilder: (_, _) => const Gap(8),
+                separatorBuilder: (_, _) => 8.horizontalSpace,
                 itemBuilder: (context, index) {
                   final cat = categoryPills[index];
                   final isSelected =
@@ -193,13 +190,13 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        color: isSelected ? AppColors.primary : AppColors.surface,
+                        borderRadius: BorderRadius.circular(20.r),
                         border: Border.all(
                           color: isSelected
                               ? AppColors.primary
@@ -209,8 +206,8 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                           if (isSelected)
                             BoxShadow(
                               color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
+                              blurRadius: 6.r,
+                              offset: Offset(0, 2.h),
                             ),
                         ],
                       ),
@@ -219,7 +216,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                           cat,
                           style: context.semiBold12.copyWith(
                             color: isSelected
-                                ? Colors.white
+                                ? AppColors.textOnPrimary
                                 : AppColors.textSecondary,
                           ),
                         ),
@@ -229,7 +226,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                 },
               ),
             ),
-            const Gap(16),
+            16.verticalSpace,
 
             // Stats row
             Row(
@@ -239,7 +236,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   label: t.admin.doctors.totalDoctors,
                   count: totalDoctors,
                 ),
-                const Gap(16),
+                16.horizontalSpace,
                 _buildStatCard(
                   icon: Icons.check_circle_outline,
                   label: t.admin.doctors.active,
@@ -248,17 +245,17 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                 ),
               ],
             ),
-            const Gap(20),
+            20.verticalSpace,
 
             // Doctor list
             if (filteredDoctors.isEmpty)
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 60),
+                  padding: EdgeInsets.only(top: 60.h),
                   child: Column(
                     children: [
-                      SvgPicture.asset(AppImages.logo, width: 80, height: 80),
-                      const Gap(16),
+                      SvgPicture.asset(AppImages.logo, width: 80.r, height: 80.r),
+                      16.verticalSpace,
                       Text(
                         t.admin.doctors.noDoctorsFound,
                         style: context.semiBold16.textSecondary,
@@ -282,7 +279,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   ),
                 ),
               ),
-            const Gap(80),
+            80.verticalSpace,
           ],
         );
       },
@@ -297,27 +294,27 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
   }) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: AppColors.textPrimary.withValues(alpha: 0.05),
+              blurRadius: 10.r,
+              offset: Offset(0, 2.h),
             ),
           ],
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary, size: 28),
-            const Gap(12),
+            Icon(icon, color: AppColors.primary, size: 28.r),
+            12.horizontalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label, style: context.regular12.textSecondary),
-                const Gap(2),
+                2.verticalSpace,
                 Text('$count', style: context.bold20.textPrimary),
               ],
             ),

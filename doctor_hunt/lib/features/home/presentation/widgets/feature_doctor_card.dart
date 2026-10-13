@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -30,19 +30,19 @@ class FeatureDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 120,
-        height: 130,
-        margin: const EdgeInsets.only(right: 5),
-        padding: const EdgeInsets.all(5),
+        width: 120.w,
+        height: 130.h,
+        margin: EdgeInsets.only(right: 5.w),
+        padding: EdgeInsets.all(5.r),
         decoration: BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.divider, width: 2),
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: AppColors.divider, width: 2.w),
           boxShadow: [
             BoxShadow(
-              color: AppColors.backgroundDark.withValues(alpha: (0.1)),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              color: AppColors.backgroundDark.withValues(alpha: 0.1),
+              blurRadius: 10.r,
+              offset: Offset(0, 3.h),
             ),
           ],
         ),
@@ -58,23 +58,22 @@ class FeatureDoctorCard extends StatelessWidget {
                     isFavorite
                         ? Icons.favorite_rounded
                         : Icons.favorite_border_rounded,
-                    size: 16,
+                    size: 16.r,
                     color: isFavorite ? AppColors.error : AppColors.textLight,
                   ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.star_rounded,
-                      size: 14,
+                      size: 14.r,
                       color: AppColors.star,
                     ),
-                    Gap(2),
+                    2.horizontalSpace,
                     Text(
                       rating.toStringAsFixed(1),
                       style: context.bold12.copyWith(
-                        fontSize: 11,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -82,35 +81,35 @@ class FeatureDoctorCard extends StatelessWidget {
                 ),
               ],
             ),
-            Gap(5),
+            5.verticalSpace,
 
             // Circular Avatar
             ClipOval(
               child: imagePath.startsWith('http')
                   ? CachedNetworkImage(
                       imageUrl: imagePath,
-                      width: 50,
-                      height: 50,
+                      width: 50.r,
+                      height: 50.r,
                       fit: BoxFit.cover,
-                      errorWidget: (_, _, _) => const Icon(
+                      errorWidget: (_, _, _) => Icon(
                         Icons.person,
-                        size: 30,
+                        size: 30.r,
                         color: AppColors.primary,
                       ),
                     )
                   : Image.asset(
                       imagePath,
-                      width: 50,
-                      height: 50,
+                      width: 50.r,
+                      height: 50.r,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => const Icon(
+                      errorBuilder: (_, _, _) => Icon(
                         Icons.person,
-                        size: 30,
+                        size: 30.r,
                         color: AppColors.primary,
                       ),
                     ),
             ),
-            Gap(5),
+            5.verticalSpace,
 
             // Doctor Name
             Text(

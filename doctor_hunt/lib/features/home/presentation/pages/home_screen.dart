@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -51,18 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSearchTap: () => context.go(AppRoutes.search),
                     onAvatarTap: widget.onAvatarTap,
                   ),
-                  const Gap(36),
+                  36.verticalSpace,
                   _buildSectionHeader(
                     title: t.home.liveDoctors,
                     showSeeAll: true,
                   ),
-                  const Gap(12),
+                  12.verticalSpace,
                   SizedBox(
-                    height: 160,
+                    height: 160.h,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
                       children: const [
                         LiveDoctorCard(imagePath: AppImages.doctor1),
                         LiveDoctorCard(imagePath: AppImages.doctor2),
@@ -71,9 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const Gap(24),
+                  24.verticalSpace,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Row(
                       children: [
                         CategoryCard(
@@ -107,15 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const Gap(24),
+                  24.verticalSpace,
 
                   // Popular Doctors (using BlocBuilder)
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) {
                       if (state is HomeLoading) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 40),
-                          child: Center(
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 40.h),
+                          child: const Center(
                             child: CircularProgressIndicator(
                               color: AppColors.primary,
                             ),
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       if (state is HomeError) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          padding: EdgeInsets.symmetric(vertical: 40.h),
                           child: Center(
                             child: Text(
                               state.message,
@@ -138,10 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         final doctors = state.doctors;
                         if (doctors.isEmpty) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 40),
+                            padding: EdgeInsets.symmetric(vertical: 40.h),
                             child: Center(
                               child: Text(
-                                'No doctors available yet',
+                                t.home.noDoctorsAvailableYet,
                                 style: context.regular14.textSecondary,
                               ),
                             ),
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
-                  const Gap(24),
+                  24.verticalSpace,
                 ],
               ),
             ),
@@ -177,15 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(title: t.home.popularDoctor, showSeeAll: true),
-        const Gap(12),
+        12.verticalSpace,
         SizedBox(
-          height: 220,
+          height: 220.h,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             itemCount: doctors.length,
-            separatorBuilder: (_, _) => const Gap(14),
+            separatorBuilder: (_, _) => 14.horizontalSpace,
             itemBuilder: (context, index) {
               final doctor = doctors[index];
               final isFav =
@@ -206,17 +206,17 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        const Gap(24),
+        24.verticalSpace,
         _buildSectionHeader(title: t.home.featureDoctor, showSeeAll: true),
-        const Gap(12),
+        12.verticalSpace,
         SizedBox(
-          height: 135,
+          height: 135.h,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             itemCount: doctors.length,
-            separatorBuilder: (_, _) => const Gap(10),
+            separatorBuilder: (_, _) => 10.horizontalSpace,
             itemBuilder: (context, index) {
               final doctor = doctors[index];
               final isFav =
@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          '${doctor.name ?? 'Doctor'} removed from favorites',
+                          t.favorite.doctorRemoved(doctorName: doctor.name ?? 'Doctor'),
                         ),
                         action: SnackBarAction(
                           label: t.common.undo,
@@ -254,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         duration: const Duration(seconds: 3),
                         behavior: SnackBarBehavior.floating,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
                       ),
                     );
@@ -274,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
     VoidCallback? onSeeAllTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -296,10 +296,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColors.textSecondary,
                     ),
                   ),
-                  const Gap(2),
-                  const Icon(
+                  2.horizontalSpace,
+                  Icon(
                     Icons.chevron_right_rounded,
-                    size: 16,
+                    size: 16.r,
                     color: AppColors.textSecondary,
                   ),
                 ],

@@ -1,4 +1,5 @@
 import '../../features/patient_profile/presentation/pages/help_center_screen.dart';
+import '../../features/patient_profile/presentation/pages/patient_profile_screen.dart';
 import '../../features/patient_profile/presentation/pages/patient_settings_screen.dart';
 import '../../features/patient_profile/presentation/pages/privacy_policy_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ import '../../features/admin/presentation/pages/admin_doctor_availability_screen
 import '../../features/admin/presentation/pages/create_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_admin_profile_screen.dart';
-import '../../features/admin/presentation/pages/change_password_screen.dart';
+import '../../features/auth/presentation/pages/change_password_screen.dart';
 import '../../features/admin/presentation/pages/admin_appointment_details_screen.dart';
 
 class AppRoutes {
@@ -45,6 +46,7 @@ class AppRoutes {
   static const String helpCenter = '/help-center';
   static const String patientAppointments = '/patient-appointments';
   static const String favoriteDoctors = '/favorite-doctors';
+  static const String patientProfile = '/profile';
 
   // Admin routes
   static const String adminLogin = '/admin/login';
@@ -56,7 +58,7 @@ class AppRoutes {
   static const String adminDoctorDetails = '/admin/doctor-details';
   static const String adminDoctorAvailability = '/admin/doctor-availability';
   static const String editAdminProfile = '/admin/edit-profile';
-  static const String changePassword = '/admin/change-password';
+  static const String changePassword = '/change-password';
   static const String adminAppointmentDetails = '/admin/appointment-details';
 }
 
@@ -158,6 +160,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.patientAppointments,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const AppointmentsScreen()),
+    ),
+    GoRoute(
+      path: AppRoutes.patientProfile,
+      pageBuilder: (context, state) =>
+          _slidePage(key: state.pageKey, child: const PatientProfileScreen()),
     ),
 
     // Admin routes

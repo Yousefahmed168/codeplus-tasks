@@ -1,13 +1,15 @@
 import '../../../appointments/views/appointments_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../features/home/presentation/pages/home_screen.dart';
 import '../../../../features/home/presentation/widgets/home_bottom_nav_bar.dart';
 import '../../../doctors/presentation/pages/favorite_doctors_screen.dart';
-import '../../../patient_profile/presentation/pages/patient_profile_screen.dart';
+import '../../../patient_profile/presentation/pages/patient_settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -27,16 +29,28 @@ class _MainScreenState extends State<MainScreen> {
         ? sl<FavoriteService>().streamFavoriteIds(_patientUid!)
         : Stream.value(<String>{});
 
-    return AppBackground(
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+        }
+      },
+      child: AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            HomeScreen(onAvatarTap: () => setState(() => _currentIndex = 3)),
+            HomeScreen(
+              onAvatarTap: () => context.push(AppRoutes.patientProfile),
+            ),
             const FavoriteDoctorsScreen(),
             const AppointmentsScreen(),
-            const PatientProfileScreen(),
+            const PatientSettingsScreen(),
           ],
         ),
         bottomNavigationBar: StreamBuilder<Set<String>>(
@@ -55,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
           },
         ),
       ),
+    ),
     );
   }
 }

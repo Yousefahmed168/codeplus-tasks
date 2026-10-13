@@ -2,7 +2,7 @@ import '../../../../core/widgets/password_text_form_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -60,6 +60,10 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               SnackBar(
                 content: Text(state.message),
                 backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
             );
           }
@@ -68,12 +72,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
           final isLoading = state is AdminLoginLoading;
           return AppBackground(
             child: Container(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.r),
               child: Form(
                 key: _formKey,
                 child: ListView(
                   children: [
-                    const Gap(3),
+                    3.verticalSpace,
                     // Back button
                     Align(
                       alignment: Alignment.centerLeft,
@@ -81,34 +85,34 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         onTap: () => context.go(AppRoutes.role),
                       ),
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
                     // Logo
-                    SvgPicture.asset(AppImages.logo, width: 56, height: 56),
-                    const Gap(12),
+                    SvgPicture.asset(AppImages.logo, width: 56.r, height: 56.r),
+                    12.verticalSpace,
                     Text(
                       t.admin.login.title,
                       style: context.bold24.textPrimary,
                       textAlign: TextAlign.center,
                     ),
-                    const Gap(8),
+                    8.verticalSpace,
                     Text(
                       t.admin.login.subtitle,
                       style: context.regular14.textSecondary,
                       textAlign: TextAlign.center,
                     ),
-                    const Gap(60),
+                    60.verticalSpace,
 
                     // Email
                     Text(t.common.email, style: context.semiBold14.textPrimary),
-                    const Gap(8),
+                    8.verticalSpace,
                     CustomTextFormField(
                       controller: _emailCtrl,
                       hintText: t.common.email,
                       keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.email_outlined,
                         color: AppColors.textHint,
-                        size: 20,
+                        size: 20.r,
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
@@ -121,7 +125,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       },
                     ),
 
-                    const Gap(8),
+                    8.verticalSpace,
                     PasswordTextFormField(
                       labelText: t.common.password,
                       controller: _passwordCtrl,
@@ -136,7 +140,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         return null;
                       },
                     ),
-                    const Gap(8),
+                    8.verticalSpace,
 
                     // Remember me + Forgot password
                     Row(
@@ -157,7 +161,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         ),
                       ],
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
 
                     // Login button
                     MainButton(
@@ -166,18 +170,18 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                           : t.admin.login.loginBtn,
                       onPressed: isLoading ? null : () => _login(context),
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
 
                     // Secure access note
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.shield_rounded,
                           color: AppColors.primary,
-                          size: 16,
+                          size: 16.r,
                         ),
-                        const Gap(8),
+                        8.horizontalSpace,
                         Text(
                           t.admin.login.secureAccess,
                           style: context.regular12.textSecondary,

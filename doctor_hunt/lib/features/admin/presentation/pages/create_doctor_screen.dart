@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +49,10 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
           SnackBar(
             content: Text('${t.admin.createDoctor.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -81,6 +86,10 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
           SnackBar(
             content: Text(t.admin.createDoctor.success),
             backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         context.pop();
@@ -91,6 +100,10 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
           SnackBar(
             content: Text('${t.admin.createDoctor.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -106,12 +119,11 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryLight,
         elevation: 0,
-        leadingWidth: 70,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
         ),
-
         title: Text(
           t.admin.createDoctor.title,
           style: context.bold18.textPrimary,
@@ -119,7 +131,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.r),
         child: DoctorFormWidget(
           formKey: _formKey,
           nameCtrl: _nameCtrl,

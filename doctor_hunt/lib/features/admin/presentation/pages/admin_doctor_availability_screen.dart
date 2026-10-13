@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/admin_service.dart';
@@ -10,6 +10,7 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../features/doctors/models/doctor.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../core/widgets/custom_dropdown.dart';
+import '../../../../i18n/strings.g.dart';
 
 class AdminDoctorAvailabilityScreen extends StatefulWidget {
   final Doctor doctor;
@@ -72,9 +73,13 @@ class _AdminDoctorAvailabilityScreenState
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Availability updated successfully'),
+          SnackBar(
+            content: Text(t.admin.availability.updated),
             backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         context.pop();
@@ -83,8 +88,12 @@ class _AdminDoctorAvailabilityScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update availability: $e'),
+            content: Text('${t.admin.availability.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -100,55 +109,55 @@ class _AdminDoctorAvailabilityScreenState
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leadingWidth: 70,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
         ),
-        title: Text('Doctor Availability', style: context.bold18.textPrimary),
+        title: Text(t.admin.availability.title, style: context.bold18.textPrimary),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Doctor Header Card
             _buildDoctorHeader(),
-            const Gap(24),
+            24.verticalSpace,
 
             // Working Days
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Working Days', style: context.bold16.textPrimary),
+                Text(t.admin.availability.workingDays, style: context.bold16.textPrimary),
                 Text(
-                  '${_selectedDays.length} days enabled',
+                  t.admin.availability.daysEnabled(count: _selectedDays.length),
                   style: context.regular12.textHint,
                 ),
               ],
             ),
-            const Gap(16),
+            16.verticalSpace,
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 children: _allDays.map((day) => _buildDayTile(day)).toList(),
               ),
             ),
-            const Gap(24),
+            24.verticalSpace,
 
             // Working Hours
-            Text('Working Hours', style: context.bold16.textPrimary),
-            const Gap(16),
+            Text(t.admin.availability.workingHours, style: context.bold16.textPrimary),
+            16.verticalSpace,
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: AppColors.border),
               ),
               child: Column(
@@ -162,16 +171,16 @@ class _AdminDoctorAvailabilityScreenState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'START TIME',
+                              t.admin.availability.startTime,
                               style: context.semiBold11.textSecondary,
                             ),
-                            const Gap(5),
+                            5.verticalSpace,
                             CustomDropdown<String>(
                               value: _startTime,
                               isExpanded: true,
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Icon(Icons.access_time, size: 16, color: AppColors.primary),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
                               ),
                               items: const [
                                 '08:00 AM',
@@ -184,22 +193,22 @@ class _AdminDoctorAvailabilityScreenState
                           ],
                         ),
                       ),
-                      const Gap(16),
+                      16.horizontalSpace,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'END TIME',
+                              t.admin.availability.endTime,
                               style: context.semiBold11.textSecondary,
                             ),
-                            const Gap(5),
+                            5.verticalSpace,
                             CustomDropdown<String>(
                               value: _endTime,
                               isExpanded: true,
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Icon(Icons.access_time, size: 16, color: AppColors.primary),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
                               ),
                               items: const [
                                 '03:00 PM',
@@ -215,18 +224,18 @@ class _AdminDoctorAvailabilityScreenState
                       ),
                     ],
                   ),
-                  const Gap(16),
+                  16.verticalSpace,
                   Text(
                     'SLOT DURATION',
                     style: context.semiBold11.textSecondary,
                   ),
-                  const Gap(5),
+                  5.verticalSpace,
                   CustomDropdown<String>(
                     value: '$_slotDuration Minutes',
                     isExpanded: true,
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Icon(Icons.access_time, size: 16, color: AppColors.primary),
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
                     ),
                     items: const [
                       '15 Minutes',
@@ -243,14 +252,14 @@ class _AdminDoctorAvailabilityScreenState
                 ],
               ),
             ),
-            const Gap(32),
+            32.verticalSpace,
 
             MainButton(
-              text: _isSaving ? 'Saving...' : 'Save Availability',
+              text: _isSaving ? t.admin.editDoctor.updatingBtn : t.admin.editDoctor.updateBtn,
               onPressed: _isSaving ? null : _saveAvailability,
               bgColor: AppColors.primary,
             ),
-            const Gap(32),
+            32.verticalSpace,
           ],
         ),
       ),
@@ -259,20 +268,20 @@ class _AdminDoctorAvailabilityScreenState
 
   Widget _buildDoctorHeader() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
           Container(
-            width: 50,
-            height: 50,
+            width: 50.r,
+            height: 50.r,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               color: AppColors.primary.withValues(alpha: 0.1),
               image:
                   widget.doctor.imageUrl != null &&
@@ -291,7 +300,7 @@ class _AdminDoctorAvailabilityScreenState
                 ? const Icon(Icons.person, color: AppColors.primary)
                 : null,
           ),
-          const Gap(12),
+          12.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,18 +317,18 @@ class _AdminDoctorAvailabilityScreenState
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             decoration: BoxDecoration(
               color: widget.doctor.isActive
                   ? AppColors.success.withValues(alpha: 0.1)
                   : AppColors.error.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Row(
               children: [
                 Container(
-                  width: 6,
-                  height: 6,
+                  width: 6.r,
+                  height: 6.r,
                   decoration: BoxDecoration(
                     color: widget.doctor.isActive
                         ? AppColors.success
@@ -327,9 +336,9 @@ class _AdminDoctorAvailabilityScreenState
                     shape: BoxShape.circle,
                   ),
                 ),
-                const Gap(4),
+                4.horizontalSpace,
                 Text(
-                  widget.doctor.isActive ? 'Active' : 'Inactive',
+                  widget.doctor.isActive ? t.admin.doctors.active : t.admin.doctorDetails.inactive,
                   style: context.semiBold12.copyWith(
                     color: widget.doctor.isActive
                         ? AppColors.success
@@ -347,22 +356,22 @@ class _AdminDoctorAvailabilityScreenState
   Widget _buildDayTile(String day) {
     final isSelected = _selectedDays.contains(day);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
               color: AppColors.surfaceVariant,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.calendar_today_outlined,
-              size: 16,
+              size: 16.r,
               color: AppColors.primary,
             ),
           ),
-          const Gap(12),
+          12.horizontalSpace,
           Expanded(
             child: Text(
               day,

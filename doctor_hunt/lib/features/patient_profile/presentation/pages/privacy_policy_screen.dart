@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -16,10 +16,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leadingWidth: 70,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
         ),
         title: Text(
           t.privacyPolicy.title,
@@ -31,11 +31,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
         children: [
           // Content
           SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 16,
-              bottom: 40,
+            padding: EdgeInsets.only(
+              left: 20.w,
+              right: 20.w,
+              top: 16.h,
+              bottom: 40.h,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     color: AppColors.policyBackground,
                   ),
                 ),
-                const Gap(16),
+                16.verticalSpace,
                 Text(
                   'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.',
                   style: context.regular14.copyWith(
@@ -54,27 +54,27 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     height: 1.6,
                   ),
                 ),
-                const Gap(20),
+                20.verticalSpace,
                 _buildBulletPoint(
                   context,
                   'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.',
                 ),
-                const Gap(14),
+                14.verticalSpace,
                 _buildBulletPoint(
                   context,
                   'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.',
                 ),
-                const Gap(14),
+                14.verticalSpace,
                 _buildBulletPoint(
                   context,
                   'Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
                 ),
-                const Gap(14),
+                14.verticalSpace,
                 _buildBulletPoint(
                   context,
                   'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
                 ),
-                const Gap(24),
+                24.verticalSpace,
                 Text(
                   'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
                   style: context.regular14.copyWith(
@@ -82,7 +82,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     height: 1.6,
                   ),
                 ),
-                const Gap(40),
+                40.verticalSpace,
               ],
             ),
           ),
@@ -91,7 +91,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            height: 100,
+            height: 100.h,
             child: IgnorePointer(
               child: Container(
                 decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     end: Alignment.topCenter,
                     colors: [
                       AppColors.primary.withValues(alpha: 0.12),
-                      Colors.white.withValues(alpha: 0.0),
+                      AppColors.surface.withValues(alpha: 0.0),
                     ],
                   ),
                 ),
@@ -117,15 +117,15 @@ class PrivacyPolicyScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 6),
-          width: 8,
-          height: 8,
+          margin: EdgeInsets.only(top: 6.h),
+          width: 8.r,
+          height: 8.r,
           decoration: const BoxDecoration(
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
         ),
-        const Gap(12),
+        12.horizontalSpace,
         Expanded(
           child: Text(
             text,

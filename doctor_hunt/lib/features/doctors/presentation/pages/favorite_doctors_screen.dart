@@ -1,8 +1,9 @@
 import '../../../../core/widgets/app_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -43,10 +44,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            // leading: const Padding(
-            //   padding: EdgeInsets.only(left: 20, top: 8, bottom: 8),
-            // ),
-            leadingWidth: 64,
+            leadingWidth: 64.w,
             title: Text(
               t.home.favouriteDoctors,
               style: context.bold.px20.textPrimary,
@@ -56,8 +54,24 @@ class FavoriteDoctorsScreen extends StatelessWidget {
           body: BlocBuilder<FavoriteCubit, FavoriteState>(
             builder: (context, state) {
               if (state is FavoriteLoading || state is FavoriteInitial) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary),
+                return ListView.separated(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 10.h,
+                  ),
+                  itemCount: 4,
+                  separatorBuilder: (context, index) => 16.verticalSpace,
+                  itemBuilder: (context, index) => Shimmer.fromColors(
+                    baseColor: AppColors.border.withValues(alpha: 0.3),
+                    highlightColor: AppColors.surface,
+                    child: Container(
+                      height: 104.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                    ),
+                  ),
                 );
               }
               if (state is FavoriteError) {
@@ -76,17 +90,17 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.favorite_border_rounded,
-                          size: 64,
+                          size: 64.r,
                           color: AppColors.textHint,
                         ),
-                        const Gap(16),
+                        16.verticalSpace,
                         Text(
                           t.favorite.noFavoriteDoctors,
                           style: context.regular16.textSecondary,
                         ),
-                        const Gap(8),
+                        8.verticalSpace,
                         Text(
                           t.favorite.tapHeartHint,
                           style: context.regular14.textHint,
@@ -97,12 +111,12 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                 }
 
                 return ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 10.h,
                   ),
                   itemCount: favoriteDoctors.length,
-                  separatorBuilder: (context, index) => const Gap(16),
+                  separatorBuilder: (context, index) => 16.verticalSpace,
                   itemBuilder: (context, index) {
                     final doctor = favoriteDoctors[index];
                     final hasImage =
@@ -113,16 +127,16 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                         context.push(AppRoutes.doctorDetails, extra: doctor);
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(12.r),
                         decoration: BoxDecoration(
                           color: AppColors.background,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.textPrimary.withValues(
                                 alpha: 0.05,
                               ),
-                              blurRadius: 10,
+                              blurRadius: 10.r,
                               offset: const Offset(0, 4),
                             ),
                           ],
@@ -130,40 +144,40 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                         child: Row(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                               child: hasImage
                                   ? CachedNetworkImage(
                                       imageUrl: doctor.imageUrl!,
-                                      width: 80,
-                                      height: 80,
+                                      width: 80.r,
+                                      height: 80.r,
                                       fit: BoxFit.cover,
-                                      placeholder: (context, url) => Container(
-                                        width: 80,
-                                        height: 80,
-                                        color: AppColors.primaryLight
-                                            .withValues(alpha: 0.1),
-                                        child: const Center(
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                          ),
+                                      placeholder: (context, url) =>
+                                          Shimmer.fromColors(
+                                        baseColor: AppColors.border
+                                            .withValues(alpha: 0.3),
+                                        highlightColor: AppColors.surface,
+                                        child: Container(
+                                          width: 80.r,
+                                          height: 80.r,
+                                          color: AppColors.surface,
                                         ),
                                       ),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
-                                            AppImages.doctor,
-                                            width: 80,
-                                            height: 80,
-                                            fit: BoxFit.cover,
-                                          ),
+                                        AppImages.doctor,
+                                        width: 80.r,
+                                        height: 80.r,
+                                        fit: BoxFit.cover,
+                                      ),
                                     )
                                   : Image.asset(
                                       AppImages.doctor,
-                                      width: 80,
-                                      height: 80,
+                                      width: 80.r,
+                                      height: 80.r,
                                       fit: BoxFit.cover,
                                     ),
                             ),
-                            const Gap(16),
+                            16.horizontalSpace,
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +188,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const Gap(4),
+                                  4.verticalSpace,
                                   Text(
                                     doctor.specialization ?? 'Specialist',
                                     style: context.regular14.textSecondary,
@@ -212,15 +226,15 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                                     duration: const Duration(seconds: 3),
                                     behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(12.r),
                                     ),
                                   ),
                                 );
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.favorite_rounded,
                                 color: AppColors.error,
-                                size: 20,
+                                size: 20.r,
                               ),
                             ),
                           ],

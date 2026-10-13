@@ -1,5 +1,7 @@
-import '../../../../core/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -16,16 +18,16 @@ class HomeBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72,
-      margin: const EdgeInsets.all(16),
+      height: 72.h,
+      margin: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
+            color: AppColors.textPrimary.withValues(alpha: 0.08),
+            blurRadius: 20.r,
+            offset: Offset(0, 4.h),
           ),
         ],
       ),
@@ -49,7 +51,7 @@ class HomeBottomNavBar extends StatelessWidget {
             onTap: () => onTap?.call(2),
           ),
           _NavBarItem(
-            icon: Icons.person_rounded,
+            icon: Icons.settings_rounded,
             isSelected: currentIndex == 3,
             onTap: () => onTap?.call(3),
           ),
@@ -78,16 +80,16 @@ class _NavBarItem extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        width: 48,
-        height: 48,
+        width: 48.r,
+        height: 48.r,
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.center,
           children: [
             isSelected
                 ? Container(
-                    width: 48,
-                    height: 48,
+                    width: 48.r,
+                    height: 48.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
@@ -97,32 +99,30 @@ class _NavBarItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    child: Icon(icon, color: Colors.white, size: 24),
+                    child: Icon(icon, color: AppColors.textOnPrimary, size: 24.r),
                   )
-                : Icon(icon, color: AppColors.textLight, size: 24),
+                : Icon(icon, color: AppColors.textLight, size: 24.r),
             // Badge
             if (badgeCount > 0)
               Positioned(
-                top: -4,
-                right: -4,
+                top: -4.h,
+                right: -4.w,
                 child: Container(
-                  constraints: const BoxConstraints(
-                    minWidth: 18,
-                    minHeight: 18,
+                  constraints: BoxConstraints(
+                    minWidth: 18.r,
+                    minHeight: 18.r,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
                   decoration: BoxDecoration(
                     color: AppColors.error,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
+                    border: Border.all(color: AppColors.surface, width: 2.w),
                   ),
                   child: Center(
                     child: Text(
                       badgeCount > 99 ? '99+' : '$badgeCount',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      style: context.bold11.copyWith(
+                        color: AppColors.textOnPrimary,
                         height: 1,
                       ),
                     ),

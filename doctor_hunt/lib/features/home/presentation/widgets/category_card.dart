@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/theme/colors.dart';
 
 class CategoryCard extends StatelessWidget {
   final String? svgAssetPath;
@@ -21,10 +23,10 @@ class CategoryCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 80,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          height: 80.h,
+          margin: EdgeInsets.symmetric(horizontal: 4.w),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -33,8 +35,8 @@ class CategoryCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: gradientColors.last.withValues(alpha: 0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                blurRadius: 10.r,
+                offset: Offset(0, 4.h),
               ),
             ],
           ),
@@ -42,17 +44,17 @@ class CategoryCard extends StatelessWidget {
             child: svgAssetPath != null
                 ? SvgPicture.asset(
                     svgAssetPath!,
-                    width: 36,
-                    height: 36,
+                    width: 36.r,
+                    height: 36.r,
                     colorFilter: const ColorFilter.mode(
-                      Colors.white,
+                      AppColors.textOnPrimary,
                       BlendMode.srcIn,
                     ),
                   )
                 : Icon(
                     iconData ?? Icons.medical_services_outlined,
-                    color: Colors.white,
-                    size: 36,
+                    color: AppColors.textOnPrimary,
+                    size: 36.r,
                   ),
           ),
         ),

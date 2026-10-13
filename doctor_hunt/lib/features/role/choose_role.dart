@@ -6,8 +6,8 @@ import '../../core/widgets/widgets.dart';
 import '../../core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 
 enum AppRole { patient, admin }
 
@@ -32,71 +32,73 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBackground(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //  Logo
-              const Gap(32),
-              SvgPicture.asset(AppImages.logo, width: 56, height: 56),
-              const Gap(8),
-              Text(t.common.appName, style: context.bold24.textPrimary),
+    return DoubleBackToExit(
+      child: AppBackground(
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Logo
+                32.verticalSpace,
+                SvgPicture.asset(AppImages.logo, width: 56.r, height: 56.r),
+                8.verticalSpace,
+                Text(t.common.appName, style: context.bold24.textPrimary),
 
-              //  Title & subtitle
-              const Gap(32),
-              Text(
-                t.roleSelection.title,
-                style: context.semiBold20.textPrimary,
-              ),
-              const Gap(8),
-              Text(
-                t.roleSelection.subtitle,
-                style: context.regular14.textSecondary,
-                textAlign: TextAlign.center,
-              ),
+                // Title & subtitle
+                32.verticalSpace,
+                Text(
+                  t.roleSelection.title,
+                  style: context.semiBold20.textPrimary,
+                ),
+                8.verticalSpace,
+                Text(
+                  t.roleSelection.subtitle,
+                  style: context.regular14.textSecondary,
+                  textAlign: TextAlign.center,
+                ),
 
-              //  Role cards
-              const Gap(32),
-              _RoleCard(
-                role: AppRole.patient,
-                selected: _selectedRole == AppRole.patient,
-                icon: Icons.person_outline_rounded,
-                title: t.roleSelection.roles.patient.title,
-                description: t.roleSelection.roles.patient.description,
-                onTap: () => setState(() => _selectedRole = AppRole.patient),
-              ),
+                // Role cards
+                32.verticalSpace,
+                _RoleCard(
+                  role: AppRole.patient,
+                  selected: _selectedRole == AppRole.patient,
+                  icon: Icons.person_outline_rounded,
+                  title: t.roleSelection.roles.patient.title,
+                  description: t.roleSelection.roles.patient.description,
+                  onTap: () => setState(() => _selectedRole = AppRole.patient),
+                ),
 
-              const Gap(16),
-              _RoleCard(
-                role: AppRole.admin,
-                selected: _selectedRole == AppRole.admin,
-                icon: Icons.admin_panel_settings_outlined,
-                title: t.admin.chooseRole.title,
-                description: t.admin.chooseRole.description,
-                onTap: () => setState(() => _selectedRole = AppRole.admin),
-              ),
+                16.verticalSpace,
+                _RoleCard(
+                  role: AppRole.admin,
+                  selected: _selectedRole == AppRole.admin,
+                  icon: Icons.admin_panel_settings_outlined,
+                  title: t.admin.chooseRole.title,
+                  description: t.admin.chooseRole.description,
+                  onTap: () => setState(() => _selectedRole = AppRole.admin),
+                ),
 
-              const Spacer(),
+                const Spacer(),
 
-              //  Continue button
-              MainButton(
-                text: t.common.continueBtn,
-                onPressed: _selectedRole != null
-                    ? _onContinue
-                    : () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(t.roleSelection.errorNoRole),
-                            backgroundColor: AppColors.error,
-                          ),
-                        );
-                      },
-              ),
-              const Gap(32),
-            ],
+                // Continue button
+                MainButton(
+                  text: t.common.continueBtn,
+                  onPressed: _selectedRole != null
+                      ? _onContinue
+                      : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(t.roleSelection.errorNoRole),
+                              backgroundColor: AppColors.error,
+                            ),
+                          );
+                        },
+                ),
+                32.verticalSpace,
+              ],
+            ),
           ),
         ),
       ),
@@ -104,7 +106,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
   }
 }
 
-//  Role Card
+// Role Card
 
 class _RoleCard extends StatelessWidget {
   const _RoleCard({
@@ -131,8 +133,8 @@ class _RoleCard extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: selected ? selectedColor : AppColors.divider,
           width: selected ? 2 : 1.5,
@@ -142,39 +144,39 @@ class _RoleCard extends StatelessWidget {
             color: selected
                 ? selectedColor.withValues(alpha: 0.30)
                 : Colors.black.withValues(alpha: 0.04),
-            blurRadius: selected ? 16 : 8,
+            blurRadius: selected ? 16.r : 8.r,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             child: Row(
               children: [
                 // Icon container
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  width: 48,
-                  height: 48,
+                  width: 48.r,
+                  height: 48.r,
                   decoration: BoxDecoration(
                     color: selected
                         ? selectedColor.withValues(alpha: 0.12)
                         : AppColors.background,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(
                     icon,
-                    size: 26,
+                    size: 26.r,
                     color: selected ? selectedColor : AppColors.textSecondary,
                   ),
                 ),
-                const Gap(16),
+                16.horizontalSpace,
 
                 // Text
                 Expanded(
@@ -182,7 +184,7 @@ class _RoleCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(title, style: context.semiBold16.textPrimary),
-                      const Gap(4),
+                      4.verticalSpace,
                       Text(description, style: context.regular12.textSecondary),
                     ],
                   ),
@@ -193,16 +195,16 @@ class _RoleCard extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   opacity: selected ? 1 : 0,
                   child: Container(
-                    width: 24,
-                    height: 24,
+                    width: 24.r,
+                    height: 24.r,
                     decoration: const BoxDecoration(
                       color: selectedColor,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.check_rounded,
-                      size: 16,
-                      color: Colors.white,
+                      size: 16.r,
+                      color: AppColors.textOnPrimary,
                     ),
                   ),
                 ),

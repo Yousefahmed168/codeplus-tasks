@@ -21,6 +21,9 @@
     "undo": "Undo",
     "notice": "Notice",
     "confirm": "Confirm",
+    "edit": "Edit",
+    "delete": "Delete",
+    "tapBackAgainToExit": "Tap back again to exit",
     "loading": "Loading...",
     "errorGeneric": "An error occurred. Please try again",
     "validation": {
@@ -32,8 +35,12 @@
       "enterPhone": "Enter your phone number",
       "passwordsDoNotMatch": "Passwords do not match",
       "enterConfirmPassword": "Please confirm your password",
-      "selectRole": "Please select a role"
-    }
+      "selectRole": "Please select a role",
+      "fieldRequired": "Please enter $field",
+      "invalidNumber": "Please enter a valid number",
+      "validPhone": "Enter a valid phone number"
+    },
+    "notProvided": "Not provided"
   },
   "onboarding": {
     "pages": [
@@ -151,13 +158,15 @@
     "service2": "If you run your practice you know how frustrating.",
     "service3": "Thats why some of appointment reminder system.",
     "doctorInfo": "Doctor Info",
+    "reviews": "Rating",
     "removedFromFavorites": "$doctorName removed from favorites"
   },
   "favorite": {
     "pleaseLogin": "Please log in to view favorites",
     "noFavoriteDoctors": "No favorite doctors yet",
     "tapHeartHint": "Tap the heart icon on any doctor to add them here",
-    "doctorRemoved": "$doctorName removed from favorites"
+    "doctorRemoved": "$doctorName removed from favorites",
+    "doctorAdded": "$doctorName added to favorites"
   },
   "appointment": {
     "successTitle": "Thank You !",
@@ -211,6 +220,7 @@
     },
     "doctors": {
       "title": "Doctors",
+      "addDoctor": "Add Doctor",
       "searchHint": "Search doctors...",
       "totalDoctors": "Total Doctors",
       "active": "Active",
@@ -228,7 +238,7 @@
       "specialtyLabel": "Specialty",
       "specialtyHint": "Select specialty",
       "feeLabel": "Consultation Fee",
-      "feeHint": "e.g. $28.00",
+      "feeHint": "e.g. \\$28.00",
       "statusLabel": "Doctor Status",
       "statusSubtitle": "Active & Available",
       "bioLabel": "Bio",
@@ -250,6 +260,7 @@
       "updateBtn": "Save Changes",
       "updatingBtn": "Saving...",
       "deleteBtn": "Delete Doctor",
+      "deletedSuccess": "Doctor deleted successfully",
       "success": "Doctor updated successfully",
       "failed": "Failed to update doctor"
     },
@@ -263,6 +274,16 @@
       "editDoctor": "Edit Doctor",
       "deleteDoctor": "Delete Doctor"
     },
+    "availability": {
+      "title": "Doctor Availability",
+      "workingDays": "Working Days",
+      "workingHours": "Working Hours",
+      "startTime": "START TIME",
+      "endTime": "END TIME",
+      "daysEnabled": "$count days enabled",
+      "updated": "Availability updated successfully",
+      "failed": "Failed to update availability"
+    },
     "editProfile": {
       "title": "Edit Profile",
       "tapPhotoToChange": "Tap photo to change",
@@ -270,12 +291,14 @@
       "emailAddress": "EMAIL ADDRESS",
       "saveChanges": "Save Changes",
       "saving": "Saving...",
+      "reauthRequired": "Email change requires re-authentication",
       "success": "Profile updated successfully",
       "failed": "Failed to update profile"
     },
     "appointments": {
       "title": "Appointments",
       "detailsTitle": "Appointment Details",
+      "notFound": "Appointment not found.",
       "markCompleted": "Mark as Completed",
       "cancelAppointment": "Cancel Appointment",
       "viewDetails": "View Details",
@@ -328,47 +351,26 @@
       "helpSupportDesc": "Get help with the admin panel",
       "about": "About",
       "aboutDesc": "App version and information"
-    },
-    "changePassword": {
-      "title": "Change Password",
-      "currentPassword": "Current Password",
-      "newPassword": "New Password",
-      "confirmNewPassword": "Confirm New Password",
-      "updatePassword": "Update Password",
-      "updating": "Updating...",
-      "success": "Password updated successfully",
-      "failed": "Failed to update password",
-      "currentPasswordRequired": "Please enter your current password"
     }
   },
   "patientProfile": {
     "title": "Profile",
-    "setupProfile": "Set up your profile",
-    "setupSubtitle": "Update your profile to connect your doctor with better impression.",
     "personalInfo": "Personal information",
     "contactNumber": "Contact Number",
-    "dateOfBirth": "Date of birth",
-    "location": "Location",
-    "myDoctors": "My Doctors",
-    "medicalRecords": "Medical Records",
-    "payments": "Payments",
-    "privacyPolicy": "Privacy & Policy",
-    "helpCenter": "Help Center",
-    "settings": "Settings"
+    "profileUpdated": "Profile updated successfully",
+    "noProfileData": "No profile data found"
   },
   "patientSettings": {
     "title": "Settings",
     "accountSettings": "Account settings",
     "changePassword": "Change Password",
     "notifications": "Notifications",
-    "statistics": "Statistics",
-    "aboutUs": "About us",
+    "privacyPolicy": "Privacy Policy",
     "moreOptions": "More options",
-    "textMessages": "Text messages",
-    "phoneCalls": "Phone calls",
     "languages": "Languages",
-    "currency": "Currency",
-    "linkedAccounts": "Linked accounts"
+    "selectLanguage": "Select language",
+    "languageEnglish": "English",
+    "buildVersion": "Build version"
   },
   "privacyPolicy": {
     "title": "Privacy policy",
@@ -376,7 +378,8 @@
   },
   "helpCenter": {
     "title": "Help center",
-    "issueHeader": "I have an issue with"
+    "issueHeader": "I have an issue with",
+    "selectedIssue": "Selected: $issue"
   },
   "logoutDialog": {
     "title": "Log Out",
@@ -386,6 +389,7 @@
     "home": "Home",
     "favourites": "Favourites",
     "myAppointments": "My Appointments",
+    "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout"
   },
@@ -410,7 +414,20 @@
     "cancelSuccess": "Appointment cancelled",
     "cancelFailed": "Failed to cancel appointment",
     "reviewSuccess": "Thank you for your review!",
-    "reviewFailed": "Failed to submit review"
+    "reviewFailed": "Failed to submit review",
+    "noUpcomingSubtitle": "Book an appointment with a doctor to see it here.",
+    "noCompletedSubtitle": "Your completed appointments will appear here.",
+    "noCancelledSubtitle": "Your cancelled appointments will appear here."
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "updatePassword": "Update Password",
+    "updating": "Updating...",
+    "success": "Password updated successfully",
+    "failed": "Failed to update password",
+    "currentPasswordRequired": "Please enter your current password"
   }
 }
-

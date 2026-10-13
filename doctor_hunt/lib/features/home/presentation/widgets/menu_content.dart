@@ -1,6 +1,6 @@
 import '../../../../core/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,19 +32,19 @@ class MenuContent extends StatelessWidget {
             imageUrl = state.patient?.image;
             phone = state.patient?.phone;
           }
-          final userName = name?.isNotEmpty == true ? name! : 'Abdullah Mamun';
-          final userPhone = phone?.isNotEmpty == true ? phone! : '01303-527300';
+          final userName = name?.isNotEmpty == true ? name! : 'Patient User';
+          final userPhone = phone?.isNotEmpty == true ? phone! : '';
 
           return SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                top: 40,
-                bottom: 40,
-                right: 16,
+              padding: EdgeInsets.only(
+                left: 24.w,
+                top: 40.h,
+                bottom: 40.h,
+                right: 16.w,
               ),
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.65,
+                width: 0.65.sw,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -52,11 +52,11 @@ class MenuContent extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          width: 50,
-                          height: 50,
+                          width: 50.r,
+                          height: 50.r,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
+                            border: Border.all(color: AppColors.textOnPrimary, width: 2.w),
                           ),
                           child: ClipOval(
                             child: imageUrl != null && imageUrl.isNotEmpty
@@ -64,14 +64,14 @@ class MenuContent extends StatelessWidget {
                                     imageUrl: imageUrl,
                                     fit: BoxFit.cover,
                                   )
-                                : const Icon(
+                                : Icon(
                                     Icons.person_rounded,
-                                    color: Colors.white,
-                                    size: 32,
+                                    color: AppColors.textOnPrimary,
+                                    size: 32.r,
                                   ),
                           ),
                         ),
-                        const Gap(12),
+                        12.horizontalSpace,
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,39 +79,49 @@ class MenuContent extends StatelessWidget {
                               Text(
                                 userName,
                                 style: context.bold16.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textOnPrimary,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const Gap(4),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.phone_rounded,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                  const Gap(4),
-                                  Expanded(
-                                    child: Text(
-                                      userPhone,
-                                      style: context.regular12.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                              if (userPhone.isNotEmpty) ...[
+                                4.verticalSpace,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.phone_rounded,
+                                      color: AppColors.textOnPrimary,
+                                      size: 14.r,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    4.horizontalSpace,
+                                    Expanded(
+                                      child: Text(
+                                        userPhone,
+                                        style: context.regular12.copyWith(
+                                          color: AppColors.textOnPrimary,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                         ),
                       ],
                     ),
-                    const Gap(60),
+                    60.verticalSpace,
                     // Menu Items
+                    _MenuItem(
+                      icon: Icons.account_circle_rounded,
+                      title: t.menu.profile,
+                      onTap: () {
+                        DrawerScreen.of(context)?.closeDrawer();
+                        context.push(AppRoutes.patientProfile);
+                      },
+                    ),
                     _MenuItem(
                       icon: Icons.person_rounded,
                       title: t.menu.home,
@@ -158,19 +168,19 @@ class MenuContent extends StatelessWidget {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.logout_rounded,
-                              color: Colors.white,
-                              size: 24,
+                              color: AppColors.textOnPrimary,
+                              size: 24.r,
                             ),
-                            const Gap(16),
+                            16.horizontalSpace,
                             Text(
                               t.menu.logout,
                               style: context.bold18.copyWith(
-                                color: Colors.white,
+                                color: AppColors.textOnPrimary,
                               ),
                             ),
                           ],
@@ -204,11 +214,11 @@ class _MenuItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.background, size: 24),
-            const Gap(16),
+            Icon(icon, color: AppColors.background, size: 24.r),
+            16.horizontalSpace,
             Expanded(
               child: Text(
                 title,
@@ -218,9 +228,9 @@ class _MenuItem extends StatelessWidget {
             Icon(
               Icons.chevron_right_rounded,
               color: AppColors.background,
-              size: 24,
+              size: 24.r,
             ),
-            const Gap(16),
+            16.horizontalSpace,
           ],
         ),
       ),

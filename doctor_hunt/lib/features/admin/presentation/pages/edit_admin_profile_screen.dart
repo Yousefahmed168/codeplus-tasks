@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -67,6 +67,10 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
           SnackBar(
             content: Text('${t.admin.editProfile.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -100,13 +104,15 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
 
       // Update email if changed
       if (_emailCtrl.text.trim() != user.email) {
-        // Note: Changing email requires re-authentication in Firebase
-        // For now, we just show a message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Email change requires re-authentication'),
+              content: Text(t.admin.editProfile.reauthRequired),
               backgroundColor: AppColors.warning,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
             ),
           );
         }
@@ -124,6 +130,10 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
           SnackBar(
             content: Text(t.admin.editProfile.success),
             backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         context.pop();
@@ -134,6 +144,10 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
           SnackBar(
             content: Text('${t.admin.editProfile.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -153,8 +167,11 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
         backgroundColor: AppColors.primaryLight,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: const CustomBackButton(),
-
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
+        ),
         title: Text(
           t.admin.editProfile.title,
           style: context.bold18.textPrimary,
@@ -162,7 +179,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.r),
         child: Form(
           key: _formKey,
           child: Column(
@@ -173,8 +190,8 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                 child: Stack(
                   children: [
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 100.r,
+                      height: 100.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.primary.withValues(alpha: 0.1),
@@ -209,27 +226,27 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                       bottom: 0,
                       right: 0,
                       child: Container(
-                        padding: const EdgeInsets.all(6),
+                        padding: EdgeInsets.all(6.r),
                         decoration: const BoxDecoration(
                           color: AppColors.primary,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.camera_alt,
-                          color: Colors.white,
-                          size: 16,
+                          color: AppColors.textOnPrimary,
+                          size: 16.r,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const Gap(8),
+              8.verticalSpace,
               Text(
                 t.admin.editProfile.tapPhotoToChange,
                 style: context.regular12.primary,
               ),
-              const Gap(32),
+              32.verticalSpace,
 
               // Full Name
               Align(
@@ -239,14 +256,14 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                   style: context.semiBold12.textSecondary,
                 ),
               ),
-              const Gap(8),
+              8.verticalSpace,
               CustomTextFormField(
                 controller: _nameCtrl,
-                hintText: 'Enter your full name',
-                prefixIcon: const Icon(
+                hintText: t.admin.createDoctor.nameHint,
+                prefixIcon: Icon(
                   Icons.person_outline,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -255,7 +272,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                   return null;
                 },
               ),
-              const Gap(20),
+              20.verticalSpace,
 
               // Email Address
               Align(
@@ -265,15 +282,15 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                   style: context.semiBold12.textSecondary,
                 ),
               ),
-              const Gap(8),
+              8.verticalSpace,
               CustomTextFormField(
                 controller: _emailCtrl,
-                hintText: 'Enter your email',
+                hintText: t.common.email,
                 keyboardType: TextInputType.emailAddress,
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.email_outlined,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -283,38 +300,37 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                   return null;
                 },
               ),
-              const Gap(20),
+              20.verticalSpace,
 
-              // Clinic Central Location (Inherited by all doctors)
+              // Clinic Central Location
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'CLINIC LOCATION',
+                  t.admin.createDoctor.addressLabel.toUpperCase(),
                   style: context.semiBold12.textSecondary,
                 ),
               ),
-              const Gap(8),
+              8.verticalSpace,
               CustomTextFormField(
                 controller: _locationCtrl,
-                hintText: 'e.g. 123 Healthcare Ave, Medical District',
-                prefixIcon: const Icon(
+                hintText: t.admin.createDoctor.addressHint,
+                prefixIcon: Icon(
                   Icons.location_on_outlined,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
-                    return 'Please enter central clinic location';
+                    return t.common.validation.fieldRequired(field: t.admin.createDoctor.addressLabel);
                   }
                   return null;
                 },
               ),
-              const Gap(32),
+              32.verticalSpace,
 
               // Save Changes button
               SizedBox(
                 width: double.infinity,
-                height: 50,
                 child: MainButton(
                   text: _isSaving
                       ? t.admin.editProfile.saving

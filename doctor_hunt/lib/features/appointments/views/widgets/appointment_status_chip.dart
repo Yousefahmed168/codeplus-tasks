@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 
 class AppointmentStatusChip extends StatelessWidget {
@@ -17,27 +19,23 @@ class AppointmentStatusChip extends StatelessWidget {
     };
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 6,
-            height: 6,
+            width: 6.r,
+            height: 6.r,
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
-          const SizedBox(width: 5),
+          5.horizontalSpace,
           Text(
             label,
-            style: TextStyle(
-              color: color,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
+            style: context.semiBold11.copyWith(color: color),
           ),
         ],
       ),

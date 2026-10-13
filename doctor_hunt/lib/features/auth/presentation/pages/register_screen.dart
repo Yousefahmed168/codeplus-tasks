@@ -1,8 +1,8 @@
 import '../../../../core/widgets/password_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context, state) {
           final isLoading = state is AuthLoadingState;
           return Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.r),
             child: Form(
               key: _formKey,
               child: ListView(
@@ -120,19 +120,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onTap: () => context.go(AppRoutes.role),
                     ),
                   ),
-                  const Gap(10),
+                  10.verticalSpace,
                   Text(
                     t.auth.register.title,
                     style: context.bold24.textPrimary,
                     textAlign: TextAlign.center,
                   ),
-                  const Gap(12),
+                  12.verticalSpace,
                   Text(
                     t.auth.register.subtitle,
                     style: context.medium14.textSecondary,
                     textAlign: TextAlign.center,
                   ),
-                  const Gap(32),
+                  32.verticalSpace,
                   Row(
                     children: [
                       Expanded(
@@ -140,8 +140,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           label: t.common.google,
                           icon: SvgPicture.asset(
                             AppImages.google,
-                            width: 20,
-                            height: 20,
+                            width: 20.r,
+                            height: 20.r,
                           ),
                           onTap: isLoading
                               ? () {}
@@ -149,21 +149,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context.read<AuthCubit>().loginWithGoogle(),
                         ),
                       ),
-                      const Gap(12),
+                      12.horizontalSpace,
                       Expanded(
                         child: SocialButton(
                           label: t.common.facebook,
                           icon: SvgPicture.asset(
                             AppImages.facebook,
-                            width: 20,
-                            height: 20,
+                            width: 20.r,
+                            height: 20.r,
                           ),
                           onTap: () {},
                         ),
                       ),
                     ],
                   ),
-                  const Gap(30),
+                  30.verticalSpace,
                   CustomTextFormField(
                     controller: _nameCtrl,
                     hintText: _isDoctor
@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  const Gap(16),
+                  16.verticalSpace,
                   CustomTextFormField(
                     controller: _emailCtrl,
                     hintText: t.common.email,
@@ -192,11 +192,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  const Gap(16),
+                  16.verticalSpace,
                   PasswordTextFormField(
                     controller: _passwordCtrl,
                     hintText: t.common.password,
-
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return t.common.validation.enterPassword;
@@ -205,11 +204,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  const Gap(16),
+                  16.verticalSpace,
                   PasswordTextFormField(
                     controller: _confirmPasswordCtrl,
                     hintText: t.common.confirmPassword,
-
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return t.common.validation.enterConfirmPassword;
@@ -220,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     },
                   ),
-                  const Gap(16),
+                  16.verticalSpace,
 
                   Row(
                     children: [
@@ -229,8 +227,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             setState(() => _agreeToTerms = !_agreeToTerms),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          width: 22,
-                          height: 22,
+                          width: 22.r,
+                          height: 22.r,
                           decoration: BoxDecoration(
                             color: _agreeToTerms
                                 ? AppColors.primary
@@ -241,18 +239,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   : AppColors.border,
                               width: 2,
                             ),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(6.r),
                           ),
                           child: _agreeToTerms
-                              ? const Icon(
+                              ? Icon(
                                   Icons.check,
-                                  size: 14,
-                                  color: Colors.white,
+                                  size: 14.r,
+                                  color: AppColors.textOnPrimary,
                                 )
                               : null,
                         ),
                       ),
-                      const Gap(10),
+                      10.horizontalSpace,
                       Expanded(
                         child: RichText(
                           text: TextSpan(
@@ -261,18 +259,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextSpan(text: t.auth.register.termsPrefix),
                               TextSpan(
                                 text: t.auth.register.terms,
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: context.semiBold14.primary,
                               ),
                               TextSpan(text: t.auth.register.termsAnd),
                               TextSpan(
                                 text: t.auth.register.privacy,
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: context.semiBold14.primary,
                               ),
                             ],
                           ),
@@ -280,14 +272,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  const Gap(28),
+                  28.verticalSpace,
                   MainButton(
                     text: isLoading
                         ? t.auth.register.creatingAccount
                         : t.auth.register.submitBtn,
                     onPressed: isLoading ? null : _register,
                   ),
-                  const Gap(40),
+                  40.verticalSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -304,7 +296,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  const Gap(24),
+                  24.verticalSpace,
                 ],
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/main_button.dart';
@@ -25,20 +25,20 @@ class AppointmentSuccessDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       elevation: 0,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+      insetPadding: EdgeInsets.symmetric(horizontal: 32.w),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Circle with thumb up icon
             Container(
-              width: 120,
-              height: 120,
+              width: 120.r,
+              height: 120.r,
               decoration: BoxDecoration(
                 color: AppColors.background,
                 shape: BoxShape.circle,
@@ -47,25 +47,25 @@ class AppointmentSuccessDialog extends StatelessWidget {
                 child: Icon(
                   Icons.thumb_up_rounded,
                   color: AppColors.success,
-                  size: 64,
+                  size: 64.r,
                 ),
               ),
             ),
-            const Gap(32),
+            32.verticalSpace,
             // Title
             Text(
               t.appointment.successTitle,
-              style: context.bold.copyWith(fontSize: 28, color: AppColors.textPrimary),
+              style: context.bold28.textPrimary,
               textAlign: TextAlign.center,
             ),
-            const Gap(12),
+            12.verticalSpace,
             // Subtitle
             Text(
               t.appointment.successSubtitle,
-              style: context.regular.copyWith(fontSize: 16, color: AppColors.textSecondary),
+              style: context.regular16.textSecondary,
               textAlign: TextAlign.center,
             ),
-            const Gap(24),
+            24.verticalSpace,
             // Message
             Text(
               t.appointment.successMessage(
@@ -73,22 +73,22 @@ class AppointmentSuccessDialog extends StatelessWidget {
                 date: date,
                 time: time,
               ),
-              style: context.regular.copyWith(fontSize: 12, color: AppColors.textHint, height: 1.5),
+              style: context.regular12.textHint,
               textAlign: TextAlign.center,
             ),
-            const Gap(32),
+            32.verticalSpace,
             // Done Button
             MainButton(
               text: t.appointment.doneBtn,
               onPressed: onDone,
             ),
-            const Gap(20),
+            20.verticalSpace,
             // Edit Button
             GestureDetector(
               onTap: onEdit,
               child: Text(
                 t.appointment.editBtn,
-                style: context.regular.copyWith(fontSize: 14, color: AppColors.textSecondary),
+                style: context.regular14.textSecondary,
               ),
             ),
           ],

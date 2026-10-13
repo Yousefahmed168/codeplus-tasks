@@ -11,6 +11,7 @@ abstract class Routes {
   static const String selectTime = '/select-time';
   static const String updateDoctorProfile = '/update-doctor-profile';
   static const String patientSettings = '/patient-settings';
+  static const String patientProfile = '/profile';
   static const String privacyPolicy = '/privacy-policy';
   static const String helpCenter = '/help-center';
 }

@@ -60,6 +60,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$logoutDialog$en logoutDialog = Translations$logoutDialog$en._(_root);
 	late final Translations$menu$en menu = Translations$menu$en._(_root);
 	late final Translations$appointments$en appointments = Translations$appointments$en._(_root);
+	late final Translations$changePassword$en changePassword = Translations$changePassword$en._(_root);
 }
 
 // Path: common
@@ -133,6 +134,15 @@ class Translations$common$en {
 	/// en: 'Confirm'
 	String get confirm => 'Confirm';
 
+	/// en: 'Edit'
+	String get edit => 'Edit';
+
+	/// en: 'Delete'
+	String get delete => 'Delete';
+
+	/// en: 'Tap back again to exit'
+	String get tapBackAgainToExit => 'Tap back again to exit';
+
 	/// en: 'Loading...'
 	String get loading => 'Loading...';
 
@@ -140,6 +150,9 @@ class Translations$common$en {
 	String get errorGeneric => 'An error occurred. Please try again';
 
 	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
+
+	/// en: 'Not provided'
+	String get notProvided => 'Not provided';
 }
 
 // Path: onboarding
@@ -327,6 +340,9 @@ class Translations$doctorDetails$en {
 	/// en: 'Doctor Info'
 	String get doctorInfo => 'Doctor Info';
 
+	/// en: 'Rating'
+	String get reviews => 'Rating';
+
 	/// en: '$doctorName removed from favorites'
 	String removedFromFavorites({required Object doctorName}) => '${doctorName} removed from favorites';
 }
@@ -350,6 +366,9 @@ class Translations$favorite$en {
 
 	/// en: '$doctorName removed from favorites'
 	String doctorRemoved({required Object doctorName}) => '${doctorName} removed from favorites';
+
+	/// en: '$doctorName added to favorites'
+	String doctorAdded({required Object doctorName}) => '${doctorName} added to favorites';
 }
 
 // Path: appointment
@@ -485,10 +504,10 @@ class Translations$admin$en {
 	late final Translations$admin$createDoctor$en createDoctor = Translations$admin$createDoctor$en._(_root);
 	late final Translations$admin$editDoctor$en editDoctor = Translations$admin$editDoctor$en._(_root);
 	late final Translations$admin$doctorDetails$en doctorDetails = Translations$admin$doctorDetails$en._(_root);
+	late final Translations$admin$availability$en availability = Translations$admin$availability$en._(_root);
 	late final Translations$admin$editProfile$en editProfile = Translations$admin$editProfile$en._(_root);
 	late final Translations$admin$appointments$en appointments = Translations$admin$appointments$en._(_root);
 	late final Translations$admin$settings$en settings = Translations$admin$settings$en._(_root);
-	late final Translations$admin$changePassword$en changePassword = Translations$admin$changePassword$en._(_root);
 }
 
 // Path: patientProfile
@@ -502,41 +521,17 @@ class Translations$patientProfile$en {
 	/// en: 'Profile'
 	String get title => 'Profile';
 
-	/// en: 'Set up your profile'
-	String get setupProfile => 'Set up your profile';
-
-	/// en: 'Update your profile to connect your doctor with better impression.'
-	String get setupSubtitle => 'Update your profile to connect your doctor with better impression.';
-
 	/// en: 'Personal information'
 	String get personalInfo => 'Personal information';
 
 	/// en: 'Contact Number'
 	String get contactNumber => 'Contact Number';
 
-	/// en: 'Date of birth'
-	String get dateOfBirth => 'Date of birth';
+	/// en: 'Profile updated successfully'
+	String get profileUpdated => 'Profile updated successfully';
 
-	/// en: 'Location'
-	String get location => 'Location';
-
-	/// en: 'My Doctors'
-	String get myDoctors => 'My Doctors';
-
-	/// en: 'Medical Records'
-	String get medicalRecords => 'Medical Records';
-
-	/// en: 'Payments'
-	String get payments => 'Payments';
-
-	/// en: 'Privacy & Policy'
-	String get privacyPolicy => 'Privacy & Policy';
-
-	/// en: 'Help Center'
-	String get helpCenter => 'Help Center';
-
-	/// en: 'Settings'
-	String get settings => 'Settings';
+	/// en: 'No profile data found'
+	String get noProfileData => 'No profile data found';
 }
 
 // Path: patientSettings
@@ -559,29 +554,23 @@ class Translations$patientSettings$en {
 	/// en: 'Notifications'
 	String get notifications => 'Notifications';
 
-	/// en: 'Statistics'
-	String get statistics => 'Statistics';
-
-	/// en: 'About us'
-	String get aboutUs => 'About us';
+	/// en: 'Privacy Policy'
+	String get privacyPolicy => 'Privacy Policy';
 
 	/// en: 'More options'
 	String get moreOptions => 'More options';
 
-	/// en: 'Text messages'
-	String get textMessages => 'Text messages';
-
-	/// en: 'Phone calls'
-	String get phoneCalls => 'Phone calls';
-
 	/// en: 'Languages'
 	String get languages => 'Languages';
 
-	/// en: 'Currency'
-	String get currency => 'Currency';
+	/// en: 'Select language'
+	String get selectLanguage => 'Select language';
 
-	/// en: 'Linked accounts'
-	String get linkedAccounts => 'Linked accounts';
+	/// en: 'English'
+	String get languageEnglish => 'English';
+
+	/// en: 'Build version'
+	String get buildVersion => 'Build version';
 }
 
 // Path: privacyPolicy
@@ -612,6 +601,9 @@ class Translations$helpCenter$en {
 
 	/// en: 'I have an issue with'
 	String get issueHeader => 'I have an issue with';
+
+	/// en: 'Selected: $issue'
+	String selectedIssue({required Object issue}) => 'Selected: ${issue}';
 }
 
 // Path: logoutDialog
@@ -645,6 +637,9 @@ class Translations$menu$en {
 
 	/// en: 'My Appointments'
 	String get myAppointments => 'My Appointments';
+
+	/// en: 'Profile'
+	String get profile => 'Profile';
 
 	/// en: 'Settings'
 	String get settings => 'Settings';
@@ -723,6 +718,51 @@ class Translations$appointments$en {
 
 	/// en: 'Failed to submit review'
 	String get reviewFailed => 'Failed to submit review';
+
+	/// en: 'Book an appointment with a doctor to see it here.'
+	String get noUpcomingSubtitle => 'Book an appointment with a doctor to see it here.';
+
+	/// en: 'Your completed appointments will appear here.'
+	String get noCompletedSubtitle => 'Your completed appointments will appear here.';
+
+	/// en: 'Your cancelled appointments will appear here.'
+	String get noCancelledSubtitle => 'Your cancelled appointments will appear here.';
+}
+
+// Path: changePassword
+class Translations$changePassword$en {
+	Translations$changePassword$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Change Password'
+	String get title => 'Change Password';
+
+	/// en: 'Current Password'
+	String get currentPassword => 'Current Password';
+
+	/// en: 'New Password'
+	String get newPassword => 'New Password';
+
+	/// en: 'Confirm New Password'
+	String get confirmNewPassword => 'Confirm New Password';
+
+	/// en: 'Update Password'
+	String get updatePassword => 'Update Password';
+
+	/// en: 'Updating...'
+	String get updating => 'Updating...';
+
+	/// en: 'Password updated successfully'
+	String get success => 'Password updated successfully';
+
+	/// en: 'Failed to update password'
+	String get failed => 'Failed to update password';
+
+	/// en: 'Please enter your current password'
+	String get currentPasswordRequired => 'Please enter your current password';
 }
 
 // Path: common.validation
@@ -759,6 +799,15 @@ class Translations$common$validation$en {
 
 	/// en: 'Please select a role'
 	String get selectRole => 'Please select a role';
+
+	/// en: 'Please enter $field'
+	String fieldRequired({required Object field}) => 'Please enter ${field}';
+
+	/// en: 'Please enter a valid number'
+	String get invalidNumber => 'Please enter a valid number';
+
+	/// en: 'Enter a valid phone number'
+	String get validPhone => 'Enter a valid phone number';
 }
 
 // Path: onboarding.pages.0
@@ -996,6 +1045,9 @@ class Translations$admin$doctors$en {
 	/// en: 'Doctors'
 	String get title => 'Doctors';
 
+	/// en: 'Add Doctor'
+	String get addDoctor => 'Add Doctor';
+
 	/// en: 'Search doctors...'
 	String get searchHint => 'Search doctors...';
 
@@ -1050,8 +1102,8 @@ class Translations$admin$createDoctor$en {
 	/// en: 'Consultation Fee'
 	String get feeLabel => 'Consultation Fee';
 
-	/// en: 'e.g. $28.00'
-	String feeHint({required Object price}) => 'e.g. ${price}.00';
+	/// en: 'e.g. \$28.00'
+	String get feeHint => 'e.g. \$28.00';
 
 	/// en: 'Doctor Status'
 	String get statusLabel => 'Doctor Status';
@@ -1119,6 +1171,9 @@ class Translations$admin$editDoctor$en {
 	/// en: 'Delete Doctor'
 	String get deleteBtn => 'Delete Doctor';
 
+	/// en: 'Doctor deleted successfully'
+	String get deletedSuccess => 'Doctor deleted successfully';
+
 	/// en: 'Doctor updated successfully'
 	String get success => 'Doctor updated successfully';
 
@@ -1159,6 +1214,39 @@ class Translations$admin$doctorDetails$en {
 	String get deleteDoctor => 'Delete Doctor';
 }
 
+// Path: admin.availability
+class Translations$admin$availability$en {
+	Translations$admin$availability$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Doctor Availability'
+	String get title => 'Doctor Availability';
+
+	/// en: 'Working Days'
+	String get workingDays => 'Working Days';
+
+	/// en: 'Working Hours'
+	String get workingHours => 'Working Hours';
+
+	/// en: 'START TIME'
+	String get startTime => 'START TIME';
+
+	/// en: 'END TIME'
+	String get endTime => 'END TIME';
+
+	/// en: '$count days enabled'
+	String daysEnabled({required Object count}) => '${count} days enabled';
+
+	/// en: 'Availability updated successfully'
+	String get updated => 'Availability updated successfully';
+
+	/// en: 'Failed to update availability'
+	String get failed => 'Failed to update availability';
+}
+
 // Path: admin.editProfile
 class Translations$admin$editProfile$en {
 	Translations$admin$editProfile$en._(this._root);
@@ -1185,6 +1273,9 @@ class Translations$admin$editProfile$en {
 	/// en: 'Saving...'
 	String get saving => 'Saving...';
 
+	/// en: 'Email change requires re-authentication'
+	String get reauthRequired => 'Email change requires re-authentication';
+
 	/// en: 'Profile updated successfully'
 	String get success => 'Profile updated successfully';
 
@@ -1205,6 +1296,9 @@ class Translations$admin$appointments$en {
 
 	/// en: 'Appointment Details'
 	String get detailsTitle => 'Appointment Details';
+
+	/// en: 'Appointment not found.'
+	String get notFound => 'Appointment not found.';
 
 	/// en: 'Mark as Completed'
 	String get markCompleted => 'Mark as Completed';
@@ -1366,42 +1460,6 @@ class Translations$admin$settings$en {
 	String get aboutDesc => 'App version and information';
 }
 
-// Path: admin.changePassword
-class Translations$admin$changePassword$en {
-	Translations$admin$changePassword$en._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Change Password'
-	String get title => 'Change Password';
-
-	/// en: 'Current Password'
-	String get currentPassword => 'Current Password';
-
-	/// en: 'New Password'
-	String get newPassword => 'New Password';
-
-	/// en: 'Confirm New Password'
-	String get confirmNewPassword => 'Confirm New Password';
-
-	/// en: 'Update Password'
-	String get updatePassword => 'Update Password';
-
-	/// en: 'Updating...'
-	String get updating => 'Updating...';
-
-	/// en: 'Password updated successfully'
-	String get success => 'Password updated successfully';
-
-	/// en: 'Failed to update password'
-	String get failed => 'Failed to update password';
-
-	/// en: 'Please enter your current password'
-	String get currentPasswordRequired => 'Please enter your current password';
-}
-
 // Path: roleSelection.roles.patient
 class Translations$roleSelection$roles$patient$en {
 	Translations$roleSelection$roles$patient$en._(this._root);
@@ -1461,6 +1519,9 @@ extension on Translations {
 			'common.undo' => 'Undo',
 			'common.notice' => 'Notice',
 			'common.confirm' => 'Confirm',
+			'common.edit' => 'Edit',
+			'common.delete' => 'Delete',
+			'common.tapBackAgainToExit' => 'Tap back again to exit',
 			'common.loading' => 'Loading...',
 			'common.errorGeneric' => 'An error occurred. Please try again',
 			'common.validation.enterEmail' => 'Enter your email',
@@ -1472,6 +1533,10 @@ extension on Translations {
 			'common.validation.passwordsDoNotMatch' => 'Passwords do not match',
 			'common.validation.enterConfirmPassword' => 'Please confirm your password',
 			'common.validation.selectRole' => 'Please select a role',
+			'common.validation.fieldRequired' => ({required Object field}) => 'Please enter ${field}',
+			'common.validation.invalidNumber' => 'Please enter a valid number',
+			'common.validation.validPhone' => 'Enter a valid phone number',
+			'common.notProvided' => 'Not provided',
 			'onboarding.pages.0.title' => 'Find Trusted Doctors',
 			'onboarding.pages.0.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
 			'onboarding.pages.1.title' => 'Choose Best Doctors',
@@ -1559,11 +1624,13 @@ extension on Translations {
 			'doctorDetails.service2' => 'If you run your practice you know how frustrating.',
 			'doctorDetails.service3' => 'Thats why some of appointment reminder system.',
 			'doctorDetails.doctorInfo' => 'Doctor Info',
+			'doctorDetails.reviews' => 'Rating',
 			'doctorDetails.removedFromFavorites' => ({required Object doctorName}) => '${doctorName} removed from favorites',
 			'favorite.pleaseLogin' => 'Please log in to view favorites',
 			'favorite.noFavoriteDoctors' => 'No favorite doctors yet',
 			'favorite.tapHeartHint' => 'Tap the heart icon on any doctor to add them here',
 			'favorite.doctorRemoved' => ({required Object doctorName}) => '${doctorName} removed from favorites',
+			'favorite.doctorAdded' => ({required Object doctorName}) => '${doctorName} added to favorites',
 			'appointment.successTitle' => 'Thank You !',
 			'appointment.successSubtitle' => 'Your Appointment Successful',
 			'appointment.successMessage' => ({required Object doctorName, required Object date, required Object time}) => 'You booked an appointment with ${doctorName} on ${date}, at ${time}',
@@ -1604,6 +1671,7 @@ extension on Translations {
 			'admin.login.secureAccess' => 'Secure admin access only',
 			'admin.login.accessDenied' => 'Access denied. You are not an admin.',
 			'admin.doctors.title' => 'Doctors',
+			'admin.doctors.addDoctor' => 'Add Doctor',
 			'admin.doctors.searchHint' => 'Search doctors...',
 			'admin.doctors.totalDoctors' => 'Total Doctors',
 			'admin.doctors.active' => 'Active',
@@ -1619,7 +1687,7 @@ extension on Translations {
 			'admin.createDoctor.specialtyLabel' => 'Specialty',
 			'admin.createDoctor.specialtyHint' => 'Select specialty',
 			'admin.createDoctor.feeLabel' => 'Consultation Fee',
-			'admin.createDoctor.feeHint' => ({required Object price}) => 'e.g. ${price}.00',
+			'admin.createDoctor.feeHint' => 'e.g. \$28.00',
 			'admin.createDoctor.statusLabel' => 'Doctor Status',
 			'admin.createDoctor.statusSubtitle' => 'Active & Available',
 			'admin.createDoctor.bioLabel' => 'Bio',
@@ -1639,6 +1707,7 @@ extension on Translations {
 			'admin.editDoctor.updateBtn' => 'Save Changes',
 			'admin.editDoctor.updatingBtn' => 'Saving...',
 			'admin.editDoctor.deleteBtn' => 'Delete Doctor',
+			'admin.editDoctor.deletedSuccess' => 'Doctor deleted successfully',
 			'admin.editDoctor.success' => 'Doctor updated successfully',
 			'admin.editDoctor.failed' => 'Failed to update doctor',
 			'admin.doctorDetails.title' => 'Doctor Details',
@@ -1649,16 +1718,26 @@ extension on Translations {
 			'admin.doctorDetails.inactive' => 'Inactive',
 			'admin.doctorDetails.editDoctor' => 'Edit Doctor',
 			'admin.doctorDetails.deleteDoctor' => 'Delete Doctor',
+			'admin.availability.title' => 'Doctor Availability',
+			'admin.availability.workingDays' => 'Working Days',
+			'admin.availability.workingHours' => 'Working Hours',
+			'admin.availability.startTime' => 'START TIME',
+			'admin.availability.endTime' => 'END TIME',
+			'admin.availability.daysEnabled' => ({required Object count}) => '${count} days enabled',
+			'admin.availability.updated' => 'Availability updated successfully',
+			'admin.availability.failed' => 'Failed to update availability',
 			'admin.editProfile.title' => 'Edit Profile',
 			'admin.editProfile.tapPhotoToChange' => 'Tap photo to change',
 			'admin.editProfile.fullName' => 'FULL NAME',
 			'admin.editProfile.emailAddress' => 'EMAIL ADDRESS',
 			'admin.editProfile.saveChanges' => 'Save Changes',
 			'admin.editProfile.saving' => 'Saving...',
+			'admin.editProfile.reauthRequired' => 'Email change requires re-authentication',
 			'admin.editProfile.success' => 'Profile updated successfully',
 			'admin.editProfile.failed' => 'Failed to update profile',
 			'admin.appointments.title' => 'Appointments',
 			'admin.appointments.detailsTitle' => 'Appointment Details',
+			'admin.appointments.notFound' => 'Appointment not found.',
 			'admin.appointments.markCompleted' => 'Mark as Completed',
 			'admin.appointments.cancelAppointment' => 'Cancel Appointment',
 			'admin.appointments.viewDetails' => 'View Details',
@@ -1709,49 +1788,32 @@ extension on Translations {
 			'admin.settings.helpSupportDesc' => 'Get help with the admin panel',
 			'admin.settings.about' => 'About',
 			'admin.settings.aboutDesc' => 'App version and information',
-			'admin.changePassword.title' => 'Change Password',
-			'admin.changePassword.currentPassword' => 'Current Password',
-			'admin.changePassword.newPassword' => 'New Password',
-			'admin.changePassword.confirmNewPassword' => 'Confirm New Password',
-			'admin.changePassword.updatePassword' => 'Update Password',
-			'admin.changePassword.updating' => 'Updating...',
-			'admin.changePassword.success' => 'Password updated successfully',
-			'admin.changePassword.failed' => 'Failed to update password',
-			'admin.changePassword.currentPasswordRequired' => 'Please enter your current password',
 			'patientProfile.title' => 'Profile',
-			'patientProfile.setupProfile' => 'Set up your profile',
-			'patientProfile.setupSubtitle' => 'Update your profile to connect your doctor with better impression.',
 			'patientProfile.personalInfo' => 'Personal information',
 			'patientProfile.contactNumber' => 'Contact Number',
-			'patientProfile.dateOfBirth' => 'Date of birth',
-			'patientProfile.location' => 'Location',
-			'patientProfile.myDoctors' => 'My Doctors',
-			'patientProfile.medicalRecords' => 'Medical Records',
-			'patientProfile.payments' => 'Payments',
-			'patientProfile.privacyPolicy' => 'Privacy & Policy',
-			'patientProfile.helpCenter' => 'Help Center',
-			'patientProfile.settings' => 'Settings',
+			'patientProfile.profileUpdated' => 'Profile updated successfully',
+			'patientProfile.noProfileData' => 'No profile data found',
 			'patientSettings.title' => 'Settings',
 			'patientSettings.accountSettings' => 'Account settings',
 			'patientSettings.changePassword' => 'Change Password',
 			'patientSettings.notifications' => 'Notifications',
-			'patientSettings.statistics' => 'Statistics',
-			'patientSettings.aboutUs' => 'About us',
+			'patientSettings.privacyPolicy' => 'Privacy Policy',
 			'patientSettings.moreOptions' => 'More options',
-			'patientSettings.textMessages' => 'Text messages',
-			'patientSettings.phoneCalls' => 'Phone calls',
 			'patientSettings.languages' => 'Languages',
-			'patientSettings.currency' => 'Currency',
-			'patientSettings.linkedAccounts' => 'Linked accounts',
+			'patientSettings.selectLanguage' => 'Select language',
+			'patientSettings.languageEnglish' => 'English',
+			'patientSettings.buildVersion' => 'Build version',
 			'privacyPolicy.title' => 'Privacy policy',
 			'privacyPolicy.heading' => 'Doctor Hunt Apps Privacy Policy',
 			'helpCenter.title' => 'Help center',
 			'helpCenter.issueHeader' => 'I have an issue with',
+			'helpCenter.selectedIssue' => ({required Object issue}) => 'Selected: ${issue}',
 			'logoutDialog.title' => 'Log Out',
 			'logoutDialog.confirmMessage' => 'Are you sure you want to logout?',
 			'menu.home' => 'Home',
 			'menu.favourites' => 'Favourites',
 			'menu.myAppointments' => 'My Appointments',
+			'menu.profile' => 'Profile',
 			'menu.settings' => 'Settings',
 			'menu.logout' => 'Logout',
 			'appointments.title' => 'Appointments',
@@ -1775,6 +1837,18 @@ extension on Translations {
 			'appointments.cancelFailed' => 'Failed to cancel appointment',
 			'appointments.reviewSuccess' => 'Thank you for your review!',
 			'appointments.reviewFailed' => 'Failed to submit review',
+			'appointments.noUpcomingSubtitle' => 'Book an appointment with a doctor to see it here.',
+			'appointments.noCompletedSubtitle' => 'Your completed appointments will appear here.',
+			'appointments.noCancelledSubtitle' => 'Your cancelled appointments will appear here.',
+			'changePassword.title' => 'Change Password',
+			'changePassword.currentPassword' => 'Current Password',
+			'changePassword.newPassword' => 'New Password',
+			'changePassword.confirmNewPassword' => 'Confirm New Password',
+			'changePassword.updatePassword' => 'Update Password',
+			'changePassword.updating' => 'Updating...',
+			'changePassword.success' => 'Password updated successfully',
+			'changePassword.failed' => 'Failed to update password',
+			'changePassword.currentPasswordRequired' => 'Please enter your current password',
 			_ => null,
 		};
 	}

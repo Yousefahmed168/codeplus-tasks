@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -36,26 +36,26 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         elevation: 0,
-        leadingWidth: 70,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
         ),
         title: Text(
           t.admin.doctorDetails.title,
-          style: context.bold18.textPrimary,
+          style: context.bold18.copyWith(color: AppColors.textOnPrimary),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20.r),
         child: Column(
           children: [
             // Doctor photo
             Center(
               child: Container(
-                width: 100,
-                height: 100,
+                width: 100.r,
+                height: 100.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.primary.withValues(alpha: 0.1),
@@ -68,38 +68,38 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                       : null,
                 ),
                 child: _doctor.imageUrl == null || _doctor.imageUrl!.isEmpty
-                    ? const Icon(
+                    ? Icon(
                         Icons.person,
                         color: AppColors.primary,
-                        size: 48,
+                        size: 48.r,
                       )
                     : null,
               ),
             ),
-            const Gap(16),
+            16.verticalSpace,
 
             // Doctor Name
             Text(
               _doctor.name ?? 'Unknown Doctor',
               style: context.bold20.textPrimary,
             ),
-            const Gap(8),
+            8.verticalSpace,
 
             // Active status pill
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: _doctor.isActive
                     ? AppColors.success.withValues(alpha: 0.1)
                     : AppColors.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 6,
-                    height: 6,
+                    width: 6.r,
+                    height: 6.r,
                     decoration: BoxDecoration(
                       color: _doctor.isActive
                           ? AppColors.success
@@ -107,9 +107,9 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const Gap(6),
+                  6.horizontalSpace,
                   Text(
-                    _doctor.isActive ? 'Active' : 'Inactive',
+                    _doctor.isActive ? t.admin.doctors.active : t.admin.doctorDetails.inactive,
                     style: context.semiBold12.copyWith(
                       color: _doctor.isActive
                           ? AppColors.success
@@ -119,27 +119,26 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                 ],
               ),
             ),
-            const Gap(24),
+            24.verticalSpace,
 
             // Info section
             _buildInfoSection(),
-            const Gap(32),
+            32.verticalSpace,
 
             // Edit Doctor button
             MainButton(
-              text:
-                  'Edit Doctor', // MVP text or t.admin.doctorDetails.editDoctor
+              text: t.admin.doctorDetails.editDoctor,
               onPressed: () async {
                 await context.push(AppRoutes.editDoctor, extra: _doctor);
                 if (mounted) setState(() {});
               },
               bgColor: AppColors.primary,
             ),
-            const Gap(16),
+            16.verticalSpace,
 
             // Manage Availability button
             MainButton(
-              text: 'Manage Availability',
+              text: t.admin.availability.title,
               onPressed: () async {
                 await context.push(
                   AppRoutes.adminDoctorAvailability,
@@ -150,7 +149,7 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
               bgColor: AppColors.background,
               textColor: AppColors.primary,
             ),
-            const Gap(32),
+            32.verticalSpace,
           ],
         ),
       ),
@@ -160,15 +159,15 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
   Widget _buildInfoSection() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 10.r,
+            offset: Offset(0, 2.h),
           ),
         ],
       ),
@@ -177,19 +176,19 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
         children: [
           _buildInfoRow(
             icon: Icons.medical_services_outlined,
-            label: 'Specialty',
+            label: t.admin.doctorDetails.specialty,
             value: _doctor.specialization ?? 'General',
           ),
-          const Divider(height: 32, color: AppColors.border),
+          Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
             icon: Icons.star_border,
-            label: 'Rating',
-            value: '${_doctor.rating ?? 0.0} • 128 reviews', // Mock reviews
+            label: t.doctorDetails.reviews,
+            value: '${_doctor.rating ?? 0.0}',
           ),
-          const Divider(height: 32, color: AppColors.border),
+          Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
             icon: Icons.attach_money,
-            label: 'Consultation Fee',
+            label: t.admin.createDoctor.feeLabel,
             value: '\$${_doctor.consultationFee.toStringAsFixed(2)}',
           ),
         ],
@@ -205,20 +204,20 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(8.r),
           decoration: BoxDecoration(
             color: AppColors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppColors.primary, size: 20),
+          child: Icon(icon, color: AppColors.primary, size: 20.r),
         ),
-        const Gap(16),
+        16.horizontalSpace,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label, style: context.regular12.textSecondary),
-              const Gap(4),
+              4.verticalSpace,
               Text(value, style: context.semiBold14.textPrimary),
             ],
           ),

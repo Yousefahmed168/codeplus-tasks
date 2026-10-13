@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -26,14 +26,14 @@ class DoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 12,
+              blurRadius: 12.r,
               offset: const Offset(0, 4),
             ),
           ],
@@ -46,32 +46,32 @@ class DoctorCard extends StatelessWidget {
               children: [
                 // Doctor photo
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   child: (doctor.imageUrl ?? '').startsWith('http')
                       ? CachedNetworkImage(
                           imageUrl: doctor.imageUrl!,
-                          width: 80,
-                          height: 80,
+                          width: 80.r,
+                          height: 80.r,
                           fit: BoxFit.cover,
                           errorWidget: (_, _, _) => Icon(
                             Icons.person,
-                            size: 80,
+                            size: 80.r,
                             color: AppColors.primary,
                           ),
                         )
                       : Image.asset(
                           doctor.imageUrl ?? 'assets/images/doctor.png',
-                          width: 80,
-                          height: 80,
+                          width: 80.r,
+                          height: 80.r,
                           fit: BoxFit.cover,
                           errorBuilder: (_, _, _) => Icon(
                             Icons.person,
-                            size: 80,
+                            size: 80.r,
                             color: AppColors.primary,
                           ),
                         ),
                 ),
-                const Gap(12),
+                12.horizontalSpace,
 
                 // Info
                 Expanded(
@@ -79,20 +79,20 @@ class DoctorCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(doctor.name ?? 'Unknown', style: context.bold16.textPrimary),
-                      const Gap(2),
+                      2.verticalSpace,
                       Text(doctor.specialization ?? 'General', style: context.regular14.primary),
-                      const Gap(6),
+                      6.verticalSpace,
                       Row(
                         children: [
-                          const Icon(Icons.star, size: 14, color: Colors.amber),
-                          const Gap(4),
+                          Icon(Icons.star, size: 14.r, color: AppColors.star),
+                          4.horizontalSpace,
                           Text(
                             '${doctor.rating ?? 0.0}',
                             style: context.regular12.textSecondary,
                           ),
                         ],
                       ),
-                      const Gap(4),
+                      4.verticalSpace,
                       Text(
                         '\$${doctor.consultationFee.toStringAsFixed(2)}',
                         style: context.semiBold14.textPrimary,
@@ -109,13 +109,13 @@ class DoctorCard extends StatelessWidget {
                     color: doctor.isFavorite
                         ? AppColors.error
                         : AppColors.textHint,
-                    size: 24,
+                    size: 24.r,
                   ),
                 ),
               ],
             ),
 
-            const Gap(12),
+            12.verticalSpace,
             Row(
               children: [
                 // Next Available
@@ -127,7 +127,7 @@ class DoctorCard extends StatelessWidget {
                         t.common.nextAvailable,
                         style: context.regular12.textSecondary,
                       ),
-                      const Gap(2),
+                      2.verticalSpace,
                       Text('8:00 AM', style: context.medium14.textPrimary),
                     ],
                   ),
@@ -137,13 +137,13 @@ class DoctorCard extends StatelessWidget {
                 GestureDetector(
                   onTap: onBookNow,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 10,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 10.h,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       t.common.bookNow,

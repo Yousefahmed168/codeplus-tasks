@@ -1,7 +1,8 @@
 import '../../../../core/theme/colors.dart';
+import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LiveDoctorCard extends StatelessWidget {
   final String imagePath;
@@ -14,12 +15,12 @@ class LiveDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 120,
-        height: 160,
-        margin: const EdgeInsets.only(right: 12),
+        width: 120.w,
+        height: 160.h,
+        margin: EdgeInsets.only(right: 12.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: BoxBorder.all(color: AppColors.divider),
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: AppColors.divider),
           image: DecorationImage(
             image: AssetImage(imagePath),
             fit: BoxFit.fill,
@@ -29,25 +30,23 @@ class LiveDoctorCard extends StatelessWidget {
           children: [
             // Live Badge (Top Right)
             Positioned(
-              top: 8,
-              right: 8,
+              top: 8.h,
+              right: 8.w,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                 decoration: BoxDecoration(
                   color: AppColors.error,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.circle, size: 6, color: Colors.white),
-                    Gap(4),
+                    Icon(Icons.circle, size: 6.r, color: AppColors.textOnPrimary),
+                    4.horizontalSpace,
                     Text(
                       t.home.live,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 9,
-                        fontWeight: FontWeight.bold,
+                      style: context.bold11.copyWith(
+                        color: AppColors.textOnPrimary,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -59,22 +58,22 @@ class LiveDoctorCard extends StatelessWidget {
             // Center Play Icon Button
             Center(
               child: Container(
-                width: 36,
-                height: 36,
+                width: 36.r,
+                height: 36.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.75),
+                  color: AppColors.surface.withValues(alpha: 0.75),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 6,
+                      color: AppColors.textPrimary.withValues(alpha: 0.15),
+                      blurRadius: 6.r,
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 24,
+                  color: AppColors.textOnPrimary,
+                  size: 24.r,
                 ),
               ),
             ),

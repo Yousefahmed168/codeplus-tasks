@@ -42,7 +42,8 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
     );
   }
 
-  Future<void> updateProfile({
+  /// Updates the patient document and returns whether the write succeeded.
+  Future<bool> updateProfile({
     required PatientModel currentPatient,
     String? name,
     String? phone,
@@ -53,7 +54,7 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
     String? localImagePath,
   }) async {
     final uid = _authService.currentUser?.uid;
-    if (uid == null) return;
+    if (uid == null) return false;
     
     emit(PatientProfileSaving(patient: currentPatient));
     
@@ -84,14 +85,14 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
         updated.toUpdateData(),
         role: UserRole.patient,
       );
-      
-      // We don't need to emit Loaded here since the stream will push the new data,
-      // but emitting success/loaded ensures UI unblocks immediately.
-      // Wait for stream to update naturally.
+
+      // The patient stream pushes the new document; no need to emit Loaded here.
+      return true;
     } catch (e) {
       emit(PatientProfileError('Failed to update profile: $e'));
       // Revert to loaded state after showing error
       emit(PatientProfileLoaded(patient: currentPatient));
+      return false;
     }
   }
   

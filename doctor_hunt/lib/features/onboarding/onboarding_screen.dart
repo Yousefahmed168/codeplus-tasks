@@ -6,7 +6,7 @@ import '../../core/theme/style_atoms.dart';
 import '../../core/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //  Data model
 
@@ -79,9 +79,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           //  Bottom controls
           Positioned(
-            left: 24,
-            right: 24,
-            bottom: 40,
+            left: 24.w,
+            right: 24.w,
+            bottom: 40.h,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -92,11 +92,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     _pages.length,
                     (i) => AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _currentPage == i ? 24 : 8,
-                      height: 8,
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      width: _currentPage == i ? 24.w : 8.w,
+                      height: 8.h,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(4.r),
                         color: _currentPage == i
                             ? AppColors.primaryLight
                             : AppColors.surfaceDim,
@@ -104,18 +104,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                Gap(24),
+                24.verticalSpace,
 
                 // Next / Get Started button
                 SizedBox(
                   width: double.infinity,
-                  height: 52,
+                  height: 52.h,
                   child: MainButton(
                     text: isLast ? t.common.getStarted : t.common.next,
                     onPressed: _goToNextPage,
                   ),
                 ),
-                Gap(12),
+                12.verticalSpace,
 
                 // Skip button
                 TextButton(
@@ -174,7 +174,7 @@ class _OnboardingPageView extends StatelessWidget {
                 child: Container(
                   width: size.width * 0.72,
                   height: size.width * 0.72,
-                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: ClipOval(
                     child: Image.asset(page.image, fit: BoxFit.cover),
                   ),
@@ -184,11 +184,11 @@ class _OnboardingPageView extends StatelessWidget {
           ),
         ),
 
-        Gap(32),
+        32.verticalSpace,
 
         //  Text content
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: 32.w),
           child: Column(
             children: [
               Text(
@@ -196,11 +196,11 @@ class _OnboardingPageView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: context.bold24.textPrimary,
               ),
-              Gap(12),
+              12.verticalSpace,
               Text(
                 t.onboarding.pages[index].description,
                 textAlign: TextAlign.center,
-                style: context.regular14.textSecondary.copyWith(height: 1.6),
+                style: context.regular14.textSecondary,
               ),
             ],
           ),

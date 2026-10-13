@@ -2,7 +2,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StatsRow extends StatelessWidget {
   const StatsRow({
@@ -38,17 +38,17 @@ class _StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: AppColors.border, width: 1),
         ),
         child: Column(
           children: [
             Text(value, style: context.bold22.textPrimary),
-            Gap(4),
+            4.verticalSpace,
             Text(label, style: context.regular12.textSecondary),
           ],
         ),

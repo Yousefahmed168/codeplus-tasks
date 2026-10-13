@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -50,8 +50,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(t.admin.changePassword.success),
+            content: Text(t.changePassword.success),
             backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
         context.pop();
@@ -60,8 +64,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${t.admin.changePassword.failed}: $e'),
+            content: Text('${t.changePassword.failed}: $e'),
             backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -78,16 +86,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         backgroundColor: AppColors.primary,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: const CustomBackButton(),
-
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
+        ),
         title: Text(
-          t.admin.changePassword.title,
+          t.changePassword.title,
           style: context.bold18.textLight,
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.r),
         child: Form(
           key: _formKey,
           child: Column(
@@ -97,29 +108,29 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               PasswordTextFormField(
                 controller: _currentPasswordCtrl,
                 hintText: '••••••••',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
-                    return t.admin.changePassword.currentPasswordRequired;
+                    return t.changePassword.currentPasswordRequired;
                   }
                   return null;
                 },
-                labelText: t.admin.changePassword.currentPassword,
+                labelText: t.changePassword.currentPassword,
               ),
-              const Gap(20),
+              20.verticalSpace,
 
               // New Password
               PasswordTextFormField(
                 controller: _newPasswordCtrl,
                 hintText: '••••••••',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -128,18 +139,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   if (v.length < 6) return t.common.validation.minPassword;
                   return null;
                 },
-                labelText: t.admin.changePassword.newPassword,
+                labelText: t.changePassword.newPassword,
               ),
-              const Gap(20),
+              20.verticalSpace,
 
               // Confirm New Password
               PasswordTextFormField(
                 controller: _confirmPasswordCtrl,
                 hintText: '••••••••',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.lock_outline,
                   color: AppColors.textHint,
-                  size: 20,
+                  size: 20.r,
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
@@ -150,18 +161,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   }
                   return null;
                 },
-                labelText: t.admin.changePassword.confirmNewPassword,
+                labelText: t.changePassword.confirmNewPassword,
               ),
-              const Gap(32),
+              32.verticalSpace,
 
               // Update Password button
               SizedBox(
                 width: double.infinity,
-                height: 50,
                 child: MainButton(
                   text: _isSaving
-                      ? t.admin.changePassword.updating
-                      : t.admin.changePassword.updatePassword,
+                      ? t.changePassword.updating
+                      : t.changePassword.updatePassword,
                   onPressed: _isSaving ? null : _updatePassword,
                 ),
               ),

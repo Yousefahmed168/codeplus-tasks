@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -34,16 +34,16 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
           backgroundColor: AppColors.primary,
           elevation: 0,
           automaticallyImplyLeading: false,
-          titleSpacing: 20,
+          titleSpacing: 20.w,
           title: Text(
             t.admin.appointments.title,
-            style: context.bold20.copyWith(color: Colors.white),
+            style: context.bold20.copyWith(color: AppColors.textOnPrimary),
           ),
           actions: [
             // Admin Avatar 'A'
             Container(
-              width: 38,
-              height: 38,
+              width: 38.r,
+              height: 38.r,
               decoration: const BoxDecoration(
                 color: AppColors.primaryLight,
                 shape: BoxShape.circle,
@@ -51,24 +51,24 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
               child: Center(
                 child: Text(
                   'A',
-                  style: context.bold16.copyWith(color: Colors.white),
+                  style: context.bold16.copyWith(color: AppColors.textOnPrimary),
                 ),
               ),
             ),
-            const Gap(20),
+            20.horizontalSpace,
           ],
         ),
         body: Column(
           children: [
-            const Gap(12),
+            12.verticalSpace,
             //   Pill Tab Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Container(
-                padding: const EdgeInsets.all(4),
+                padding: EdgeInsets.all(4.r),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(
                     color: AppColors.divider.withValues(alpha: 0.5),
                   ),
@@ -82,7 +82,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
                 ),
               ),
             ),
-            const Gap(12),
+            12.verticalSpace,
 
             //   Tab View Content
             Expanded(
@@ -115,12 +115,12 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
                         }
 
                         return ListView.separated(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 8,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 8.h,
                           ),
                           itemCount: appointments.length,
-                          separatorBuilder: (_, _) => const Gap(14),
+                          separatorBuilder: (_, _) => 14.verticalSpace,
                           itemBuilder: (context, index) {
                             final appt = appointments[index];
                             return AdminAppointmentCard(
@@ -130,7 +130,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
                               onViewDetails: () {
                                 context.push(
                                   AppRoutes.adminAppointmentDetails,
-                                  extra: appt,
+                                  extra: {'appointment': appt, 'isAdminView': true},
                                 );
                               },
                             );
@@ -155,16 +155,16 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
         onTap: () => setState(() => _selectedTab = index),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10.h),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Center(
             child: Text(
               title,
               style: isSelected
-                  ? context.semiBold14.copyWith(color: Colors.white)
+                  ? context.semiBold14.copyWith(color: AppColors.textOnPrimary)
                   : context.regular14.textSecondary,
             ),
           ),
@@ -222,7 +222,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(t.admin.appointments.cancelConfirmTitle),
         content: Text(t.admin.appointments.cancelConfirmMessage),
         actions: [
@@ -254,7 +254,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
               backgroundColor: AppColors.error,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
             ),
           );
@@ -280,7 +280,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(t.admin.appointments.completeConfirmTitle),
         content: Text(t.admin.appointments.completeConfirmMessage),
         actions: [
@@ -312,7 +312,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
               backgroundColor: AppColors.primary,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
             ),
           );

@@ -4,7 +4,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import '../widgets/appointment_success_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -13,6 +13,7 @@ import '../../../../core/models/appointment_model.dart';
 import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/appointment_service.dart';
 import '../../../../core/services/auth_service.dart';
+import '../../../../core/services/favorite_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
@@ -35,6 +36,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   String? _selectedTime;
   String _clinicLocation = 'Central Clinic';
   bool _isBooking = false;
+  bool _isFavorite = false;
 
   final List<String> _afternoonSlots = [
     '1:00 PM',
@@ -67,12 +69,18 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
         _availableDates[1]; // default to Tomorrow (as in screenshot)
 
     sl<AdminService>().getCentralClinicLocation().then((loc) {
-      if (mounted) {
-        setState(() {
-          _clinicLocation = loc;
-        });
-      }
+      if (mounted) setState(() => _clinicLocation = loc);
     });
+
+    final uid = sl<AuthService>().currentUser?.uid;
+    final doctorUid = widget.doctor.uid;
+    if (uid != null && doctorUid != null) {
+      sl<FavoriteService>()
+          .isFavorited(patientUid: uid, doctorUid: doctorUid)
+          .then((val) {
+        if (mounted) setState(() => _isFavorite = val);
+      });
+    }
   }
 
   String _getDateLabel(DateTime date) {
@@ -97,38 +105,47 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: CustomBackButton(),
-
         title: Text(t.selectTime.title, style: context.bold24.textPrimary),
         centerTitle: false,
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                const Gap(16),
+                16.verticalSpace,
                 DoctorProfileHeader(
                   name: widget.doctor.name ?? 'Unknown',
                   clinic: _clinicLocation,
                   rating: widget.doctor.ratingPercentage.toInt(),
                   imagePath:
                       widget.doctor.imageUrl ?? 'assets/images/doctor.png',
-                  // isFavorite: true,
+                  isFavorite: _isFavorite,
+                  onFavoriteToggle: () async {
+                    final uid = sl<AuthService>().currentUser?.uid;
+                    final doctorUid = widget.doctor.uid;
+                    if (uid == null || doctorUid == null) return;
+                    final nowFav = await sl<FavoriteService>().toggleFavorite(
+                      patientUid: uid,
+                      doctorUid: doctorUid,
+                    );
+                    if (mounted) setState(() => _isFavorite = nowFav);
+                  },
                 ),
-                const Gap(24),
+                24.verticalSpace,
               ],
             ),
           ),
 
           // Horizontal Date List
           SizedBox(
-            height: 80,
+            height: 80.h,
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               scrollDirection: Axis.horizontal,
               itemCount: _availableDates.length,
-              separatorBuilder: (context, index) => const Gap(12),
+              separatorBuilder: (context, index) => 12.horizontalSpace,
               itemBuilder: (context, index) {
                 final date = _availableDates[index];
                 final isSelected = date == _selectedDate;
@@ -143,13 +160,13 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 12.h,
                     ),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary : AppColors.surface,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                       border: isSelected
                           ? null
                           : Border.all(color: AppColors.textSecondary),
@@ -157,7 +174,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                           ? [
                               BoxShadow(
                                 color: AppColors.primary.withValues(alpha: 0.3),
-                                blurRadius: 8,
+                                blurRadius: 8.r,
                                 offset: const Offset(0, 4),
                               ),
                             ]
@@ -169,16 +186,16 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         Text(
                           _getDateLabel(date),
                           style: isSelected
-                              ? context.bold16.copyWith(color: Colors.white)
+                              ? context.bold16.textOnPrimary
                               : context.bold16.textPrimary,
                         ),
-                        const Gap(4),
+                        4.verticalSpace,
                         Text(
                           slotsCount == 0
                               ? t.selectTime.noSlotsAvailable
                               : t.selectTime.slotsAvailable(count: slotsCount),
                           style: isSelected
-                              ? context.regular12.copyWith(color: Colors.white)
+                              ? context.regular12.textOnPrimary
                               : context.regular12.textSecondary,
                         ),
                       ],
@@ -189,12 +206,12 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
             ),
           ),
 
-          const Gap(32),
+          32.verticalSpace,
 
           // Time Slots Section
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -203,7 +220,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                       _getDateLabel(_selectedDate!),
                       style: context.bold20.textPrimary,
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
                   ],
 
                   if (_selectedDate != null &&
@@ -218,18 +235,18 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         style: context.bold18.textPrimary,
                       ),
                     ),
-                    const Gap(16),
+                    16.verticalSpace,
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
+                        spacing: 12.w,
+                        runSpacing: 12.h,
                         children: _afternoonSlots
                             .map((time) => _buildTimeSlot(time))
                             .toList(),
                       ),
                     ),
-                    const Gap(32),
+                    32.verticalSpace,
 
                     // Evening
                     Align(
@@ -239,22 +256,22 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         style: context.bold18.textPrimary,
                       ),
                     ),
-                    const Gap(16),
+                    16.verticalSpace,
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
+                        spacing: 12.w,
+                        runSpacing: 12.h,
                         children: _eveningSlots
                             .map((time) => _buildTimeSlot(time))
                             .toList(),
                       ),
                     ),
-                    const Gap(40),
+                    40.verticalSpace,
 
                     // Proceed Button
                     MainButton(
-                      text: _isBooking ? 'Booking...' : t.selectTime.proceed,
+                      text: _isBooking ? t.common.loading : t.selectTime.proceed,
                       bgColor: (_selectedTime != null && !_isBooking)
                           ? AppColors.primary
                           : AppColors.textSecondary,
@@ -263,7 +280,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                               final currentUser = sl<AuthService>().currentUser;
                               if (currentUser == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please log in to book an appointment')),
+                                  SnackBar(content: Text(t.favorite.pleaseLogin)),
                                 );
                                 return;
                               }
@@ -294,7 +311,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                                     builder: (context) {
                                       return AppointmentSuccessDialog(
                                         onDone: () {
-                                          context.go(AppRoutes.patientAppointments);
+                                          context.go(AppRoutes.home);
                                         },
                                         doctorName: 'Dr. ${widget.doctor.name}',
                                         date: DateFormat('d MMM yyyy').format(_selectedDate!),
@@ -310,7 +327,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                                 if (mounted) {
                                   // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('Booking failed: $e')),
+                                    SnackBar(content: Text('${t.common.errorGeneric}: $e')),
                                   );
                                 }
                               } finally {
@@ -321,33 +338,33 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                     ),
                   ] else ...[
                     // Empty state for Today
-                    const Gap(40),
+                    40.verticalSpace,
                     Text(
                       t.selectTime.noSlotsAvailable,
                       style: context.regular14.textSecondary,
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
                     MainButton(
                       text: t.selectTime.nextAvailability,
                       onPressed: () {},
                       bgColor: AppColors.primary,
-                      textColor: AppColors.background,
+                      textColor: AppColors.textOnPrimary,
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
                     Text(
                       t.selectTime.or,
                       style: context.regular14.textSecondary,
                     ),
-                    const Gap(24),
+                    24.verticalSpace,
                     MainButton(
                       text: t.selectTime.contactClinic,
                       onPressed: () {},
-                      bgColor: Colors.white,
+                      bgColor: AppColors.surface,
                       textColor: AppColors.primary,
                       borderColor: AppColors.textHint,
                     ),
                   ],
-                  const Gap(100), // extra scroll padding
+                  100.verticalSpace, // extra scroll padding
                 ],
               ),
             ),
@@ -368,17 +385,17 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary
               : AppColors.primary.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(
           time,
           style: isSelected
-              ? context.bold14.copyWith(color: Colors.white)
+              ? context.bold14.textOnPrimary
               : context.bold14.primary,
         ),
       ),

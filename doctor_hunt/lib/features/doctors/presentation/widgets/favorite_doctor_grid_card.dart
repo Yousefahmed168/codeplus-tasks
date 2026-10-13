@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../models/doctor.dart';
@@ -23,11 +23,11 @@ class FavoriteDoctorGridCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
+              blurRadius: 10.r,
               offset: const Offset(0, 4),
             ),
           ],
@@ -42,14 +42,14 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                   ClipOval(
                     child: Image.asset(
                       doctor.imageUrl ?? 'assets/images/doctor.png',
-                      width: 80,
-                      height: 80,
+                      width: 80.r,
+                      height: 80.r,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const Gap(12),
+                  12.verticalSpace,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Text(
                       doctor.name ?? 'Unknown',
                       style: context.bold16.textPrimary,
@@ -58,9 +58,9 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Gap(4),
+                  4.verticalSpace,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
                     child: Text(
                       doctor.specialization ?? 'General',
                       style: context.regular12.primary,
@@ -73,8 +73,8 @@ class FavoriteDoctorGridCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 12,
-              right: 12,
+              top: 12.h,
+              right: 12.w,
               child: GestureDetector(
                 onTap: onFavoriteToggle,
                 child: Icon(
@@ -84,7 +84,7 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                   color: doctor.isFavorite
                       ? AppColors.error
                       : AppColors.textSecondary,
-                  size: 20,
+                  size: 20.r,
                 ),
               ),
             ),

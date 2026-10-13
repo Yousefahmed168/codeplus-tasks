@@ -17,22 +17,33 @@ class AdminAppointmentDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appointment = GoRouterState.of(context).extra as AppointmentModel?;
+    final extra = GoRouterState.of(context).extra;
+    AppointmentModel? appointment;
+    bool isAdminView = true;
+
+    if (extra is Map) {
+      appointment = extra['appointment'] as AppointmentModel?;
+      isAdminView = extra['isAdminView'] as bool? ?? true;
+    } else if (extra is AppointmentModel) {
+      appointment = extra;
+    }
+
     if (appointment == null) {
-      return const Scaffold(
-        body: Center(child: Text('Appointment not found.')),
+      return Scaffold(
+        body: Center(child: Text(t.admin.appointments.notFound)),
       );
     }
     return BlocProvider(
       create: (_) =>
-          AdminAppointmentDetailsCubit(initialAppointment: appointment),
-      child: const _AdminAppointmentDetailsView(),
+          AdminAppointmentDetailsCubit(initialAppointment: appointment!),
+      child: _AdminAppointmentDetailsView(isAdminView: isAdminView),
     );
   }
 }
 
 class _AdminAppointmentDetailsView extends StatelessWidget {
-  const _AdminAppointmentDetailsView();
+  final bool isAdminView;
+  const _AdminAppointmentDetailsView({this.isAdminView = true});
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +271,7 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: appt.status == AppointmentStatus.upcoming
+          bottomNavigationBar: isAdminView && appt.status == AppointmentStatus.upcoming
               ? Container(
                   padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 24.h),
                   decoration: BoxDecoration(

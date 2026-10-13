@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/theme/colors.dart';
@@ -27,17 +27,17 @@ class AdminAppointmentCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.textPrimary.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            blurRadius: 10.r,
+            offset: Offset(0, 3.h),
           ),
         ],
         border: Border.all(
           color: AppColors.divider.withValues(alpha: 0.6),
-          width: 1,
+          width: 1.w,
         ),
       ),
       child: Column(
@@ -51,15 +51,15 @@ class AdminAppointmentCard extends StatelessWidget {
               children: [
                 //   Header (Patient & Doctor)
                 Padding(
-                  padding: const EdgeInsets.all(14),
+                  padding: EdgeInsets.all(14.r),
                   child: Row(
                     children: [
                       // Patient Avatar
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         child: Container(
-                          width: 48,
-                          height: 48,
+                          width: 48.r,
+                          height: 48.r,
                           color: AppColors.primary.withValues(alpha: 0.1),
                           child: Center(
                             child: Text(
@@ -71,7 +71,7 @@ class AdminAppointmentCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Gap(12),
+                      12.horizontalSpace,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +82,7 @@ class AdminAppointmentCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const Gap(2),
+                            2.verticalSpace,
                             Text(
                               '${appointment.doctorName}${appointment.doctorSpecialty != null && appointment.doctorSpecialty!.isNotEmpty ? ' • ${appointment.doctorSpecialty}' : ''}',
                               style: context.regular12.textSecondary,
@@ -97,13 +97,13 @@ class AdminAppointmentCard extends StatelessWidget {
                   ),
                 ),
 
-                const Divider(height: 1, color: AppColors.divider),
+                Divider(height: 1.h, color: AppColors.divider),
 
                 //   Details Row (Date / Time / Fee)
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.w,
+                    vertical: 12.h,
                   ),
                   child: Row(
                     children: [
@@ -135,16 +135,16 @@ class AdminAppointmentCard extends StatelessWidget {
                         (appointment.reviewComment != null &&
                             appointment.reviewComment!.isNotEmpty))) ...[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
+                    padding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 12.h),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                         border: Border.all(
                           color: AppColors.divider.withValues(alpha: 0.5),
                         ),
@@ -152,19 +152,19 @@ class AdminAppointmentCard extends StatelessWidget {
                       child: Row(
                         children: [
                           if (appointment.reviewRating != null) ...[
-                            const Icon(
+                            Icon(
                               Icons.star_rounded,
-                              size: 16,
-                              color: Colors.amber,
+                              size: 16.r,
+                              color: AppColors.star,
                             ),
-                            const Gap(4),
+                            4.horizontalSpace,
                             Text(
                               appointment.reviewRating!.toStringAsFixed(1),
                               style: context.semiBold12.textPrimary,
                             ),
-                            const Gap(6),
+                            6.horizontalSpace,
                             Text('•', style: context.regular12.textHint),
-                            const Gap(6),
+                            6.horizontalSpace,
                           ],
                           Expanded(
                             child: Text(
@@ -188,7 +188,7 @@ class AdminAppointmentCard extends StatelessWidget {
 
           //   Action Buttons
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+            padding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 14.h),
             child: _buildActionButtons(context),
           ),
         ],
@@ -220,20 +220,20 @@ class AdminAppointmentCard extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: chipBg,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 6,
-            height: 6,
+            width: 6.r,
+            height: 6.r,
             decoration: BoxDecoration(color: chipColor, shape: BoxShape.circle),
           ),
-          const Gap(6),
+          6.horizontalSpace,
           Text(label, style: context.semiBold12.copyWith(color: chipColor)),
         ],
       ),
@@ -251,14 +251,14 @@ class AdminAppointmentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(6),
+            padding: EdgeInsets.all(6.r),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Icon(icon, size: 16, color: AppColors.primary),
+            child: Icon(icon, size: 16.r, color: AppColors.primary),
           ),
-          const Gap(8),
+          8.horizontalSpace,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,11 +291,11 @@ class AdminAppointmentCard extends StatelessWidget {
               onPressed: onCancel,
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.error,
-                side: const BorderSide(color: AppColors.error, width: 1.2),
+                side: BorderSide(color: AppColors.error, width: 1.2.w),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
               ),
               child: Text(
                 t.admin.appointments.cancelAppointment,
@@ -305,33 +305,33 @@ class AdminAppointmentCard extends StatelessWidget {
               ),
             ),
           ),
-          const Gap(10),
+          10.horizontalSpace,
           // Mark as Completed
           Expanded(
             child: ElevatedButton(
               onPressed: onComplete,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.textOnPrimary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.check_rounded,
-                    size: 16,
-                    color: Colors.white,
+                    size: 16.r,
+                    color: AppColors.textOnPrimary,
                   ),
-                  const Gap(4),
+                  4.horizontalSpace,
                   Flexible(
                     child: Text(
                       t.admin.appointments.markCompleted,
-                      style: context.semiBold12.copyWith(color: Colors.white),
+                      style: context.semiBold12.copyWith(color: AppColors.textOnPrimary),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -351,11 +351,11 @@ class AdminAppointmentCard extends StatelessWidget {
         onPressed: onViewDetails,
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary, width: 1.2),
+          side: BorderSide(color: AppColors.primary, width: 1.2.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
         ),
         child: Text(
           t.admin.appointments.viewDetails,

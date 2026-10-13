@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import 'package:gap/gap.dart';
 
 class PopularDoctorCard extends StatelessWidget {
   final String imagePath;
@@ -25,16 +25,16 @@ class PopularDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 150,
-        margin: const EdgeInsets.only(right: 7),
+        width: 150.w,
+        margin: EdgeInsets.only(right: 7.w),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.09),
-              blurRadius: 14,
-              offset: const Offset(0, 4),
+              color: AppColors.textPrimary.withValues(alpha: 0.09),
+              blurRadius: 14.r,
+              offset: Offset(0, 4.h),
             ),
           ],
         ),
@@ -43,21 +43,21 @@ class PopularDoctorCard extends StatelessWidget {
           children: [
             // Doctor Image Container
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(16.r),
               ),
               child: Container(
-                height: 140,
+                height: 140.h,
                 width: double.infinity,
                 color: AppColors.divider,
                 child: imagePath.startsWith('http')
                     ? CachedNetworkImage(
                         imageUrl: imagePath,
                         fit: BoxFit.cover,
-                        errorWidget: (_, _, _) => const Center(
+                        errorWidget: (_, _, _) => Center(
                           child: Icon(
                             Icons.person,
-                            size: 60,
+                            size: 60.r,
                             color: AppColors.primary,
                           ),
                         ),
@@ -65,10 +65,10 @@ class PopularDoctorCard extends StatelessWidget {
                     : Image.asset(
                         imagePath,
                         fit: BoxFit.fill,
-                        errorBuilder: (_, _, _) => const Center(
+                        errorBuilder: (_, _, _) => Center(
                           child: Icon(
                             Icons.person,
-                            size: 50,
+                            size: 50.r,
                             color: AppColors.primary,
                           ),
                         ),
@@ -76,7 +76,7 @@ class PopularDoctorCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.r),
               child: Column(
                 children: [
                   Text(
@@ -89,18 +89,17 @@ class PopularDoctorCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Gap(2),
+                  2.verticalSpace,
                   Text(
                     specialty,
                     style: context.regular12.copyWith(
                       color: AppColors.textSecondary,
-                      fontSize: 11,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Gap(6),
+                  6.verticalSpace,
                   // Rating Stars
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +111,7 @@ class PopularDoctorCard extends StatelessWidget {
                                   ? Icons.star_half_rounded
                                   : Icons.star_outline_rounded),
                         color: AppColors.star,
-                        size: 14,
+                        size: 14.r,
                       );
                     }),
                   ),

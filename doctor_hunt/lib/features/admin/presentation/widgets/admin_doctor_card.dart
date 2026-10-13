@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../features/doctors/models/doctor.dart';
+import '../../../../i18n/strings.g.dart';
 
 class AdminDoctorCard extends StatelessWidget {
   const AdminDoctorCard({
@@ -20,16 +21,16 @@ class AdminDoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 10.r,
+            offset: Offset(0, 2.h),
           ),
         ],
       ),
@@ -37,8 +38,8 @@ class AdminDoctorCard extends StatelessWidget {
         children: [
           // Avatar
           Container(
-            width: 56,
-            height: 56,
+            width: 56.r,
+            height: 56.r,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.primary.withValues(alpha: 0.1),
@@ -50,10 +51,10 @@ class AdminDoctorCard extends StatelessWidget {
                   : null,
             ),
             child: doctor.imageUrl == null || doctor.imageUrl!.isEmpty
-                ? Icon(Icons.person, color: AppColors.primary, size: 28)
+                ? Icon(Icons.person, color: AppColors.primary, size: 28.r)
                 : null,
           ),
-          const Gap(16),
+          16.horizontalSpace,
 
           // Name + Specialization
           Expanded(
@@ -64,17 +65,17 @@ class AdminDoctorCard extends StatelessWidget {
                   'Dr. ${doctor.name ?? 'Unknown'}',
                   style: context.semiBold16.textPrimary,
                 ),
-                const Gap(4),
+                4.verticalSpace,
                 Text(
                   doctor.specialization ?? 'General',
                   style: context.regular14.textSecondary,
                 ),
-                const Gap(4),
+                4.verticalSpace,
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                   decoration: BoxDecoration(
                     color: AppColors.success.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
                     'Active',
@@ -92,10 +93,10 @@ class AdminDoctorCard extends StatelessWidget {
               if (value == 'delete') onDelete();
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(value: 'edit', child: Text('Edit')),
+              PopupMenuItem(value: 'edit', child: Text(t.common.edit)),
               PopupMenuItem(
                 value: 'delete',
-                child: Text('Delete', style: context.regular12.copyWith(color: AppColors.error)),
+                child: Text(t.common.delete, style: context.regular12.copyWith(color: AppColors.error)),
               ),
             ],
           ),

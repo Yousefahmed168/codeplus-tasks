@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../../core/widgets/double_back_to_exit.dart';
 import '../../../../i18n/strings.g.dart';
 import 'admin_appointments_screen.dart';
 import 'admin_doctors_screen.dart';
@@ -24,7 +25,15 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DoubleBackToExit(
+      onPopIntercept: () {
+        if (_currentTab != 0) {
+          setState(() => _currentTab = 0);
+          return true;
+        }
+        return false;
+      },
+      child: Scaffold(
       backgroundColor: AppColors.background,
       body: IndexedStack(index: _currentTab, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
@@ -50,6 +59,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 }

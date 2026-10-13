@@ -3,8 +3,8 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
 
 class DoctorInfoCard extends StatelessWidget {
   const DoctorInfoCard({
@@ -31,14 +31,14 @@ class DoctorInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 12,
+            blurRadius: 12.r,
             offset: const Offset(0, 4),
           ),
         ],
@@ -51,32 +51,32 @@ class DoctorInfoCard extends StatelessWidget {
             children: [
               // Doctor photo
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 child: imagePath.startsWith('http')
                     ? CachedNetworkImage(
                         imageUrl: imagePath,
-                        width: 80,
-                        height: 80,
+                        width: 80.r,
+                        height: 80.r,
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) => Icon(
                           Icons.person,
-                          size: 50,
+                          size: 50.r,
                           color: AppColors.primary,
                         ),
                       )
                     : Image.asset(
                         imagePath,
-                        width: 50,
-                        height: 50,
+                        width: 80.r,
+                        height: 80.r,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Icon(
                           Icons.person,
-                          size: 50,
+                          size: 50.r,
                           color: AppColors.primary,
                         ),
                       ),
               ),
-              Gap(12),
+              12.horizontalSpace,
 
               // Info
               Expanded(
@@ -84,9 +84,9 @@ class DoctorInfoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(name, style: context.bold18.textPrimary),
-                    Gap(4),
+                    4.verticalSpace,
                     Text(specialty, style: context.regular14.textSecondary),
-                    Gap(8),
+                    8.verticalSpace,
                     // Stars
                     Row(
                       children: List.generate(
@@ -95,12 +95,12 @@ class DoctorInfoCard extends StatelessWidget {
                           i < rating
                               ? Icons.star_rounded
                               : Icons.star_border_rounded,
-                          size: 20,
+                          size: 20.r,
                           color: AppColors.star,
                         ),
                       ),
                     ),
-                    Gap(4),
+                    4.verticalSpace,
                     Text(
                       t.doctorDetails.perHour(
                         price: hourlyRate.toStringAsFixed(2),
@@ -117,13 +117,13 @@ class DoctorInfoCard extends StatelessWidget {
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: isFavorite ? AppColors.error : AppColors.textHint,
-                  size: 24,
+                  size: 24.r,
                 ),
               ),
             ],
           ),
 
-          Gap(12),
+          12.verticalSpace,
 
           // Book Now button
           MainButton(

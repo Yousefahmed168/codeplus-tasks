@@ -2,6 +2,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_text_form_field.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../pages/drawer_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/colors.dart';
@@ -50,11 +51,11 @@ class HomeHeader extends StatelessWidget {
             // Top curved green container
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 50,
-                bottom: 45,
+              padding: EdgeInsets.only(
+                left: 20.w,
+                right: 20.w,
+                top: 50.h,
+                bottom: 45.h,
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -65,9 +66,9 @@ class HomeHeader extends StatelessWidget {
                     AppColors.primary.withValues(alpha: 0.7),
                   ],
                 ),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(24),
-                  bottomRight: Radius.circular(24),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(24.r),
+                  bottomRight: Radius.circular(24.r),
                 ),
               ),
               child: Row(
@@ -79,13 +80,13 @@ class HomeHeader extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () => DrawerScreen.of(context)?.toggleDrawer(),
-                        child: const Icon(
+                        child: Icon(
                           Icons.menu_rounded,
-                          color: Colors.white,
-                          size: 28,
+                          color: AppColors.textOnPrimary,
+                          size: 28.r,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      12.horizontalSpace,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -95,8 +96,7 @@ class HomeHeader extends StatelessWidget {
                                 ? 'Hello, $firstName 👋'
                                 : t.home.findYourDoctor,
                             style: context.bold24.copyWith(
-                              color: Colors.white,
-                              fontSize: 22,
+                              color: AppColors.textOnPrimary,
                             ),
                           ),
                         ],
@@ -107,11 +107,11 @@ class HomeHeader extends StatelessWidget {
                   GestureDetector(
                     onTap: onAvatarTap,
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: 48.r,
+                      height: 48.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(color: AppColors.textOnPrimary, width: 2.w),
                       ),
                       child: ClipOval(
                         child: hasImage && imageUrl!.isNotEmpty
@@ -119,11 +119,11 @@ class HomeHeader extends StatelessWidget {
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
                                 placeholder: (_, _) => Container(
-                                  color: Colors.white.withValues(alpha: 0.3),
-                                  child: const Icon(
+                                  color: AppColors.textOnPrimary.withValues(alpha: 0.3),
+                                  child: Icon(
                                     Icons.person_rounded,
-                                    color: Colors.white,
-                                    size: 26,
+                                    color: AppColors.textOnPrimary,
+                                    size: 26.r,
                                   ),
                                 ),
                               )
@@ -137,22 +137,22 @@ class HomeHeader extends StatelessWidget {
 
             // Floating Search Bar
             Positioned(
-              left: 20,
-              right: 20,
-              bottom: -24,
+              left: 20.w,
+              right: 20.w,
+              bottom: -24.h,
               child: CustomTextFormField(
                 suffixIcon: GestureDetector(
                   onTap: onClearSearch,
                   child: Icon(
                     Icons.close_rounded,
                     color: AppColors.textSecondary,
-                    size: 20,
+                    size: 20.r,
                   ),
                 ),
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search_rounded,
                   color: AppColors.success,
-                  size: 16,
+                  size: 16.r,
                 ),
                 controller: searchController,
                 onChange: onSearchChanged,

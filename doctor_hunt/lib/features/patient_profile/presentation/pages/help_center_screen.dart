@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
@@ -29,10 +29,10 @@ class HelpCenterScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leadingWidth: 70,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: CustomBackButton(),
+        leadingWidth: 70.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const CustomBackButton(),
         ),
         title: Text(
           t.helpCenter.title,
@@ -43,22 +43,22 @@ class HelpCenterScreen extends StatelessWidget {
       body: Stack(
         children: [
           ListView(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.r),
             children: [
               // Header Card
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 18,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 18.h,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(12.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+                      color: AppColors.textPrimary.withValues(alpha: 0.03),
+                      blurRadius: 8.r,
+                      offset: Offset(0, 2.h),
                     ),
                   ],
                 ),
@@ -67,35 +67,35 @@ class HelpCenterScreen extends StatelessWidget {
                   style: context.medium16.copyWith(color: AppColors.primary),
                 ),
               ),
-              const Gap(16),
+              16.verticalSpace,
 
               // Issues list
               ...issues.map(
                 (issue) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: 12.h),
                   child: InkWell(
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Selected: $issue'),
+                          content: Text(t.helpCenter.selectedIssue(issue: issue)),
                           backgroundColor: AppColors.primary,
                         ),
                       );
                     },
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 16.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.02),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
+                            color: AppColors.textPrimary.withValues(alpha: 0.02),
+                            blurRadius: 6.r,
+                            offset: Offset(0, 2.h),
                           ),
                         ],
                       ),
@@ -110,10 +110,10 @@ class HelpCenterScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const Icon(
+                          Icon(
                             Icons.chevron_right_rounded,
                             color: AppColors.helpText,
-                            size: 22,
+                            size: 22.r,
                           ),
                         ],
                       ),
@@ -121,7 +121,7 @@ class HelpCenterScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Gap(32),
+              32.verticalSpace,
             ],
           ),
           // Subtle bottom teal gradient decorative flare matching 
@@ -129,7 +129,7 @@ class HelpCenterScreen extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            height: 100,
+            height: 100.h,
             child: IgnorePointer(
               child: Container(
                 decoration: BoxDecoration(
@@ -138,7 +138,7 @@ class HelpCenterScreen extends StatelessWidget {
                     end: Alignment.topCenter,
                     colors: [
                       AppColors.primary.withValues(alpha: 0.12),
-                      Colors.white.withValues(alpha: 0.0),
+                      AppColors.surface.withValues(alpha: 0.0),
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -55,8 +56,8 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(18),
-              child: SvgPicture.asset(AppImages.logo, width: 56, height: 56),
+              padding: EdgeInsets.all(18.r),
+              child: SvgPicture.asset(AppImages.logo, width: 56.r, height: 56.r),
             ),
             Text(t.common.appName, style: context.bold24.textPrimary),
           ],

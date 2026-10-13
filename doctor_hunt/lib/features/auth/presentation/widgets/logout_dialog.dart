@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
@@ -17,11 +18,11 @@ class LogoutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       backgroundColor: AppColors.surface,
       elevation: 8,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,12 +31,12 @@ class LogoutDialog extends StatelessWidget {
               t.logoutDialog.title,
               style: context.bold20.textPrimary,
             ),
-            const SizedBox(height: 12),
+            12.verticalSpace,
             Text(
               t.logoutDialog.confirmMessage,
               style: context.regular14.textSecondary,
             ),
-            const SizedBox(height: 24),
+            24.verticalSpace,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -47,7 +48,7 @@ class LogoutDialog extends StatelessWidget {
                   ),
                   child: Text(t.common.cancel),
                 ),
-                const SizedBox(width: 8),
+                8.horizontalSpace,
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   style: TextButton.styleFrom(

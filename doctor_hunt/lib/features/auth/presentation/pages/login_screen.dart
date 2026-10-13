@@ -1,8 +1,8 @@
 import '../../../../core/widgets/password_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -68,12 +68,12 @@ class _LoginScreenState extends State<LoginScreen> {
           final isLoading = state is AuthLoadingState;
           return SafeArea(
             child: Container(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.r),
               child: Form(
                 key: _formKey,
                 child: ListView(
                   children: [
-                    const Gap(3),
+                    3.verticalSpace,
                     // Back button
                     Align(
                       alignment: Alignment.centerLeft,
@@ -81,19 +81,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () => context.go(AppRoutes.role),
                       ),
                     ),
-                    const Gap(10),
+                    10.verticalSpace,
                     Text(
                       t.auth.login.title,
                       style: context.bold24.textPrimary,
                       textAlign: TextAlign.center,
                     ),
-                    const Gap(12),
+                    12.verticalSpace,
                     Text(
                       t.auth.login.subtitle,
                       style: context.regular14.textSecondary,
                       textAlign: TextAlign.center,
                     ),
-                    const Gap(70),
+                    70.verticalSpace,
                     Row(
                       children: [
                         Expanded(
@@ -101,8 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             label: t.common.google,
                             icon: SvgPicture.asset(
                               AppImages.google,
-                              width: 20,
-                              height: 20,
+                              width: 20.r,
+                              height: 20.r,
                             ),
                             onTap: isLoading
                                 ? () {}
@@ -111,31 +111,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .loginWithGoogle(),
                           ),
                         ),
-                        const Gap(12),
+                        12.horizontalSpace,
                         Expanded(
                           child: SocialButton(
                             label: t.common.facebook,
                             icon: SvgPicture.asset(
                               AppImages.facebook,
-                              width: 20,
-                              height: 20,
+                              width: 20.r,
+                              height: 20.r,
                             ),
                             onTap: () {},
                           ),
                         ),
                       ],
                     ),
-                    const Gap(28),
+                    28.verticalSpace,
                     CustomTextFormField(
                       textInputAction: TextInputAction.next,
-
                       controller: _emailCtrl,
                       hintText: t.common.email,
                       keyboardType: TextInputType.emailAddress,
-                      suffixIcon: const Icon(
+                      suffixIcon: Icon(
                         Icons.check_circle_rounded,
                         color: AppColors.primary,
-                        size: 20,
+                        size: 20.r,
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
@@ -147,11 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-                    const Gap(16),
+                    16.verticalSpace,
                     PasswordTextFormField(
                       controller: _passwordCtrl,
                       hintText: t.common.password,
-
                       validator: (v) {
                         if (v == null || v.isEmpty) {
                           return t.common.validation.enterPassword;
@@ -162,20 +160,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-                    const Gap(28),
+                    28.verticalSpace,
                     MainButton(
                       text: isLoading
                           ? t.auth.login.loggingIn
                           : t.auth.login.submitBtn,
                       onPressed: isLoading ? null : _login,
                     ),
-                    const Gap(16),
+                    16.verticalSpace,
                     ForgotPasswordButton(
                       emailController: _emailCtrl,
                       onSend: (email) =>
                           context.read<AuthCubit>().sendPasswordResetEmail(email),
                     ),
-                    const Gap(70),
+                    70.verticalSpace,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/models/appointment_model.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/theme/style_atoms.dart';
 import '../../../core/widgets/app_background.dart';
 import '../../../core/widgets/custom_back_button.dart';
 import '../../../i18n/strings.g.dart';
@@ -40,7 +42,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             automaticallyImplyLeading: false,
             leading: widget.showBackButton
                 ? Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: EdgeInsets.only(left: 16.w),
                     child: CustomBackButton(
                       onTap: () {
                         if (context.canPop()) {
@@ -52,14 +54,10 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                     ),
                   )
                 : null,
-            leadingWidth: widget.showBackButton ? 64 : 0,
+            leadingWidth: widget.showBackButton ? 64.w : 0,
             title: Text(
               t.appointments.title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
+              style: context.bold20.textPrimary,
             ),
             centerTitle: false,
           ),
@@ -73,7 +71,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 return Center(
                   child: Text(
                     state.message,
-                    style: const TextStyle(color: AppColors.textSecondary),
+                    style: context.regular14.textSecondary,
                   ),
                 );
               }
@@ -92,24 +90,21 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                           _AppointmentList(
                             appointments: state.upcoming,
                             emptyTitle: t.appointments.noUpcoming,
-                            emptySubtitle:
-                                'Book an appointment with a doctor to see it here.',
+                            emptySubtitle: t.appointments.noUpcomingSubtitle,
                             emptyIcon: Icons.calendar_today_rounded,
                             tabIndex: 0,
                           ),
                           _AppointmentList(
                             appointments: state.completed,
                             emptyTitle: t.appointments.noCompleted,
-                            emptySubtitle:
-                                'Your completed appointments will appear here.',
+                            emptySubtitle: t.appointments.noCompletedSubtitle,
                             emptyIcon: Icons.check_circle_outline_rounded,
                             tabIndex: 1,
                           ),
                           _AppointmentList(
                             appointments: state.cancelled,
                             emptyTitle: t.appointments.noCancelled,
-                            emptySubtitle:
-                                'Your cancelled appointments will appear here.',
+                            emptySubtitle: t.appointments.noCancelledSubtitle,
                             emptyIcon: Icons.cancel_outlined,
                             tabIndex: 2,
                           ),
@@ -155,9 +150,9 @@ class _AppointmentList extends StatelessWidget {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
       itemCount: appointments.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 16),
+      separatorBuilder: (_, _) => 16.verticalSpace,
       itemBuilder: (context, index) {
         final appt = appointments[index];
         return AppointmentCard(
@@ -168,7 +163,7 @@ class _AppointmentList extends StatelessWidget {
           onViewDetails: () {
             context.push(
               AppRoutes.adminAppointmentDetails,
-              extra: appt,
+              extra: {'appointment': appt, 'isAdminView': false},
             );
           },
           onRate: appt.canReview
@@ -184,19 +179,23 @@ class _AppointmentList extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(t.appointments.cancelConfirmTitle),
         content: Text(t.appointments.cancelConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(t.common.cancel,
-                style: const TextStyle(color: AppColors.textSecondary)),
+            child: Text(
+              t.common.cancel,
+              style: context.regular14.textSecondary,
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(t.common.confirm,
-                style: const TextStyle(color: AppColors.error)),
+            child: Text(
+              t.common.confirm,
+              style: context.semiBold14.copyWith(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -209,8 +208,9 @@ class _AppointmentList extends StatelessWidget {
           SnackBar(
             content: Text(t.appointments.cancelSuccess),
             behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -231,8 +231,9 @@ class _AppointmentList extends StatelessWidget {
             content: Text(t.appointments.reviewSuccess),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppColors.primary,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }
@@ -243,8 +244,9 @@ class _AppointmentList extends StatelessWidget {
             content: Text(t.appointments.reviewFailed),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppColors.error,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
           ),
         );
       }

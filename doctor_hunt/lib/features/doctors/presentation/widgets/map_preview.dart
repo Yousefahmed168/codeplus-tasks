@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -14,14 +15,14 @@ class MapPreview extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 200,
+      height: 200.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         color: AppColors.surfaceVariant,
         border: Border.all(color: AppColors.border, width: 1),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         child: FlutterMap(
           options: MapOptions(
             initialCenter: clinicLocation,
@@ -39,11 +40,11 @@ class MapPreview extends StatelessWidget {
               markers: [
                 Marker(
                   point: clinicLocation,
-                  width: 40,
-                  height: 40,
-                  child: const Icon(
+                  width: 40.r,
+                  height: 40.r,
+                  child: Icon(
                     Icons.location_on_rounded,
-                    size: 40,
+                    size: 40.r,
                     color: AppColors.primary,
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -26,14 +26,14 @@ class DoctorProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
+            blurRadius: 10.r,
             offset: const Offset(0, 4),
           ),
         ],
@@ -43,32 +43,32 @@ class DoctorProfileHeader extends StatelessWidget {
         children: [
           // Doctor photo
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             child: imagePath.startsWith('http')
                 ? CachedNetworkImage(
                     imageUrl: imagePath,
-                    width: 80,
-                    height: 80,
+                    width: 80.r,
+                    height: 80.r,
                     fit: BoxFit.cover,
-                    errorWidget: (_, _, _) => const Icon(
+                    errorWidget: (_, _, _) => Icon(
                       Icons.person,
-                      size: 80,
+                      size: 80.r,
                       color: AppColors.primary,
                     ),
                   )
                 : Image.asset(
                     imagePath,
-                    width: 80,
-                    height: 80,
+                    width: 80.r,
+                    height: 80.r,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => const Icon(
+                    errorBuilder: (_, _, _) => Icon(
                       Icons.person,
-                      size: 80,
+                      size: 80.r,
                       color: AppColors.primary,
                     ),
                   ),
           ),
-          const Gap(12),
+          12.horizontalSpace,
 
           // Info
           Expanded(
@@ -76,9 +76,9 @@ class DoctorProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name, style: context.bold18.textPrimary),
-                const Gap(4),
+                4.verticalSpace,
                 Text(clinic, style: context.regular12.textSecondary),
-                const Gap(8),
+                8.verticalSpace,
                 // Stars
                 Row(
                   children: List.generate(
@@ -87,7 +87,7 @@ class DoctorProfileHeader extends StatelessWidget {
                       i < rating
                           ? Icons.star_rounded
                           : Icons.star_border_rounded,
-                      size: 16,
+                      size: 16.r,
                       color: AppColors.star,
                     ),
                   ),
@@ -102,7 +102,7 @@ class DoctorProfileHeader extends StatelessWidget {
             child: Icon(
               isFavorite ? Icons.favorite : Icons.favorite_border,
               color: isFavorite ? AppColors.error : AppColors.textHint,
-              size: 20,
+              size: 20.r,
             ),
           ),
         ],
