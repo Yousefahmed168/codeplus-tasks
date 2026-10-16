@@ -1,19 +1,23 @@
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/main_button.dart';
+import '../../../../core/widgets/rating_stars.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/constants/my_icons.dart';
 
+/// Header card on the doctor details screen: photo, name, specialty,
+/// rating with review count, consultation fee and the primary booking CTA.
 class DoctorInfoCard extends StatelessWidget {
   const DoctorInfoCard({
     super.key,
     required this.name,
     required this.specialty,
     required this.rating,
-    required this.hourlyRate,
+    required this.reviewsCount,
+    required this.consultationFee,
     required this.imagePath,
     this.isFavorite = false,
     this.onFavoriteToggle,
@@ -22,8 +26,9 @@ class DoctorInfoCard extends StatelessWidget {
 
   final String name;
   final String specialty;
-  final int rating;
-  final double hourlyRate;
+  final double rating;
+  final int reviewsCount;
+  final double consultationFee;
   final String imagePath;
   final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
@@ -46,11 +51,9 @@ class DoctorInfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Top: photo + info
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Doctor photo
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
                 child: imagePath.startsWith('http')
@@ -59,27 +62,17 @@ class DoctorInfoCard extends StatelessWidget {
                         width: 80.r,
                         height: 80.r,
                         fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => Icon(
-                          MyIcons.person,
-                          size: 50.r,
-                          color: AppColors.primary,
-                        ),
+                        errorWidget: (_, _, _) => _avatarPlaceholder(),
                       )
                     : Image.asset(
                         imagePath,
                         width: 80.r,
                         height: 80.r,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          MyIcons.person,
-                          size: 50.r,
-                          color: AppColors.primary,
-                        ),
+                        errorBuilder: (_, _, _) => _avatarPlaceholder(),
                       ),
               ),
               12.horizontalSpace,
-
-              // Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,31 +81,33 @@ class DoctorInfoCard extends StatelessWidget {
                     4.verticalSpace,
                     Text(specialty, style: context.regular14.textSecondary),
                     8.verticalSpace,
-                    // Stars
                     Row(
-                      children: List.generate(
-                        5,
-                        (i) => Icon(
-                          i < rating
-                              ? MyIcons.starRounded
-                              : MyIcons.starBorderRounded,
-                          size: 20.r,
-                          color: AppColors.star,
+                      children: [
+                        RatingStars(rating: rating, size: 18),
+                        6.horizontalSpace,
+                        Text(
+                          rating.toStringAsFixed(1),
+                          style: context.bold12.textPrimary,
                         ),
-                      ),
+                      ],
                     ),
-                    4.verticalSpace,
+                    2.verticalSpace,
                     Text(
-                      t.doctorDetails.perHour(
-                        price: hourlyRate.toStringAsFixed(2),
-                      ),
+                      t.doctorDetails.reviewsCount(count: reviewsCount),
+                      style: context.regular11.textSecondary,
+                    ),
+                    6.verticalSpace,
+                    Text(
+                      t.doctorDetails.consultationFee,
+                      style: context.regular11.textHint,
+                    ),
+                    Text(
+                      t.common.amount(amount: consultationFee.toStringAsFixed(2)),
                       style: context.bold16.primary,
                     ),
                   ],
                 ),
               ),
-
-              // Heart
               GestureDetector(
                 onTap: onFavoriteToggle,
                 child: Icon(
@@ -123,10 +118,7 @@ class DoctorInfoCard extends StatelessWidget {
               ),
             ],
           ),
-
           12.verticalSpace,
-
-          // Book Now button
           MainButton(
             text: t.common.bookNow,
             onPressed: onBookNow,
@@ -137,4 +129,11 @@ class DoctorInfoCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _avatarPlaceholder() => Container(
+    width: 80.r,
+    height: 80.r,
+    color: AppColors.primary.withValues(alpha: 0.1),
+    child: Icon(MyIcons.person, size: 50.r, color: AppColors.primary),
+  );
 }

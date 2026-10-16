@@ -6,10 +6,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/enums/app_language.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
-import '../../../../core/utils/constants.dart';
 import '../../../../core/models/patient_model.dart';
 import 'patient_settings_state.dart';
 
@@ -18,8 +16,7 @@ import 'patient_settings_state.dart';
 class PatientSettingsCubit extends Cubit<PatientSettingsState> {
   PatientSettingsCubit() : super(const PatientSettingsState());
 
-  /// SharedPreferences key for the notifications switch. The language
-  /// preference reuses [AppConstants.languageKey].
+  /// SharedPreferences key for the notifications switch.
   static const String notificationsKey = 'patient_notifications_enabled';
 
   final UserService _userService = sl<UserService>();
@@ -46,9 +43,6 @@ class PatientSettingsCubit extends Cubit<PatientSettingsState> {
         state.copyWith(
           notificationsEnabled:
               preferences.getBool(notificationsKey) ?? true,
-          language: AppLanguage.fromCode(
-            preferences.getString(AppConstants.languageKey),
-          ),
         ),
       );
     } catch (e) {
@@ -95,21 +89,6 @@ class PatientSettingsCubit extends Cubit<PatientSettingsState> {
       await preferences.setBool(notificationsKey, enabled);
     } catch (e) {
       debugPrint('PatientSettingsCubit: failed to save notifications: $e');
-    }
-  }
-
-  /// Persists the language choice.
-  ///
-  /// Only English ships today, so the app keeps rendering English. Once a
-  /// second locale file exists, apply the choice here:
-  /// `await LocaleSettings.setLocaleRaw(language.code)`.
-  Future<void> setLanguage(AppLanguage language) async {
-    emit(state.copyWith(language: language));
-    try {
-      final preferences = await SharedPreferences.getInstance();
-      await preferences.setString(AppConstants.languageKey, language.code);
-    } catch (e) {
-      debugPrint('PatientSettingsCubit: failed to save language: $e');
     }
   }
 

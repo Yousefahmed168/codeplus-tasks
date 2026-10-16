@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/services/appointment_service.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../i18n/strings.g.dart';
 
 class AdminAppointmentDetailsState {
   final AppointmentModel appointment;
@@ -48,6 +51,8 @@ class AdminAppointmentDetailsCubit
 
   void _subscribeToAppointment(String appointmentId) {
     if (appointmentId.isEmpty) return;
+    // Guard: never open a Firestore listener without an authenticated admin.
+    if (sl<AuthService>().currentUser == null) return;
     _subscription?.cancel();
     _subscription = _appointmentService
         .streamAppointmentById(appointmentId)
@@ -58,7 +63,8 @@ class AdminAppointmentDetailsCubit
         }
       },
       onError: (err) {
-        // Stream listener error handled gracefully without breaking UI
+        debugPrint('AdminAppointmentDetailsCubit stream error: $err');
+        emit(state.copyWith(errorMessage: t.common.errorGeneric));
       },
     );
   }

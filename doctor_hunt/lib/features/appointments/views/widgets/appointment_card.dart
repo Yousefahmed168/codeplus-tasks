@@ -9,11 +9,11 @@ import '../../../../i18n/strings.g.dart';
 import 'appointment_status_chip.dart';
 import '../../../../core/constants/my_icons.dart';
 
-class AppointmentCard extends StatefulWidget {
+class AppointmentCard extends StatelessWidget {
   final AppointmentModel appointment;
   final VoidCallback? onCancel;
   final VoidCallback? onViewDetails;
-  final void Function(double rating)? onRate;
+  final VoidCallback? onRate;
 
   const AppointmentCard({
     super.key,
@@ -23,14 +23,7 @@ class AppointmentCard extends StatefulWidget {
     this.onRate,
   });
 
-  @override
-  State<AppointmentCard> createState() => _AppointmentCardState();
-}
-
-class _AppointmentCardState extends State<AppointmentCard> {
-  double _hoverRating = 0;
-
-  AppointmentModel get appt => widget.appointment;
+  AppointmentModel get appt => appointment;
 
   @override
   Widget build(BuildContext context) {
@@ -108,12 +101,14 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 Row(
                   children: [
                     _detailItem(
+                      context,
                       MyIcons.calendarTodayRounded,
                       t.appointments.appointmentDate,
                       dateStr,
                     ),
                     20.horizontalSpace,
                     _detailItem(
+                      context,
                       MyIcons.accessTimeRounded,
                       t.appointments.appointmentTime,
                       appt.timeSlot,
@@ -124,44 +119,23 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 Row(
                   children: [
                     _detailItem(
+                      context,
                       MyIcons.personOutlineRounded,
                       t.appointments.patient,
                       appt.patientName,
                     ),
                     20.horizontalSpace,
                     _detailItem(
+                      context,
                       MyIcons.attachMoneyRounded,
                       t.appointments.consultationFee,
-                      '\$${appt.doctorFee.toStringAsFixed(2)}',
+                      t.common.amount(amount: appt.doctorFee.toStringAsFixed(2)),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-
-          //   Star rating (completed & not reviewed)
-          if (appt.status == AppointmentStatus.completed && !appt.hasReviewed)
-            Padding(
-              padding: EdgeInsets.fromLTRB(14.w, 12.h, 14.w, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(height: 1.h, color: AppColors.divider),
-                  10.verticalSpace,
-                  Text(
-                    t.appointments.tapToRate,
-                    style: context.regular12.textSecondary,
-                  ),
-                  6.verticalSpace,
-                  _StarRatingRow(
-                    rating: _hoverRating,
-                    onRatingChanged: (r) => setState(() => _hoverRating = r),
-                    onRatingSubmitted: widget.onRate,
-                  ),
-                ],
-              ),
-            ),
 
           //   Action buttons
           Padding(
@@ -172,7 +146,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                   Expanded(
                     child: _OutlinedBtn(
                       label: t.appointments.viewDetails,
-                      onTap: widget.onViewDetails,
+                      onTap: onViewDetails,
                     ),
                   ),
                   10.horizontalSpace,
@@ -180,14 +154,14 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     child: _OutlinedBtn(
                       label: t.appointments.cancelAppointment,
                       color: AppColors.error,
-                      onTap: widget.onCancel,
+                      onTap: onCancel,
                     ),
                   ),
                 ] else if (appt.status == AppointmentStatus.completed) ...[
                   Expanded(
                     child: _OutlinedBtn(
                       label: t.appointments.viewDetails,
-                      onTap: widget.onViewDetails,
+                      onTap: onViewDetails,
                     ),
                   ),
                   if (!appt.hasReviewed) ...[
@@ -195,9 +169,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     Expanded(
                       child: _FilledBtn(
                         label: t.appointments.rateDoctor,
-                        onTap: _hoverRating > 0
-                            ? () => widget.onRate?.call(_hoverRating)
-                            : null,
+                        onTap: onRate,
                       ),
                     ),
                   ],
@@ -205,7 +177,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                   Expanded(
                     child: _OutlinedBtn(
                       label: t.appointments.viewDetails,
-                      onTap: widget.onViewDetails,
+                      onTap: onViewDetails,
                     ),
                   ),
                 ],
@@ -224,7 +196,12 @@ class _AppointmentCardState extends State<AppointmentCard> {
     child: Icon(MyIcons.personRounded, color: AppColors.primary, size: 30.r),
   );
 
-  Widget _detailItem(IconData icon, String label, String value) => Expanded(
+  Widget _detailItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) => Expanded(
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,40 +225,6 @@ class _AppointmentCardState extends State<AppointmentCard> {
       ],
     ),
   );
-}
-
-class _StarRatingRow extends StatelessWidget {
-  final double rating;
-  final ValueChanged<double> onRatingChanged;
-  final void Function(double)? onRatingSubmitted;
-
-  const _StarRatingRow({
-    required this.rating,
-    required this.onRatingChanged,
-    required this.onRatingSubmitted,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(5, (i) {
-        final starValue = (i + 1).toDouble();
-        return GestureDetector(
-          onTap: () => onRatingChanged(starValue),
-          child: Padding(
-            padding: EdgeInsets.only(right: 4.w),
-            child: Icon(
-              rating >= starValue
-                  ? MyIcons.starRounded
-                  : MyIcons.starOutlineRounded,
-              color: AppColors.star,
-              size: 26.r,
-            ),
-          ),
-        );
-      }),
-    );
-  }
 }
 
 class _OutlinedBtn extends StatelessWidget {

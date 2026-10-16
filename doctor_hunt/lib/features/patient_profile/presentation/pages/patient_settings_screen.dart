@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../core/enums/app_language.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -15,7 +14,6 @@ import '../../../../core/models/patient_model.dart';
 import '../../../auth/presentation/widgets/logout_dialog.dart';
 import '../cubit/patient_settings_cubit.dart';
 import '../cubit/patient_settings_state.dart';
-import '../widgets/language_picker_sheet.dart';
 import '../../../../core/utils/snack_bar_helper.dart';
 import '../../../../core/constants/my_icons.dart';
 
@@ -113,12 +111,6 @@ class _PatientSettingsView extends StatelessWidget {
                 _SectionHeader(title: t.patientSettings.moreOptions),
                 12.verticalSpace,
                 _ValueRow(
-                  title: t.patientSettings.languages,
-                  value: _languageLabel(state.language),
-                  onTap: () => _pickLanguage(context, state.language),
-                ),
-                10.verticalSpace,
-                _ValueRow(
                   title: t.patientSettings.buildVersion,
                   value: state.appVersion,
                 ),
@@ -134,20 +126,6 @@ class _PatientSettingsView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _languageLabel(AppLanguage language) {
-    switch (language) {
-      case AppLanguage.english:
-        return t.patientSettings.languageEnglish;
-    }
-  }
-
-  Future<void> _pickLanguage(BuildContext context, AppLanguage selected) async {
-    final cubit = context.read<PatientSettingsCubit>();
-    final chosen = await LanguagePickerSheet.show(context, selected: selected);
-    if (chosen == null) return;
-    await cubit.setLanguage(chosen);
   }
 
   Future<void> _handleLogout(BuildContext context) async {
@@ -408,18 +386,16 @@ class _SwitchRow extends StatelessWidget {
   }
 }
 
-/// Title plus a read-only value; the chevron only shows when [onTap] is set.
+/// Title plus a read-only value.
 class _ValueRow extends StatelessWidget {
-  const _ValueRow({required this.title, required this.value, this.onTap});
+  const _ValueRow({required this.title, required this.value});
 
   final String title;
   final String value;
-  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return _SettingsRowShell(
-      onTap: onTap,
       child: Row(
         children: [
           Expanded(child: Text(title, style: context.medium14.textPrimary)),
@@ -433,14 +409,6 @@ class _ValueRow extends StatelessWidget {
               textAlign: TextAlign.end,
             ),
           ),
-          if (onTap != null) ...[
-            4.horizontalSpace,
-            Icon(
-              MyIcons.chevronRightRounded,
-              color: AppColors.textSecondary,
-              size: 20.r,
-            ),
-          ],
         ],
       ),
     );

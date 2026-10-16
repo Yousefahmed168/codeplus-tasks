@@ -15,16 +15,26 @@ class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {
   final PatientModel? patient;
   final List<Doctor> doctors;
+  final List<Doctor> popularDoctors;
+  final List<Doctor> topRatedDoctors;
   final Set<String> favoriteIds;
 
   const HomeLoaded({
     this.patient,
     required this.doctors,
+    required this.popularDoctors,
+    required this.topRatedDoctors,
     required this.favoriteIds,
   });
 
   @override
-  List<Object?> get props => [patient, doctors, favoriteIds];
+  List<Object?> get props => [
+    patient,
+    doctors,
+    popularDoctors,
+    topRatedDoctors,
+    favoriteIds,
+  ];
 }
 
 class HomeError extends HomeState {

@@ -129,6 +129,27 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            4.h.verticalSpace,
+                            Row(
+                              children: [
+                                const Icon(
+                                  MyIcons.phoneRounded,
+                                  size: 14,
+                                  color: AppColors.textSecondary,
+                                ),
+                                6.w.horizontalSpace,
+                                Expanded(
+                                  child: Text(
+                                    (appt.patientPhone == null ||
+                                            appt.patientPhone!.isEmpty)
+                                        ? t.common.notProvided
+                                        : appt.patientPhone!,
+                                    style: context.regular12.textSecondary,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -229,7 +250,9 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
                         icon: MyIcons.fee,
                         label: t.admin.appointments.consultationFee
                             .toUpperCase(),
-                        value: '\$${appt.doctorFee.toStringAsFixed(2)}',
+                        value: t.common.amount(
+                          amount: appt.doctorFee.toStringAsFixed(2),
+                        ),
                       ),
                       10.h.verticalSpace,
                       _buildDetailTile(

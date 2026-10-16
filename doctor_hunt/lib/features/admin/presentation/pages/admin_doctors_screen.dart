@@ -1,5 +1,6 @@
 import '../../../../core/widgets/widgets.dart';
 
+import '../../../../core/constants/specializations.dart';
 import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,14 +43,18 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
     super.dispose();
   }
 
-  void _showDeleteDialog(Doctor doctor) {
+  void _showStatusDialog(Doctor doctor) {
+    final willActivate = !doctor.isActive;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: Text(t.admin.doctors.deleteTitle),
+        title: Text(t.admin.doctors.statusConfirmTitle),
         content: Text(
-          t.admin.doctors.deleteConfirm.replaceAll('@name', doctor.name ?? ''),
+          (willActivate
+                  ? t.admin.doctors.activateConfirm
+                  : t.admin.doctors.deactivateConfirm)
+              .replaceAll('@name', doctor.name ?? ''),
         ),
         actions: [
           TextButton(
@@ -58,23 +63,33 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
           ),
           TextButton(
             onPressed: () async {
+              final uid = doctor.uid;
               Navigator.pop(ctx);
-              if (doctor.uid != null) {
-                await sl<AdminService>().deleteDoctor(doctor.uid!);
+              if (uid == null) return;
+              try {
+                await sl<AdminService>().toggleDoctorStatus(uid, willActivate);
                 if (mounted) {
-                  SnackBarHelper.showError(
+                  SnackBarHelper.show(
                     context,
-                    t.admin.doctors.deleted.replaceAll(
-                      '@name',
-                      doctor.name ?? '',
-                    ),
+                    (willActivate
+                            ? t.admin.doctors.activated
+                            : t.admin.doctors.deactivated)
+                        .replaceAll('@name', doctor.name ?? ''),
                   );
+                }
+              } catch (_) {
+                if (mounted) {
+                  SnackBarHelper.showError(context, t.common.errorGeneric);
                 }
               }
             },
             child: Text(
-              t.common.delete,
-              style: context.semiBold14.copyWith(color: AppColors.error),
+              willActivate
+                  ? t.admin.doctors.activate
+                  : t.admin.doctors.deactivate,
+              style: context.semiBold14.copyWith(
+                color: willActivate ? AppColors.success : AppColors.error,
+              ),
             ),
           ),
         ],
@@ -126,6 +141,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
         }
 
         final allDoctors = snapshot.data ?? [];
+        final allLabel = t.admin.doctors.allSpecialties;
         final filteredDoctors = allDoctors.where((d) {
           final matchesSearch =
               _searchQuery.isEmpty ||
@@ -138,7 +154,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
 
           final matchesCategory =
               _selectedCategory == null ||
-              _selectedCategory == 'All' ||
+              _selectedCategory == allLabel ||
               (d.specialization ?? '').toLowerCase().contains(
                 _selectedCategory!.toLowerCase(),
               );
@@ -151,15 +167,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
             .where((doctor) => doctor.isActive)
             .length;
 
-        final categoryPills = [
-          'All',
-          'Dentist',
-          'Cardiologist',
-          'Pediatrician',
-          'Neurologist',
-          'General Practitioner',
-          'Orthopedist',
-        ];
+        final categoryPills = [allLabel, ...medicalSpecializations];
 
         return ListView(
           padding: EdgeInsets.all(16.r),
@@ -185,11 +193,11 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   final cat = categoryPills[index];
                   final isSelected =
                       (_selectedCategory == cat) ||
-                      (_selectedCategory == null && cat == 'All');
+                      (_selectedCategory == null && cat == allLabel);
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedCategory = cat == 'All' ? null : cat;
+                        _selectedCategory = cat == allLabel ? null : cat;
                       });
                     },
                     child: AnimatedContainer(
@@ -275,7 +283,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                       context.push(AppRoutes.adminDoctorDetails, extra: doctor),
                   child: AdminDoctorCard(
                     doctor: doctor,
-                    onDelete: () => _showDeleteDialog(doctor),
+                    onToggleStatus: () => _showStatusDialog(doctor),
                     onEdit: () => context.push(
                       AppRoutes.adminDoctorDetails,
                       extra: doctor,

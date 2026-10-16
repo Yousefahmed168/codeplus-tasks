@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/constants.dart';
@@ -24,7 +25,11 @@ import '../../../../core/constants/my_icons.dart';
 /// Patient profile screen, opened from the drawer, the home header avatar or
 /// the settings quick information card.
 class PatientProfileScreen extends StatefulWidget {
-  const PatientProfileScreen({super.key});
+  const PatientProfileScreen({super.key, this.isTab = false});
+
+  /// When true the screen is the "Profile" bottom-navigation tab: the back
+  /// button is replaced by a settings shortcut and saving keeps the user here.
+  final bool isTab;
 
   @override
   State<PatientProfileScreen> createState() => _PatientProfileScreenState();
@@ -38,6 +43,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
 
   ProfileField _editingField = ProfileField.none;
   String? _localImagePath;
+  String? _dob;
+  int? _gender;
   bool _isPopulated = false;
 
   @override
@@ -59,6 +66,69 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   void _populate(PatientModel patient) {
     _nameCtrl.text = patient.name ?? '';
     _phoneCtrl.text = patient.phone ?? '';
+    _dob = patient.dob;
+    _gender = patient.gender;
+  }
+
+  Future<void> _pickDob() async {
+    FocusScope.of(context).unfocus();
+    final now = DateTime.now();
+    final initial = DateTime.tryParse(_dob ?? '') ?? DateTime(now.year - 25);
+    final firstDate = DateTime(1900);
+    final lastDate = DateTime(now.year - 1, 12, 31);
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial.isAfter(lastDate) ? lastDate : initial,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      helpText: t.patientProfile.dateOfBirth,
+    );
+    if (picked == null || !mounted) return;
+
+    final month = picked.month.toString().padLeft(2, '0');
+    final day = picked.day.toString().padLeft(2, '0');
+    setState(() {
+      _dob = '${picked.year}-$month-$day';
+      _editingField = ProfileField.none;
+    });
+  }
+
+  Future<void> _pickGender() async {
+    FocusScope.of(context).unfocus();
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text(t.patientProfile.male),
+              trailing: _gender == 0
+                  ? Icon(MyIcons.checkRounded, color: AppColors.primary)
+                  : null,
+              onTap: () => Navigator.of(sheetContext).pop(0),
+            ),
+            ListTile(
+              title: Text(t.patientProfile.female),
+              trailing: _gender == 1
+                  ? Icon(MyIcons.checkRounded, color: AppColors.primary)
+                  : null,
+              onTap: () => Navigator.of(sheetContext).pop(1),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (selected == null || !mounted) return;
+    setState(() {
+      _gender = selected;
+      _editingField = ProfileField.none;
+    });
   }
 
   void _startEditing(ProfileField field) {
@@ -109,6 +179,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
       currentPatient: patient,
       name: name,
       phone: phone,
+      dob: _dob,
+      gender: _gender,
       localImagePath: _localImagePath,
     );
     if (!mounted) return;
@@ -122,7 +194,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
     if (!succeeded) return;
 
     _showMessage(t.patientProfile.profileUpdated);
-    context.pop();
+    if (!widget.isTab && context.canPop()) {
+      context.pop();
+    }
   }
 
   void _showMessage(String message, {bool isError = false}) {
@@ -170,6 +244,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                         patient: patient,
                         localImagePath: _localImagePath,
                         onAvatarTap: _pickImage,
+                        isTab: widget.isTab,
+                        onSettingsTap: () =>
+                            context.push(AppRoutes.patientSettings),
                       ),
                       Expanded(
                         child: SingleChildScrollView(
@@ -191,6 +268,11 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                                   editingField: _editingField,
                                   onEditField: _startEditing,
                                   onStopEditing: _stopEditing,
+                                  email: patient.email ?? '',
+                                  dob: _dob,
+                                  gender: _gender,
+                                  onPickDob: _pickDob,
+                                  onPickGender: _pickGender,
                                 ),
                         ),
                       ),
@@ -218,11 +300,15 @@ class _ProfileHeader extends StatelessWidget {
     required this.patient,
     required this.localImagePath,
     required this.onAvatarTap,
+    required this.isTab,
+    required this.onSettingsTap,
   });
 
   final PatientModel? patient;
   final String? localImagePath;
   final VoidCallback onAvatarTap;
+  final bool isTab;
+  final VoidCallback onSettingsTap;
 
   @override
   Widget build(BuildContext context) {
@@ -243,17 +329,30 @@ class _ProfileHeader extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.center,
+          Row(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: const CustomBackButton(),
+              if (isTab)
+                SizedBox(width: 40.w)
+              else
+                const CustomBackButton(),
+              Expanded(
+                child: Text(
+                  t.patientProfile.title,
+                  textAlign: TextAlign.center,
+                  style: context.bold18.copyWith(color: AppColors.textOnPrimary),
+                ),
               ),
-              Text(
-                t.patientProfile.title,
-                style: context.bold18.copyWith(color: AppColors.textOnPrimary),
-              ),
+              if (isTab)
+                IconButton(
+                  onPressed: onSettingsTap,
+                  icon: Icon(
+                    MyIcons.settingsRounded,
+                    color: AppColors.textOnPrimary,
+                    size: 24.r,
+                  ),
+                )
+              else
+                SizedBox(width: 40.w),
             ],
           ),
           22.verticalSpace,

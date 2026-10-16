@@ -125,7 +125,9 @@ class AdminAppointmentCard extends StatelessWidget {
                         context,
                         MyIcons.attachMoneyRounded,
                         t.admin.appointments.fee,
-                        '\$${appointment.doctorFee.toStringAsFixed(2)}',
+                        t.common.amount(
+                          amount: appointment.doctorFee.toStringAsFixed(2),
+                        ),
                       ),
                     ],
                   ),

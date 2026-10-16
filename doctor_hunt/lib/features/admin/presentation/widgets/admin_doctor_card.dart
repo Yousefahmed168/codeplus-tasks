@@ -11,13 +11,13 @@ class AdminDoctorCard extends StatelessWidget {
   const AdminDoctorCard({
     super.key,
     required this.doctor,
-    required this.onDelete,
     required this.onEdit,
+    required this.onToggleStatus,
   });
 
   final Doctor doctor;
-  final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final VoidCallback onToggleStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +63,31 @@ class AdminDoctorCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dr. ${doctor.name ?? 'Unknown'}',
+                  doctor.name ?? '',
                   style: context.semiBold16.textPrimary,
                 ),
                 4.verticalSpace,
                 Text(
-                  doctor.specialization ?? 'General',
+                  doctor.specialization ?? '',
                   style: context.regular14.textSecondary,
                 ),
                 4.verticalSpace,
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withValues(alpha: 0.1),
+                    color: (doctor.isActive ? AppColors.success : AppColors.error)
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
-                    'Active',
-                    style: context.regular11.copyWith(color: AppColors.success),
+                    doctor.isActive
+                        ? t.admin.doctors.active
+                        : t.admin.doctorDetails.inactive,
+                    style: context.regular11.copyWith(
+                      color: doctor.isActive
+                          ? AppColors.success
+                          : AppColors.error,
+                    ),
                   ),
                 ),
               ],
@@ -91,13 +98,22 @@ class AdminDoctorCard extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'edit') onEdit();
-              if (value == 'delete') onDelete();
+              if (value == 'status') onToggleStatus();
             },
             itemBuilder: (context) => [
               PopupMenuItem(value: 'edit', child: Text(t.common.edit)),
               PopupMenuItem(
-                value: 'delete',
-                child: Text(t.common.delete, style: context.regular12.copyWith(color: AppColors.error)),
+                value: 'status',
+                child: Text(
+                  doctor.isActive
+                      ? t.admin.doctors.deactivate
+                      : t.admin.doctors.activate,
+                  style: context.regular12.copyWith(
+                    color: doctor.isActive
+                        ? AppColors.error
+                        : AppColors.success,
+                  ),
+                ),
               ),
             ],
           ),

@@ -11,6 +11,7 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/services/user_service.dart';
+import '../../../../core/widgets/specialty_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,7 +21,11 @@ import '../../../../i18n/strings.g.dart';
 import '../../../../core/constants/my_icons.dart';
 
 class FindDoctorScreen extends StatefulWidget {
-  const FindDoctorScreen({super.key});
+  const FindDoctorScreen({super.key, this.isTab = false});
+
+  /// When true the screen is embedded as a bottom-navigation tab: the back
+  /// button is hidden and the search field does not steal focus.
+  final bool isTab;
 
   @override
   State<FindDoctorScreen> createState() => _FindDoctorScreenState();
@@ -30,10 +35,12 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   String _searchQuery = "";
+  String? _selectedSpecialty;
 
   @override
   void initState() {
     super.initState();
+    if (widget.isTab) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -60,19 +67,30 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
-                    CustomBackButton(
-                      onTap: () {
-                        if (context.canPop()) {
-                          context.pop();
-                        } else {
-                          context.go(AppRoutes.home);
-                        }
-                      },
-                    ),
-                    12.horizontalSpace,
+                    if (!widget.isTab) ...[
+                      CustomBackButton(
+                        onTap: () {
+                          if (context.canPop()) {
+                            context.pop();
+                          } else {
+                            context.go(AppRoutes.home);
+                          }
+                        },
+                      ),
+                      12.horizontalSpace,
+                    ],
                     Text(
                       t.findDoctors.title,
                       style: context.bold20.textPrimary,
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => context.push(AppRoutes.favoriteDoctors),
+                      icon: Icon(
+                        MyIcons.favoriteRounded,
+                        color: AppColors.primary,
+                        size: 24.r,
+                      ),
                     ),
                   ],
                 ),
@@ -150,53 +168,81 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
         }
 
         final allDoctors = snapshot.data ?? [];
+        final specialties = _specialtiesOf(allDoctors);
+        final query = _searchQuery.toLowerCase();
         final results = allDoctors
             .where(
               (d) =>
-                  (d.name ?? '').toLowerCase().contains(
-                    _searchQuery.toLowerCase(),
-                  ) ||
-                  (d.specialization ?? '').toLowerCase().contains(
-                    _searchQuery.toLowerCase(),
-                  ),
+                  ((d.name ?? '').toLowerCase().contains(query) ||
+                      (d.specialization ?? '').toLowerCase().contains(query)) &&
+                  (_selectedSpecialty == null ||
+                      d.specialization == _selectedSpecialty),
             )
             .toList();
 
-        if (results.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  MyIcons.searchOffRounded,
-                  size: 64.r,
-                  color: AppColors.textHint.withValues(alpha: 0.5),
-                ),
-                16.verticalSpace,
-                Text(
-                  t.findDoctors.noDoctorsFound,
-                  style: context.bold16.textSecondary,
-                ),
-                8.verticalSpace,
-                Text(
-                  t.findDoctors.tryDifferentSearchTerm,
-                  style: context.regular14.textHint,
-                ),
-              ],
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (specialties.isNotEmpty) ...[
+              SpecialtyChips(
+                specialties: specialties,
+                selected: _selectedSpecialty,
+                allLabel: t.home.allSpecialties,
+                onSelected: (value) =>
+                    setState(() => _selectedSpecialty = value),
+              ),
+              16.verticalSpace,
+            ],
+            Expanded(
+              child: results.isEmpty
+                  ? _buildEmptyState()
+                  : ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      itemCount: results.length,
+                      separatorBuilder: (_, _) => 16.verticalSpace,
+                      itemBuilder: (context, index) {
+                        final doctor = results[index];
+                        return _buildDoctorResultCard(context, doctor);
+                      },
+                    ),
             ),
-          );
-        }
-
-        return ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          itemCount: results.length,
-          separatorBuilder: (_, _) => 16.verticalSpace,
-          itemBuilder: (context, index) {
-            final doctor = results[index];
-            return _buildDoctorResultCard(context, doctor);
-          },
+          ],
         );
       },
+    );
+  }
+
+  List<String> _specialtiesOf(List<Doctor> doctors) {
+    final set = <String>{};
+    for (final doctor in doctors) {
+      final specialty = doctor.specialization?.trim();
+      if (specialty != null && specialty.isNotEmpty) set.add(specialty);
+    }
+    return set.toList()..sort();
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            MyIcons.searchOffRounded,
+            size: 64.r,
+            color: AppColors.textHint.withValues(alpha: 0.5),
+          ),
+          16.verticalSpace,
+          Text(
+            t.findDoctors.noDoctorsFound,
+            style: context.bold16.textSecondary,
+          ),
+          8.verticalSpace,
+          Text(
+            t.findDoctors.tryDifferentSearchTerm,
+            style: context.regular14.textHint,
+          ),
+        ],
+      ),
     );
   }
 
@@ -258,18 +304,13 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    doctor.name ?? 'Unknown',
+                    doctor.name ?? '',
                     style: context.bold16.textPrimary,
                   ),
                   2.verticalSpace,
                   Text(
-                    doctor.specialization ?? 'General',
+                    doctor.specialization ?? '',
                     style: context.regular14.primary,
-                  ),
-                  4.verticalSpace,
-                  Text(
-                    t.findDoctors.tenYearsExperience,
-                    style: context.regular12.textSecondary,
                   ),
                   6.verticalSpace,
                   Row(
@@ -280,7 +321,19 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                         (doctor.rating ?? 0).toStringAsFixed(1),
                         style: context.regular12.textSecondary,
                       ),
+                      4.horizontalSpace,
+                      Text(
+                        t.home.reviewsCount(count: doctor.reviewsCount),
+                        style: context.regular12.textSecondary,
+                      ),
                     ],
+                  ),
+                  4.verticalSpace,
+                  Text(
+                    t.common.amount(
+                      amount: doctor.consultationFee.toStringAsFixed(0),
+                    ),
+                    style: context.bold12.primary,
                   ),
                 ],
               ),

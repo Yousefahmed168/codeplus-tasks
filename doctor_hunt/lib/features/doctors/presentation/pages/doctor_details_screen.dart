@@ -4,16 +4,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/widgets/custom_back_button.dart';
+import '../../../../core/utils/app_images.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/models/doctor.dart';
 import '../widgets/doctor_info_card.dart';
-import '../widgets/services_section.dart';
+import '../widgets/clinic_info_card.dart';
+import '../widgets/doctor_reviews_section.dart';
 import '../../../../core/utils/snack_bar_helper.dart';
 import '../../../../core/constants/my_icons.dart';
 
@@ -29,6 +32,7 @@ class DoctorDetailsScreen extends StatefulWidget {
 class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
   late Doctor _doctor;
   bool _isFavorite = false;
+  String _clinicLocation = '';
 
   String? get _patientUid => sl<AuthService>().currentUser?.uid;
 
@@ -37,6 +41,10 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
     super.initState();
     _doctor = widget.doctor;
     _isFavorite = _doctor.isFavorite;
+
+    sl<AdminService>().getCentralClinicLocation().then((location) {
+      if (mounted) setState(() => _clinicLocation = location);
+    });
   }
 
   Future<void> _toggleFavorite() async {
@@ -59,9 +67,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       if (wasFavorited && mounted) {
         SnackBarHelper.show(
           context,
-          t.doctorDetails.removedFromFavorites(
-            doctorName: _doctor.name ?? 'Doctor',
-          ),
+          t.doctorDetails.removedFromFavorites(doctorName: _doctor.name ?? ''),
           action: SnackBarAction(
             label: t.common.undo,
             textColor: AppColors.primary,
@@ -91,6 +97,11 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
     }
   }
 
+  String get _imagePath =>
+      (_doctor.imageUrl != null && _doctor.imageUrl!.isNotEmpty)
+      ? _doctor.imageUrl!
+      : AppImages.doctor;
+
   @override
   Widget build(BuildContext context) {
     return AppBackground(
@@ -99,7 +110,6 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Header
               16.verticalSpace,
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -133,23 +143,19 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               ),
               20.verticalSpace,
 
-              // Scrollable content
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Doctor info card
                       DoctorInfoCard(
-                        name: _doctor.name ?? 'Unknown',
-                        specialty: _doctor.specialization ?? 'General',
-                        rating: _doctor.ratingPercentage.round() > 5
-                            ? 5
-                            : _doctor.ratingPercentage.round(),
-                        hourlyRate: _doctor.consultationFee,
-                        imagePath:
-                            _doctor.imageUrl ?? 'assets/images/doctor.png',
+                        name: _doctor.name ?? '',
+                        specialty: _doctor.specialization ?? '',
+                        rating: _doctor.rating ?? 0,
+                        reviewsCount: _doctor.reviewsCount,
+                        consultationFee: _doctor.consultationFee,
+                        imagePath: _imagePath,
                         isFavorite: _isFavorite,
                         onFavoriteToggle: _toggleFavorite,
                         onBookNow: () {
@@ -158,14 +164,20 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                       ),
                       20.verticalSpace,
 
-                      // Services section
-                      ServicesSection(
-                        services: [
-                          t.doctorDetails.service1,
-                          t.doctorDetails.service2,
-                          t.doctorDetails.service3,
-                        ],
+                      ClinicInfoCard(
+                        location: _clinicLocation,
+                        workingDays: _doctor.workingDays,
+                        startTime: _doctor.startTime,
+                        endTime: _doctor.endTime,
                       ),
+                      24.verticalSpace,
+
+                      if (_doctor.uid != null)
+                        DoctorReviewsSection(
+                          doctorId: _doctor.uid!,
+                          rating: _doctor.rating ?? 0,
+                          reviewsCount: _doctor.reviewsCount,
+                        ),
                       32.verticalSpace,
                     ],
                   ),

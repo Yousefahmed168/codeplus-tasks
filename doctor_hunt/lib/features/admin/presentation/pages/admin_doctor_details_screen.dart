@@ -3,11 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../core/constants/my_icons.dart';
 
@@ -28,6 +31,60 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
   void initState() {
     super.initState();
     _doctor = widget.doctor;
+  }
+
+  Future<void> _toggleStatus() async {
+    final uid = _doctor.uid;
+    if (uid == null) return;
+    final willActivate = !_doctor.isActive;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        title: Text(t.admin.doctors.statusConfirmTitle),
+        content: Text(
+          (willActivate
+                  ? t.admin.doctors.activateConfirm
+                  : t.admin.doctors.deactivateConfirm)
+              .replaceAll('@name', _doctor.name ?? ''),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(t.common.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              willActivate
+                  ? t.admin.doctors.activate
+                  : t.admin.doctors.deactivate,
+              style: context.semiBold14.copyWith(
+                color: willActivate ? AppColors.success : AppColors.error,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+    try {
+      await sl<AdminService>().toggleDoctorStatus(uid, willActivate);
+      if (mounted) {
+        setState(() => _doctor = _doctor.copyWith(isActive: willActivate));
+        SnackBarHelper.show(
+          context,
+          (willActivate
+                  ? t.admin.doctors.activated
+                  : t.admin.doctors.deactivated)
+              .replaceAll('@name', _doctor.name ?? ''),
+        );
+      }
+    } catch (_) {
+      if (mounted) SnackBarHelper.showError(context, t.common.errorGeneric);
+    }
   }
 
   @override
@@ -81,7 +138,7 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
 
             // Doctor Name
             Text(
-              _doctor.name ?? 'Unknown Doctor',
+              _doctor.name ?? '',
               style: context.bold20.textPrimary,
             ),
             8.verticalSpace,
@@ -150,6 +207,17 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
               bgColor: AppColors.background,
               textColor: AppColors.primary,
             ),
+            16.verticalSpace,
+
+            // Status Switch (Activate / Deactivate)
+            MainButton(
+              text: _doctor.isActive
+                  ? t.admin.doctors.deactivate
+                  : t.admin.doctors.activate,
+              onPressed: _toggleStatus,
+              bgColor: _doctor.isActive ? AppColors.error : AppColors.success,
+              textColor: AppColors.textOnPrimary,
+            ),
             32.verticalSpace,
           ],
         ),
@@ -178,7 +246,7 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
           _buildInfoRow(
             icon: MyIcons.medicalServicesOutlined,
             label: t.admin.doctorDetails.specialty,
-            value: _doctor.specialization ?? 'General',
+            value: _doctor.specialization ?? '',
           ),
           Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
@@ -188,9 +256,17 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
           ),
           Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
+            icon: MyIcons.rateReviewRounded,
+            label: t.admin.doctorDetails.reviewCount,
+            value: '${_doctor.reviewsCount}',
+          ),
+          Divider(height: 32.h, color: AppColors.border),
+          _buildInfoRow(
             icon: MyIcons.attachMoney,
             label: t.admin.createDoctor.feeLabel,
-            value: '\$${_doctor.consultationFee.toStringAsFixed(2)}',
+            value: t.common.amount(
+              amount: _doctor.consultationFee.toStringAsFixed(2),
+            ),
           ),
         ],
       ),

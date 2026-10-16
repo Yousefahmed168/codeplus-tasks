@@ -1,5 +1,7 @@
-/// Available medical specializations for doctor registration.
-const List<String> specializations = [
+/// Single source of truth for the medical specialties used across the whole
+/// app (admin create/edit doctor, admin doctor filtering, and patient-side
+/// specialty filters). Never duplicate this list in a feature.
+const List<String> medicalSpecializations = [
   'Cardiologist',
   'Dermatologist',
   'Pediatrician',

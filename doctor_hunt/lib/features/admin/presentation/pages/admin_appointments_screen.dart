@@ -24,7 +24,7 @@ class AdminAppointmentsScreen extends StatefulWidget {
 }
 
 class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
-  int _selectedTab = 0; // 0: Upcoming, 1: Completed, 2: Cancelled
+  int _selectedTab = 0; // 0: All, 1: Upcoming, 2: Completed, 3: Cancelled
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +77,10 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
                 ),
                 child: Row(
                   children: [
-                    _buildTabItem(0, t.admin.appointments.upcoming),
-                    _buildTabItem(1, t.admin.appointments.completed),
-                    _buildTabItem(2, t.admin.appointments.cancelled),
+                    _buildTabItem(0, t.admin.appointments.all),
+                    _buildTabItem(1, t.admin.appointments.upcoming),
+                    _buildTabItem(2, t.admin.appointments.completed),
+                    _buildTabItem(3, t.admin.appointments.cancelled),
                   ],
                 ),
               ),
@@ -165,6 +166,8 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
           child: Center(
             child: Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: isSelected
                   ? context.semiBold14.copyWith(color: AppColors.textOnPrimary)
                   : context.regular14.textSecondary,
@@ -179,40 +182,43 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
     AdminAppointmentsLoaded state,
   ) {
     switch (_selectedTab) {
-      case 0:
-        return state.upcoming;
       case 1:
-        return state.completed;
+        return state.upcoming;
       case 2:
+        return state.completed;
+      case 3:
         return state.cancelled;
+      case 0:
       default:
-        return [];
+        return state.all;
     }
   }
 
   IconData _getEmptyIcon() {
     switch (_selectedTab) {
-      case 0:
-        return MyIcons.calendarTodayOutlined;
       case 1:
-        return MyIcons.checkCircleOutlineRounded;
-      case 2:
-        return MyIcons.cancelOutlined;
-      default:
         return MyIcons.calendarTodayOutlined;
+      case 2:
+        return MyIcons.checkCircleOutlineRounded;
+      case 3:
+        return MyIcons.cancelOutlined;
+      case 0:
+      default:
+        return MyIcons.calendarMonthRounded;
     }
   }
 
   String _getEmptyTitle() {
     switch (_selectedTab) {
-      case 0:
-        return t.admin.appointments.noUpcoming;
       case 1:
-        return t.admin.appointments.noCompleted;
+        return t.admin.appointments.noUpcoming;
       case 2:
+        return t.admin.appointments.noCompleted;
+      case 3:
         return t.admin.appointments.noCancelled;
+      case 0:
       default:
-        return '';
+        return t.admin.appointments.noAll;
     }
   }
 

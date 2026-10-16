@@ -94,7 +94,7 @@ class HomeHeader extends StatelessWidget {
                         children: [
                           Text(
                             firstName.isNotEmpty
-                                ? 'Hello, $firstName 👋'
+                                ? t.home.greeting(name: firstName)
                                 : t.home.findYourDoctor,
                             style: context.bold24.copyWith(
                               color: AppColors.textOnPrimary,

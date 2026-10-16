@@ -43,7 +43,11 @@ class UserService {
     }
   }
 
-  /// Streams all doctor documents from the doctors collection.
+  /// Streams doctor documents from the doctors collection.
+  ///
+  /// Only doctors with `isActive == true` are emitted — the patient app must
+  /// never surface deactivated doctors ([AdminService] reads the full,
+  /// unfiltered list for management).
   Stream<List<Doctor>> streamDoctors() {
     return _firestore
         .collection(AuthService.doctorsCollection)
@@ -55,6 +59,7 @@ class UserService {
                 data['uid'] = doc.id;
                 return Doctor.fromJson(data);
               })
+              .where((doctor) => doctor.isActive)
               .toList(),
         );
   }

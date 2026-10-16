@@ -4,8 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/widgets/rating_stars.dart';
 import '../../../../core/constants/my_icons.dart';
+import '../../../../i18n/strings.g.dart';
 
+/// Compact doctor summary shown at the top of the booking flow.
 class DoctorProfileHeader extends StatelessWidget {
   const DoctorProfileHeader({
     super.key,
@@ -13,13 +16,15 @@ class DoctorProfileHeader extends StatelessWidget {
     required this.clinic,
     required this.rating,
     required this.imagePath,
+    this.reviewsCount = 0,
     this.isFavorite = false,
     this.onFavoriteToggle,
   });
 
   final String name;
   final String clinic;
-  final int rating;
+  final double rating;
+  final int reviewsCount;
   final String imagePath;
   final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
@@ -42,7 +47,6 @@ class DoctorProfileHeader extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Doctor photo
           ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
             child: imagePath.startsWith('http')
@@ -51,27 +55,17 @@ class DoctorProfileHeader extends StatelessWidget {
                     width: 80.r,
                     height: 80.r,
                     fit: BoxFit.cover,
-                    errorWidget: (_, _, _) => Icon(
-                      MyIcons.person,
-                      size: 80.r,
-                      color: AppColors.primary,
-                    ),
+                    errorWidget: (_, _, _) => _avatarPlaceholder(),
                   )
                 : Image.asset(
                     imagePath,
                     width: 80.r,
                     height: 80.r,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Icon(
-                      MyIcons.person,
-                      size: 80.r,
-                      color: AppColors.primary,
-                    ),
+                    errorBuilder: (_, _, _) => _avatarPlaceholder(),
                   ),
           ),
           12.horizontalSpace,
-
-          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,24 +74,19 @@ class DoctorProfileHeader extends StatelessWidget {
                 4.verticalSpace,
                 Text(clinic, style: context.regular12.textSecondary),
                 8.verticalSpace,
-                // Stars
                 Row(
-                  children: List.generate(
-                    5,
-                    (i) => Icon(
-                      i < rating
-                          ? MyIcons.starRounded
-                          : MyIcons.starBorderRounded,
-                      size: 16.r,
-                      color: AppColors.star,
+                  children: [
+                    RatingStars(rating: rating, size: 16),
+                    6.horizontalSpace,
+                    Text(
+                      t.doctorDetails.reviewsCount(count: reviewsCount),
+                      style: context.regular11.textSecondary,
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
           ),
-
-          // Heart
           GestureDetector(
             onTap: onFavoriteToggle,
             child: Icon(
@@ -110,4 +99,11 @@ class DoctorProfileHeader extends StatelessWidget {
       ),
     );
   }
+
+  Widget _avatarPlaceholder() => Container(
+    width: 80.r,
+    height: 80.r,
+    color: AppColors.primary.withValues(alpha: 0.1),
+    child: Icon(MyIcons.person, size: 80.r, color: AppColors.primary),
+  );
 }

@@ -8,6 +8,7 @@ class Doctor {
   String? imageUrl;
   String? specialization;
   double? rating;
+  int reviewsCount;
 
   // UI specific fields with default mock values
   bool isFavorite;
@@ -18,14 +19,13 @@ class Doctor {
   int slotDuration;
   bool isActive; // Added for status toggle
 
-  double get ratingPercentage => (rating ?? 0.0) * 20.0;
-
   Doctor({
     this.uid,
     this.name,
     this.imageUrl,
     this.specialization,
     this.rating,
+    this.reviewsCount = 0,
     this.isFavorite = false,
     this.consultationFee = 0.0,
     this.workingDays = const ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -42,7 +42,7 @@ class Doctor {
       imageUrl: json['image']?.toString(),
       specialization: json['specialization']?.toString(),
       rating: _parseRating(json['rating']),
-     
+      reviewsCount: (json['reviewsCount'] as num?)?.toInt() ?? 0,
       isFavorite: json['isFavorite'] ?? false,
       consultationFee: json['consultationFee'] != null ? double.tryParse(json['consultationFee'].toString()) ?? 0.0 : 0.0,
       workingDays: json['workingDays'] != null ? List<String>.from(json['workingDays']) : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -69,6 +69,7 @@ class Doctor {
     data['image'] = imageUrl;
     data['specialization'] = specialization;
     data['rating'] = rating;
+    data['reviewsCount'] = reviewsCount;
     data['isFavorite'] = isFavorite;
     data['consultationFee'] = consultationFee;
     data['workingDays'] = workingDays;
@@ -102,6 +103,7 @@ class Doctor {
     String? imageUrl,
     String? specialization,
     double? rating,
+    int? reviewsCount,
     bool? isFavorite,
     double? consultationFee,
     List<String>? workingDays,
@@ -116,6 +118,7 @@ class Doctor {
       imageUrl: imageUrl ?? this.imageUrl,
       specialization: specialization ?? this.specialization,
       rating: rating ?? this.rating,
+      reviewsCount: reviewsCount ?? this.reviewsCount,
       isFavorite: isFavorite ?? this.isFavorite,
       consultationFee: consultationFee ?? this.consultationFee,
       workingDays: workingDays ?? this.workingDays,

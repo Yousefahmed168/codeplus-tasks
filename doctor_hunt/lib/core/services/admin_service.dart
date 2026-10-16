@@ -73,15 +73,6 @@ class AdminService {
     }
   }
 
-  Future<void> deleteDoctor(String uid) async {
-    try {
-      await _firestore.collection(doctorsCollection).doc(uid).delete();
-    } catch (e) {
-      debugPrint('AdminService.deleteDoctor error: $e');
-      rethrow;
-    }
-  }
-
   // --- Single Central Clinic Location ---
 
   Stream<String> streamCentralClinicLocation() {

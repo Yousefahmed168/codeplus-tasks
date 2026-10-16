@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/constants/my_icons.dart';
+import '../../../../i18n/strings.g.dart';
 
 class FeatureDoctorCard extends StatelessWidget {
   final String imagePath;
   final String name;
   final double rating;
+  final int reviewsCount;
   final double hourlyRate;
   final bool isFavorite;
   final VoidCallback? onFavoriteTap;
@@ -21,6 +23,7 @@ class FeatureDoctorCard extends StatelessWidget {
     required this.name,
     required this.rating,
     required this.hourlyRate,
+    this.reviewsCount = 0,
     this.isFavorite = false,
     this.onFavoriteTap,
     this.onTap,
@@ -31,7 +34,7 @@ class FeatureDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 120.w,
+        width: 135.w,
         height: 130.h,
         margin: EdgeInsets.only(right: 5.w),
         padding: EdgeInsets.all(5.r),
@@ -76,6 +79,13 @@ class FeatureDoctorCard extends StatelessWidget {
                       rating.toStringAsFixed(1),
                       style: context.bold12.copyWith(
                         color: AppColors.textPrimary,
+                      ),
+                    ),
+                    2.horizontalSpace,
+                    Text(
+                      '($reviewsCount)',
+                      style: context.regular11.copyWith(
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -124,18 +134,11 @@ class FeatureDoctorCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
 
-            // Hourly Price Rate
-            RichText(
+            // Consultation fee
+            Text(
+              t.common.amount(amount: hourlyRate.toStringAsFixed(0)),
               textAlign: TextAlign.center,
-              text: TextSpan(
-                children: [
-                  TextSpan(text: '\$ ', style: context.medium12BlobGlow),
-                  TextSpan(
-                    text: '${hourlyRate.toStringAsFixed(2)}/ hr',
-                    style: context.medium11,
-                  ),
-                ],
-              ),
+              style: context.bold12.primary,
             ),
           ],
         ),

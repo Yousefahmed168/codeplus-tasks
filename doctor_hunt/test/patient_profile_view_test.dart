@@ -15,6 +15,9 @@ void main() {
     required TextEditingController phoneCtrl,
     ProfileField editingField = ProfileField.none,
     ValueChanged<ProfileField>? onEditField,
+    String email = '',
+    String? dob,
+    int? gender,
   }) {
     return PatientProfileView(
       nameCtrl: nameCtrl,
@@ -24,6 +27,11 @@ void main() {
       editingField: editingField,
       onEditField: onEditField ?? (_) {},
       onStopEditing: () {},
+      email: email,
+      dob: dob,
+      gender: gender,
+      onPickDob: () {},
+      onPickGender: () {},
     );
   }
 
@@ -42,8 +50,13 @@ void main() {
     expect(find.text('Personal information'), findsOneWidget);
     expect(find.text('Name'), findsOneWidget);
     expect(find.text('Contact Number'), findsOneWidget);
-    expect(find.text('Not provided'), findsNWidgets(2));
-    expect(find.byIcon(Icons.edit_outlined), findsNWidgets(2));
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Date of Birth'), findsOneWidget);
+    expect(find.text('Gender'), findsOneWidget);
+    // Name, phone, email, date of birth and gender are all empty.
+    expect(find.text('Not provided'), findsNWidgets(5));
+    // Email is read-only, so only four rows expose the pencil action.
+    expect(find.byIcon(Icons.edit_outlined), findsNWidgets(4));
   });
 
   testWidgets('shows the stored values once they are populated', (
@@ -55,11 +68,22 @@ void main() {
     addTearDown(phoneCtrl.dispose);
 
     await tester.pumpWidget(
-      wrap(view(nameCtrl: nameCtrl, phoneCtrl: phoneCtrl)),
+      wrap(
+        view(
+          nameCtrl: nameCtrl,
+          phoneCtrl: phoneCtrl,
+          email: 'abdullah@mail.com',
+          dob: '1995-04-12',
+          gender: 0,
+        ),
+      ),
     );
 
     expect(find.text('Abdullah Mamun'), findsOneWidget);
     expect(find.text('+8801800000000'), findsOneWidget);
+    expect(find.text('abdullah@mail.com'), findsOneWidget);
+    expect(find.text('1995-04-12'), findsOneWidget);
+    expect(find.text('Male'), findsOneWidget);
     expect(find.text('Not provided'), findsNothing);
   });
 
@@ -104,8 +128,8 @@ void main() {
       ),
     );
 
-    // Only the phone row keeps its pencil while the name row is editable.
-    expect(find.byIcon(Icons.edit_outlined), findsOneWidget);
+    // Phone, date of birth and gender keep their pencil while name is editable.
+    expect(find.byIcon(Icons.edit_outlined), findsNWidgets(3));
     expect(find.byType(TextFormField), findsOneWidget);
     expect(
       tester.widget<TextFormField>(find.byType(TextFormField)).controller,

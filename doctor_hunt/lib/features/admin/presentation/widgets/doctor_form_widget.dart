@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../../../core/constants/specializations.dart';
 import '../../../../core/widgets/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +33,6 @@ class DoctorFormWidget extends StatelessWidget {
   final String submitLabel;
   final String submittingLabel;
   final VoidCallback onSubmit;
-  final VoidCallback? onDelete; // If provided, shows delete button
 
   const DoctorFormWidget({
     super.key,
@@ -50,24 +50,12 @@ class DoctorFormWidget extends StatelessWidget {
     this.existingImageUrl,
     this.isActive,
     this.onStatusChanged,
-    this.onDelete,
   });
 
   bool get _isEditMode => isActive != null;
 
   @override
   Widget build(BuildContext context) {
-    final specialties = [
-      'Cardiologist',
-      'Dentist',
-      'Dermatologist',
-      'Neurologist',
-      'Orthopedic',
-      'Pediatrician',
-      'Psychiatrist',
-      'Surgeon',
-    ];
-
     return Form(
       key: formKey,
       child: Column(
@@ -173,7 +161,7 @@ class DoctorFormWidget extends StatelessWidget {
           CustomDropdown<String>(
             value: selectedSpecialty,
             hintText: t.admin.createDoctor.specialtyHint,
-            items: specialties,
+            items: medicalSpecializations,
             onChanged: onSpecialtyChanged,
             validator: (v) => v == null ? t.admin.createDoctor.specialtyHint : null,
           ),
@@ -257,16 +245,6 @@ class DoctorFormWidget extends StatelessWidget {
             text: isSubmitting ? submittingLabel : submitLabel,
             onPressed: isSubmitting ? null : onSubmit,
           ),
-
-          if (_isEditMode && onDelete != null) ...[
-            12.verticalSpace,
-            MainButton(
-              text: t.admin.editDoctor.deleteBtn,
-              onPressed: onDelete,
-              bgColor: AppColors.error,
-              textColor: AppColors.textOnPrimary,
-            ),
-          ],
           32.verticalSpace,
         ],
       ),

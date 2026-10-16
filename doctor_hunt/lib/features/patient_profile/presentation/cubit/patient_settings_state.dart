@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/enums/app_language.dart';
 import '../../../../core/models/patient_model.dart';
 
 /// Presentation state for the settings screen.
@@ -14,7 +13,6 @@ class PatientSettingsState extends Equatable {
     this.error,
     this.patient,
     this.notificationsEnabled = true,
-    this.language = AppLanguage.english,
     this.appVersion = '',
   });
 
@@ -32,7 +30,6 @@ class PatientSettingsState extends Equatable {
   final PatientModel? patient;
 
   final bool notificationsEnabled;
-  final AppLanguage language;
 
   /// Formatted app version, e.g. `v1.0.0+1`.
   final String appVersion;
@@ -43,7 +40,6 @@ class PatientSettingsState extends Equatable {
     String? error,
     PatientModel? patient,
     bool? notificationsEnabled,
-    AppLanguage? language,
     String? appVersion,
   }) {
     return PatientSettingsState(
@@ -52,7 +48,6 @@ class PatientSettingsState extends Equatable {
       error: error ?? this.error,
       patient: patient ?? this.patient,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      language: language ?? this.language,
       appVersion: appVersion ?? this.appVersion,
     );
   }
@@ -64,7 +59,6 @@ class PatientSettingsState extends Equatable {
     error,
     patient,
     notificationsEnabled,
-    language,
     appVersion,
   ];
 }

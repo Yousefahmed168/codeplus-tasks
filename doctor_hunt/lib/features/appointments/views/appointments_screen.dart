@@ -16,6 +16,7 @@ import 'widgets/appointment_card.dart';
 import 'widgets/appointment_empty_state.dart';
 import 'widgets/appointment_shimmer.dart';
 import 'widgets/appointment_tab_bar.dart';
+import 'widgets/rate_doctor_dialog.dart';
 import '../../../core/utils/snack_bar_helper.dart';
 import '../../../core/constants/my_icons.dart';
 
@@ -169,7 +170,7 @@ class _AppointmentList extends StatelessWidget {
             );
           },
           onRate: appt.canReview
-              ? (rating) => _submitReview(context, appt, rating)
+              ? () => _openRateDialog(context, appt)
               : null,
         );
       },
@@ -211,25 +212,33 @@ class _AppointmentList extends StatelessWidget {
     }
   }
 
-  Future<void> _submitReview(
-      BuildContext context, AppointmentModel appt, double rating) async {
-    try {
-      await context.read<AppointmentsCubit>().submitReview(
-            appointmentId: appt.id,
-            doctorId: appt.doctorId,
-            rating: rating,
-          );
-      if (context.mounted) {
-        SnackBarHelper.show(
-          context,
-          t.appointments.reviewSuccess,
-          color: AppColors.primary,
-        );
-      }
-    } catch (_) {
-      if (context.mounted) {
-        SnackBarHelper.showError(context, t.appointments.reviewFailed);
-      }
-    }
+  Future<void> _openRateDialog(
+      BuildContext context, AppointmentModel appt) async {
+    await RateDoctorDialog.show(
+      context,
+      doctorName: appt.doctorName,
+      onSubmit: (rating, comment) async {
+        try {
+          await context.read<AppointmentsCubit>().submitReview(
+                appointmentId: appt.id,
+                doctorId: appt.doctorId,
+                rating: rating,
+                comment: comment.isEmpty ? null : comment,
+              );
+          if (context.mounted) {
+            SnackBarHelper.show(
+              context,
+              t.appointments.reviewSuccess,
+              color: AppColors.primary,
+            );
+          }
+        } catch (_) {
+          if (context.mounted) {
+            SnackBarHelper.showError(context, t.appointments.reviewFailed);
+          }
+          rethrow;
+        }
+      },
+    );
   }
 }

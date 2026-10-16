@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/services/appointment_service.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../i18n/strings.g.dart';
 import 'admin_appointments_state.dart';
 
 class AdminAppointmentsCubit extends Cubit<AdminAppointmentsState> {
@@ -13,6 +16,14 @@ class AdminAppointmentsCubit extends Cubit<AdminAppointmentsState> {
   StreamSubscription<List<AppointmentModel>>? _subscription;
 
   void loadAppointments() {
+    // Guard: never open a Firestore listener without an authenticated admin.
+    if (sl<AuthService>().currentUser == null) {
+      _subscription?.cancel();
+      _subscription = null;
+      emit(AdminAppointmentsError(t.common.errorGeneric));
+      return;
+    }
+
     emit(AdminAppointmentsLoading());
 
     _subscription?.cancel();
@@ -31,12 +42,16 @@ class AdminAppointmentsCubit extends Cubit<AdminAppointmentsState> {
             .toList();
 
         emit(AdminAppointmentsLoaded(
+          all: list,
           upcoming: upcoming,
           completed: completed,
           cancelled: cancelled,
         ));
       },
-      onError: (e) => emit(AdminAppointmentsError(e.toString())),
+      onError: (e) {
+        debugPrint('AdminAppointmentsCubit stream error: $e');
+        emit(AdminAppointmentsError(t.common.errorGeneric));
+      },
     );
   }
 

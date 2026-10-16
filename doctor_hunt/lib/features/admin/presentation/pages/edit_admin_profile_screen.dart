@@ -238,14 +238,14 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  t.admin.createDoctor.addressLabel.toUpperCase(),
+                  t.admin.editProfile.clinicLocation,
                   style: context.semiBold12.textSecondary,
                 ),
               ),
               8.verticalSpace,
               CustomTextFormField(
                 controller: _locationCtrl,
-                hintText: t.admin.createDoctor.addressHint,
+                hintText: t.admin.editProfile.clinicLocationHint,
                 prefixIcon: Icon(
                   MyIcons.locationOnOutlined,
                   color: AppColors.textHint,
@@ -253,7 +253,9 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                 ),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
-                    return t.common.validation.fieldRequired(field: t.admin.createDoctor.addressLabel);
+                    return t.common.validation.fieldRequired(
+                      field: t.admin.editProfile.clinicLocation,
+                    );
                   }
                   return null;
                 },

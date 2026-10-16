@@ -7,13 +7,13 @@ import '../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/constants/my_icons.dart';
 
-/// The editable field of the profile screen.
+/// The inline-editable field of the profile screen.
 enum ProfileField { none, name, phone }
 
 /// Personal information card of the profile screen.
 ///
-/// Each row shows its value with a pencil action; tapping the pencil swaps the
-/// row for an inline text field so a single field is edited at a time.
+/// Name and phone are edited inline; date of birth and gender open a picker;
+/// the email is read-only because it is owned by Firebase Authentication.
 class PatientProfileView extends StatelessWidget {
   final TextEditingController nameCtrl;
   final TextEditingController phoneCtrl;
@@ -22,6 +22,12 @@ class PatientProfileView extends StatelessWidget {
   final ProfileField editingField;
   final ValueChanged<ProfileField> onEditField;
   final VoidCallback onStopEditing;
+
+  final String email;
+  final String? dob;
+  final int? gender;
+  final VoidCallback onPickDob;
+  final VoidCallback onPickGender;
 
   const PatientProfileView({
     super.key,
@@ -32,7 +38,23 @@ class PatientProfileView extends StatelessWidget {
     required this.editingField,
     required this.onEditField,
     required this.onStopEditing,
+    required this.email,
+    required this.dob,
+    required this.gender,
+    required this.onPickDob,
+    required this.onPickGender,
   });
+
+  String get _genderLabel {
+    switch (gender) {
+      case 0:
+        return t.patientProfile.male;
+      case 1:
+        return t.patientProfile.female;
+      default:
+        return t.common.notProvided;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +95,7 @@ class PatientProfileView extends StatelessWidget {
                       onStopEditing: onStopEditing,
                       textInputAction: TextInputAction.next,
                     ),
-                    Divider(
-                      height: 1.h,
-                      indent: 16.w,
-                      endIndent: 16.w,
-                      color: AppColors.divider,
-                    ),
+                    const _RowDivider(),
                     _EditableInfoRow(
                       label: t.patientProfile.contactNumber,
                       controller: phoneCtrl,
@@ -89,6 +106,25 @@ class PatientProfileView extends StatelessWidget {
                       keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.done,
                     ),
+                    const _RowDivider(),
+                    _ReadOnlyInfoRow(
+                      label: t.common.email,
+                      value: email.isEmpty ? t.common.notProvided : email,
+                    ),
+                    const _RowDivider(),
+                    _PickerInfoRow(
+                      label: t.patientProfile.dateOfBirth,
+                      value: (dob == null || dob!.isEmpty)
+                          ? t.common.notProvided
+                          : dob!,
+                      onTap: onPickDob,
+                    ),
+                    const _RowDivider(),
+                    _PickerInfoRow(
+                      label: t.patientProfile.gender,
+                      value: _genderLabel,
+                      onTap: onPickGender,
+                    ),
                   ],
                 ),
               ),
@@ -98,6 +134,18 @@ class PatientProfileView extends StatelessWidget {
       ),
     );
   }
+}
+
+class _RowDivider extends StatelessWidget {
+  const _RowDivider();
+
+  @override
+  Widget build(BuildContext context) => Divider(
+        height: 1.h,
+        indent: 16.w,
+        endIndent: 16.w,
+        color: AppColors.divider,
+      );
 }
 
 class _EditableInfoRow extends StatelessWidget {
@@ -156,28 +204,83 @@ class _EditableInfoRow extends StatelessWidget {
     return InkWell(
       onTap: onEdit,
       borderRadius: BorderRadius.circular(16.r),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: context.regular12.textSecondary,
-                  ),
-                  4.verticalSpace,
-                  Text(
-                    value.isEmpty ? t.common.notProvided : value,
-                    style: context.medium16.textPrimary,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
+      child: _InfoRowBody(
+        label: label,
+        value: value.isEmpty ? t.common.notProvided : value,
+        showEditIcon: true,
+      ),
+    );
+  }
+}
+
+/// Read-only row (no pencil action).
+class _ReadOnlyInfoRow extends StatelessWidget {
+  const _ReadOnlyInfoRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return _InfoRowBody(label: label, value: value, showEditIcon: false);
+  }
+}
+
+/// Row whose value is chosen through a picker rather than typed.
+class _PickerInfoRow extends StatelessWidget {
+  const _PickerInfoRow({
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16.r),
+      child: _InfoRowBody(label: label, value: value, showEditIcon: true),
+    );
+  }
+}
+
+class _InfoRowBody extends StatelessWidget {
+  const _InfoRowBody({
+    required this.label,
+    required this.value,
+    required this.showEditIcon,
+  });
+
+  final String label;
+  final String value;
+  final bool showEditIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: context.regular12.textSecondary),
+                4.verticalSpace,
+                Text(
+                  value,
+                  style: context.medium16.textPrimary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
+          ),
+          if (showEditIcon) ...[
             8.horizontalSpace,
             Icon(
               MyIcons.editOutlined,
@@ -185,7 +288,7 @@ class _EditableInfoRow extends StatelessWidget {
               size: 20.r,
             ),
           ],
-        ),
+        ],
       ),
     );
   }

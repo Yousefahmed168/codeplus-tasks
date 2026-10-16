@@ -2,16 +2,14 @@ import '../widgets/doctor_profile_header.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_back_button.dart';
-import '../widgets/appointment_success_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/models/appointment_model.dart';
+import '../../../../core/models/booking_draft.dart';
 import '../../../../core/services/admin_service.dart';
-import '../../../../core/services/appointment_service.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/theme/colors.dart';
@@ -22,6 +20,7 @@ import '../../../../core/widgets/main_button.dart';
 import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/utils/app_images.dart';
 
 class SelectTimeScreen extends StatefulWidget {
   const SelectTimeScreen({super.key, required this.doctor});
@@ -50,8 +49,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   late List<DateTime> _availableDates;
   DateTime? _selectedDate;
   String? _selectedTime;
-  String _clinicLocation = 'Central Clinic';
-  bool _isBooking = false;
+  String _clinicLocation = '';
   bool _isFavorite = false;
 
   @override
@@ -188,11 +186,12 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
               children: [
                 16.verticalSpace,
                 DoctorProfileHeader(
-                  name: widget.doctor.name ?? 'Unknown',
+                  name: widget.doctor.name ?? '',
                   clinic: _clinicLocation,
-                  rating: widget.doctor.ratingPercentage.toInt(),
+                  rating: widget.doctor.rating ?? 0,
+                  reviewsCount: widget.doctor.reviewsCount,
                   imagePath:
-                      widget.doctor.imageUrl ?? 'assets/images/doctor.png',
+                      widget.doctor.imageUrl ?? AppImages.doctor,
                   isFavorite: _isFavorite,
                   onFavoriteToggle: () async {
                     final uid = sl<AuthService>().currentUser?.uid;
@@ -347,69 +346,30 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                       32.verticalSpace,
                     ],
 
-                    // Proceed Button
+                    // Proceed to the Review step (step 3 of 4).
                     MainButton(
-                      text: _isBooking ? t.common.loading : t.selectTime.proceed,
-                      bgColor: (_selectedTime != null && !_isBooking)
+                      text: t.selectTime.proceed,
+                      bgColor: _selectedTime != null
                           ? AppColors.primary
                           : AppColors.textSecondary,
-                      onPressed: (_selectedTime != null && !_isBooking)
-                          ? () async {
-                              final currentUser = sl<AuthService>().currentUser;
-                              if (currentUser == null) {
+                      onPressed: _selectedTime != null
+                          ? () {
+                              if (sl<AuthService>().currentUser == null) {
                                 SnackBarHelper.showWarning(
                                   context,
                                   t.favorite.pleaseLogin,
                                 );
                                 return;
                               }
-
-                              setState(() => _isBooking = true);
-                              try {
-                                final appt = AppointmentModel(
-                                  id: '',
-                                  patientId: currentUser.uid,
-                                  patientName: currentUser.displayName ?? 'Patient',
-                                  patientEmail: currentUser.email ?? '',
-                                  doctorId: widget.doctor.uid ?? '',
-                                  doctorName: widget.doctor.name ?? 'Doctor',
-                                  doctorSpecialty: widget.doctor.specialization,
-                                  doctorImageUrl: widget.doctor.imageUrl,
-                                  clinicLocation: _clinicLocation,
+                              context.push(
+                                AppRoutes.reviewAppointment,
+                                extra: BookingDraft(
+                                  doctor: widget.doctor,
                                   date: _selectedDate!,
                                   timeSlot: _selectedTime!,
-                                  status: AppointmentStatus.upcoming,
-                                );
-
-                                await sl<AppointmentService>().createAppointment(appt);
-
-                                if (mounted) {
-                                  showDialog(
-                                    // ignore: use_build_context_synchronously
-                                    context: context,
-                                    builder: (context) {
-                                      return AppointmentSuccessDialog(
-                                        onDone: () {
-                                          context.go(AppRoutes.home);
-                                        },
-                                        doctorName: 'Dr. ${widget.doctor.name}',
-                                        date: DateFormat('d MMM yyyy').format(_selectedDate!),
-                                        time: _selectedTime!,
-                                        onEdit: () {
-                                          context.pop();
-                                        },
-                                      );
-                                    },
-                                  );
-                                }
-                              } catch (e) {
-                                if (mounted) {
-                                  // ignore: use_build_context_synchronously
-                                  SnackBarHelper.showError(context, '${t.common.errorGeneric}: $e');
-                                }
-                              } finally {
-                                if (mounted) setState(() => _isBooking = false);
-                              }
+                                  clinicLocation: _clinicLocation,
+                                ),
+                              );
                             }
                           : null,
                     ),

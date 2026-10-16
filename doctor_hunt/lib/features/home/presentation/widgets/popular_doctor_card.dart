@@ -4,21 +4,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/constants/my_icons.dart';
+import '../../../../i18n/strings.g.dart';
 
+/// Horizontal doctor card used by the Home "Popular Doctors" section.
+///
+/// Shows image, name, specialty, rating & review count, consultation fee and a
+/// "Book Now" call to action (locked MVP scope).
 class PopularDoctorCard extends StatelessWidget {
   final String imagePath;
   final String name;
   final String specialty;
   final double rating;
+  final int reviewsCount;
+  final double fee;
   final VoidCallback? onTap;
+  final VoidCallback? onBookNow;
 
   const PopularDoctorCard({
     super.key,
     required this.imagePath,
     required this.name,
     required this.specialty,
-    this.rating = 5.0,
+    required this.rating,
+    this.reviewsCount = 0,
+    this.fee = 0,
     this.onTap,
+    this.onBookNow,
   });
 
   @override
@@ -26,53 +37,36 @@ class PopularDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 150.w,
-        margin: EdgeInsets.only(right: 7.w),
+        width: 170.w,
+        margin: EdgeInsets.only(right: 14.w),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textPrimary.withValues(alpha: 0.09),
+              color: AppColors.shadow.withValues(alpha: 0.08),
               blurRadius: 14.r,
               offset: Offset(0, 4.h),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Doctor Image Container
             ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(16.r),
-              ),
-              child: Container(
-                height: 140.h,
-                width: double.infinity,
-                color: AppColors.divider,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+              child: SizedBox(
+                height: 100.h,
                 child: imagePath.startsWith('http')
                     ? CachedNetworkImage(
                         imageUrl: imagePath,
                         fit: BoxFit.cover,
-                        errorWidget: (_, _, _) => Center(
-                          child: Icon(
-                            MyIcons.person,
-                            size: 60.r,
-                            color: AppColors.primary,
-                          ),
-                        ),
+                        errorWidget: (_, _, _) => _fallback(),
                       )
                     : Image.asset(
                         imagePath,
-                        fit: BoxFit.fill,
-                        errorBuilder: (_, _, _) => Center(
-                          child: Icon(
-                            MyIcons.person,
-                            size: 50.r,
-                            color: AppColors.primary,
-                          ),
-                        ),
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) => _fallback(),
                       ),
               ),
             ),
@@ -84,7 +78,6 @@ class PopularDoctorCard extends StatelessWidget {
                     name,
                     style: context.semiBold14.copyWith(
                       color: AppColors.textPrimary,
-                      fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
@@ -93,28 +86,58 @@ class PopularDoctorCard extends StatelessWidget {
                   2.verticalSpace,
                   Text(
                     specialty,
-                    style: context.regular12.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+                    style: context.regular12.textSecondary,
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   6.verticalSpace,
-                  // Rating Stars
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return Icon(
-                        index < rating.floor()
-                            ? MyIcons.starRounded
-                            : (index < rating
-                                  ? MyIcons.starHalfRounded
-                                  : MyIcons.starOutlineRounded),
-                        color: AppColors.star,
+                    children: [
+                      Icon(
+                        MyIcons.starRounded,
                         size: 14.r,
-                      );
-                    }),
+                        color: AppColors.star,
+                      ),
+                      2.horizontalSpace,
+                      Text(
+                        rating.toStringAsFixed(1),
+                        style: context.bold12.textPrimary,
+                      ),
+                      4.horizontalSpace,
+                      Flexible(
+                        child: Text(
+                          t.home.reviewsCount(count: reviewsCount),
+                          style: context.regular11.textSecondary,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  6.verticalSpace,
+                  Text(
+                    t.common.amount(amount: fee.toStringAsFixed(0)),
+                    style: context.bold12.primary,
+                  ),
+                  8.verticalSpace,
+                  GestureDetector(
+                    onTap: onBookNow,
+                    child: Container(
+                      height: 32.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Text(
+                        t.home.bookNow,
+                        style: context.semiBold12.copyWith(
+                          color: AppColors.textOnPrimary,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -124,4 +147,11 @@ class PopularDoctorCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _fallback() => Container(
+        color: AppColors.divider,
+        child: Center(
+          child: Icon(MyIcons.person, size: 48.r, color: AppColors.primary),
+        ),
+      );
 }

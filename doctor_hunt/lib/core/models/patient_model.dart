@@ -1,7 +1,7 @@
 class PatientModel {
   String? name;
   String? image;
-  String? age;
+  String? dob;
   String? email;
   String? phone;
   int? gender;
@@ -12,7 +12,7 @@ class PatientModel {
   PatientModel({
     this.name,
     this.image,
-    this.age,
+    this.dob,
     this.email,
     this.phone,
     this.bio,
@@ -24,7 +24,7 @@ class PatientModel {
   PatientModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     image = json['image'];
-    age = json['age'];
+    dob = json['dob'];
     email = json['email'];
     phone = json['phone'];
     bio = json['bio'];
@@ -37,7 +37,7 @@ class PatientModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['image'] = image;
-    data['age'] = age;
+    data['dob'] = dob;
     data['email'] = email;
     data['phone'] = phone;
     data['bio'] = bio;
@@ -51,7 +51,7 @@ class PatientModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (name != null) data['name'] = name;
     if (image != null) data['image'] = image;
-    if (age != null) data['age'] = age;
+    if (dob != null) data['dob'] = dob;
     if (email != null) data['email'] = email;
     if (phone != null) data['phone'] = phone;
     if (bio != null) data['bio'] = bio;

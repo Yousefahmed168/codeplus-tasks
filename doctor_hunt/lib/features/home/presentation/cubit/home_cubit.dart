@@ -63,11 +63,21 @@ class HomeCubit extends Cubit<HomeState> {
   }
   
   void _emitLoaded() {
-    emit(HomeLoaded(
-      patient: _currentPatient,
-      doctors: _currentDoctors,
-      favoriteIds: _currentFavorites,
-    ));
+    // Popular = most reviewed, Top Rated = highest rating (locked MVP scope).
+    final popular = [..._currentDoctors]
+      ..sort((a, b) => b.reviewsCount.compareTo(a.reviewsCount));
+    final topRated = [..._currentDoctors]
+      ..sort((a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0));
+
+    emit(
+      HomeLoaded(
+        patient: _currentPatient,
+        doctors: _currentDoctors,
+        popularDoctors: popular,
+        topRatedDoctors: topRated,
+        favoriteIds: _currentFavorites,
+      ),
+    );
   }
 
   Future<void> toggleFavorite(String doctorUid) async {

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/models/appointment_model.dart';
 import '../../../core/services/appointment_service.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../i18n/strings.g.dart';
 import 'appointments_state.dart';
 
 class AppointmentsCubit extends Cubit<AppointmentsState> {
@@ -16,7 +18,9 @@ class AppointmentsCubit extends Cubit<AppointmentsState> {
   void loadAppointments() {
     final patientId = sl<AuthService>().currentUser?.uid;
     if (patientId == null) {
-      emit(AppointmentsError('Not authenticated'));
+      _subscription?.cancel();
+      _subscription = null;
+      emit(AppointmentsError(t.common.errorGeneric));
       return;
     }
 
@@ -42,7 +46,10 @@ class AppointmentsCubit extends Cubit<AppointmentsState> {
           cancelled: cancelled,
         ));
       },
-      onError: (e) => emit(AppointmentsError(e.toString())),
+      onError: (e) {
+        debugPrint('AppointmentsCubit stream error: $e');
+        emit(AppointmentsError(t.common.errorGeneric));
+      },
     );
   }
 

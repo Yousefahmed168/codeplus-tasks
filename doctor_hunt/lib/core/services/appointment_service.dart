@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../models/appointment_model.dart';
+import '../models/review_model.dart';
 
 class AppointmentService {
   AppointmentService._();
@@ -56,6 +57,23 @@ class AppointmentService {
     }
   }
 
+  /// Decodes a Firestore payload into an [AppointmentModel].
+  ///
+  /// A single malformed document is skipped instead of tearing down the whole
+  /// stream, so one bad record can never blank out the patient or admin list.
+  AppointmentModel? _decodeAppointment(
+    Map<String, dynamic>? data,
+    String? id,
+  ) {
+    if (data == null) return null;
+    try {
+      return AppointmentModel.fromJson(data, id);
+    } catch (e) {
+      debugPrint('AppointmentService._decodeAppointment($id) error: $e');
+      return null;
+    }
+  }
+
   /// Stream appointments for a specific patient.
   Stream<List<AppointmentModel>> streamPatientAppointments(String patientId) {
     return _firestore
@@ -64,7 +82,8 @@ class AppointmentService {
         .snapshots()
         .map((snapshot) {
           final list = snapshot.docs
-              .map((doc) => AppointmentModel.fromJson(doc.data(), doc.id))
+              .map((doc) => _decodeAppointment(doc.data(), doc.id))
+              .whereType<AppointmentModel>()
               .toList();
           list.sort((a, b) => b.date.compareTo(a.date));
           return list;
@@ -73,14 +92,16 @@ class AppointmentService {
 
   /// Stream appointments for admin with optional status filtering.
   Stream<List<AppointmentModel>> streamAdminAppointments({AppointmentStatus? status}) {
-    Query query = _firestore.collection(appointmentsCollection);
+    Query<Map<String, dynamic>> query =
+        _firestore.collection(appointmentsCollection);
     if (status != null) {
       query = query.where('status', isEqualTo: status.toValue());
     }
 
     return query.snapshots().map((snapshot) {
       final list = snapshot.docs
-          .map((doc) => AppointmentModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+          .map((doc) => _decodeAppointment(doc.data(), doc.id))
+          .whereType<AppointmentModel>()
           .toList();
       list.sort((a, b) => b.date.compareTo(a.date));
       return list;
@@ -88,14 +109,38 @@ class AppointmentService {
   }
 
   /// Stream a single appointment by id from Firestore.
+  ///
+  /// Emits `null` when the document is missing or malformed.
   Stream<AppointmentModel?> streamAppointmentById(String appointmentId) {
     return _firestore
         .collection(appointmentsCollection)
         .doc(appointmentId)
         .snapshots()
-        .map((doc) => doc.exists && doc.data() != null
-            ? AppointmentModel.fromJson(doc.data()!, doc.id)
-            : null);
+        .map((doc) => _decodeAppointment(doc.data(), doc.id));
+  }
+
+  /// Streams the most recent reviews for a doctor, newest first.
+  ///
+  /// Ordering happens client-side so no composite Firestore index is needed.
+  Stream<List<ReviewModel>> streamReviewsForDoctor(
+    String doctorId, {
+    int limit = 20,
+  }) {
+    return _firestore
+        .collection(reviewsCollection)
+        .where('doctorId', isEqualTo: doctorId)
+        .snapshots()
+        .map((snapshot) {
+          final reviews = snapshot.docs
+              .map((doc) => ReviewModel.fromJson(doc.data(), doc.id))
+              .toList();
+          reviews.sort(
+            (a, b) => (b.createdAt ?? DateTime(0)).compareTo(
+              a.createdAt ?? DateTime(0),
+            ),
+          );
+          return reviews.take(limit).toList();
+        });
   }
 
   /// Submit a doctor review. Strictly requires appointment to be completed.
@@ -125,6 +170,7 @@ class AppointmentService {
         'appointmentId': appointmentId,
         'doctorId': doctorId,
         'patientId': patientId,
+        'patientName': appt.patientName,
         'rating': rating,
         'comment': comment?.trim() ?? '',
         'createdAt': FieldValue.serverTimestamp(),

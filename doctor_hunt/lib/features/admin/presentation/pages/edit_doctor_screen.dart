@@ -63,52 +63,6 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     }
   }
 
-  Future<void> _deleteDoctor() async {
-    if (widget.doctor.uid == null) return;
-    try {
-      await sl<AdminService>().deleteDoctor(widget.doctor.uid!);
-      if (mounted) {
-        SnackBarHelper.showError(context, t.admin.editDoctor.deletedSuccess);
-        // Pop back to list
-        context.pop();
-        context.pop(); 
-      }
-    } catch (e) {
-      if (mounted) {
-        SnackBarHelper.showError(context, '${t.admin.editDoctor.failed}: $e');
-      }
-    }
-  }
-
-  void _showDeleteConfirm() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: Text(t.admin.doctors.deleteTitle),
-        content: Text(
-          t.admin.doctors.deleteConfirm.replaceAll('@name', widget.doctor.name ?? ''),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(t.common.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              _deleteDoctor();
-            },
-            child: Text(
-              t.common.delete,
-              style: context.semiBold14.copyWith(color: AppColors.error),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
@@ -182,7 +136,6 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           submitLabel: t.admin.editDoctor.updateBtn,
           submittingLabel: t.admin.editDoctor.updatingBtn,
           onSubmit: _submit,
-          onDelete: _showDeleteConfirm,
         ),
       ),
     );
