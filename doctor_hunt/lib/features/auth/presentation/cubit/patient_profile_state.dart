@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/patient_model.dart';
+import '../../../../core/models/patient_model.dart';
 
 abstract class PatientProfileState extends Equatable {
   const PatientProfileState();

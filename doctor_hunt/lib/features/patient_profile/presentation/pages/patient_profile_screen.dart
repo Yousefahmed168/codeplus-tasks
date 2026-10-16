@@ -13,11 +13,13 @@ import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../i18n/strings.g.dart';
-import '../../../auth/data/models/patient_model.dart';
+import '../../../../core/models/patient_model.dart';
 import '../../../auth/presentation/cubit/patient_profile_cubit.dart';
 import '../../../auth/presentation/cubit/patient_profile_state.dart';
 import '../widgets/patient_profile_shimmer.dart';
 import 'patient_profile_view.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 /// Patient profile screen, opened from the drawer, the home header avatar or
 /// the settings quick information card.
@@ -124,14 +126,11 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   }
 
   void _showMessage(String message, {bool isError = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isError ? AppColors.error : AppColors.success,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      ),
-    );
+    if (isError) {
+      SnackBarHelper.showError(context, message);
+    } else {
+      SnackBarHelper.showSuccess(context, message);
+    }
   }
 
   @override
@@ -313,7 +312,7 @@ class _ProfileAvatar extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.camera_alt_rounded,
+                MyIcons.cameraAltRounded,
                 size: 16.r,
                 color: AppColors.primary,
               ),
@@ -340,7 +339,7 @@ class _ProfileAvatar extends StatelessWidget {
   }
 
   Widget _fallbackIcon() =>
-      Icon(Icons.person_rounded, size: 50.r, color: AppColors.primary);
+      Icon(MyIcons.personRounded, size: 50.r, color: AppColors.primary);
 }
 
 /// Full width action pinned below the scrollable form.

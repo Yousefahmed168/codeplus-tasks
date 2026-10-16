@@ -6,8 +6,8 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/services/user_service.dart';
-import '../../data/models/patient_model.dart';
-import '../../data/models/user_model.dart';
+import '../../../../core/models/patient_model.dart';
+import '../../../../core/enums/user_role.dart';
 import 'patient_profile_state.dart';
 
 class PatientProfileCubit extends Cubit<PatientProfileState> {

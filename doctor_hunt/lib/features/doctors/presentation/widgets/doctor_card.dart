@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
-import '../../models/doctor.dart';
+import '../../../../core/models/doctor.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class DoctorCard extends StatelessWidget {
   const DoctorCard({
@@ -32,7 +33,7 @@ class DoctorCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.shadow.withValues(alpha: 0.06),
               blurRadius: 12.r,
               offset: const Offset(0, 4),
             ),
@@ -54,7 +55,7 @@ class DoctorCard extends StatelessWidget {
                           height: 80.r,
                           fit: BoxFit.cover,
                           errorWidget: (_, _, _) => Icon(
-                            Icons.person,
+                            MyIcons.person,
                             size: 80.r,
                             color: AppColors.primary,
                           ),
@@ -65,7 +66,7 @@ class DoctorCard extends StatelessWidget {
                           height: 80.r,
                           fit: BoxFit.cover,
                           errorBuilder: (_, _, _) => Icon(
-                            Icons.person,
+                            MyIcons.person,
                             size: 80.r,
                             color: AppColors.primary,
                           ),
@@ -84,7 +85,7 @@ class DoctorCard extends StatelessWidget {
                       6.verticalSpace,
                       Row(
                         children: [
-                          Icon(Icons.star, size: 14.r, color: AppColors.star),
+                          Icon(MyIcons.star, size: 14.r, color: AppColors.star),
                           4.horizontalSpace,
                           Text(
                             '${doctor.rating ?? 0.0}',
@@ -105,7 +106,7 @@ class DoctorCard extends StatelessWidget {
                 GestureDetector(
                   onTap: onFavoriteToggle,
                   child: Icon(
-                    doctor.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    doctor.isFavorite ? MyIcons.favorite : MyIcons.favoriteBorder,
                     color: doctor.isFavorite
                         ? AppColors.error
                         : AppColors.textHint,

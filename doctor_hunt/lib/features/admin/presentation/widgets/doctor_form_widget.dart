@@ -10,6 +10,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class DoctorFormWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -106,7 +107,7 @@ class DoctorFormWidget extends StatelessWidget {
                             (existingImageUrl == null ||
                                 existingImageUrl!.isEmpty)
                         ? Icon(
-                            Icons.person,
+                            MyIcons.person,
                             color: AppColors.primary,
                             size: 40.r,
                           )
@@ -122,7 +123,7 @@ class DoctorFormWidget extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        Icons.camera_alt,
+                        MyIcons.cameraAlt,
                         color: AppColors.textOnPrimary,
                         size: 16.r,
                       ),
@@ -153,7 +154,7 @@ class DoctorFormWidget extends StatelessWidget {
             controller: nameCtrl,
             hintText: t.admin.createDoctor.nameHint,
             prefixIcon: Icon(
-              Icons.person_outline,
+              MyIcons.personOutline,
               color: AppColors.textHint,
               size: 20.r,
             ),
@@ -217,8 +218,8 @@ class DoctorFormWidget extends StatelessWidget {
                     ),
                     child: Icon(
                       isActive!
-                          ? Icons.check_circle_outline
-                          : Icons.cancel_outlined,
+                          ? MyIcons.checkCircleOutline
+                          : MyIcons.cancelOutlined,
                       color: isActive! ? AppColors.success : AppColors.error,
                       size: 20.r,
                     ),

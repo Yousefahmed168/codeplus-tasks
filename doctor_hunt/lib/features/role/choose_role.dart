@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../core/utils/snack_bar_helper.dart';
+import '../../core/constants/my_icons.dart';
 
 enum AppRole { patient, admin }
 
@@ -64,7 +66,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                 _RoleCard(
                   role: AppRole.patient,
                   selected: _selectedRole == AppRole.patient,
-                  icon: Icons.person_outline_rounded,
+                  icon: MyIcons.personOutlineRounded,
                   title: t.roleSelection.roles.patient.title,
                   description: t.roleSelection.roles.patient.description,
                   onTap: () => setState(() => _selectedRole = AppRole.patient),
@@ -74,7 +76,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                 _RoleCard(
                   role: AppRole.admin,
                   selected: _selectedRole == AppRole.admin,
-                  icon: Icons.admin_panel_settings_outlined,
+                  icon: MyIcons.adminPanelSettingsOutlined,
                   title: t.admin.chooseRole.title,
                   description: t.admin.chooseRole.description,
                   onTap: () => setState(() => _selectedRole = AppRole.admin),
@@ -88,11 +90,9 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                   onPressed: _selectedRole != null
                       ? _onContinue
                       : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(t.roleSelection.errorNoRole),
-                              backgroundColor: AppColors.error,
-                            ),
+                          SnackBarHelper.showError(
+                            context,
+                            t.roleSelection.errorNoRole,
                           );
                         },
                 ),
@@ -143,14 +143,14 @@ class _RoleCard extends StatelessWidget {
           BoxShadow(
             color: selected
                 ? selectedColor.withValues(alpha: 0.30)
-                : Colors.black.withValues(alpha: 0.04),
+                : AppColors.shadow.withValues(alpha: 0.04),
             blurRadius: selected ? 16.r : 8.r,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(16.r),
         child: InkWell(
           onTap: onTap,
@@ -202,7 +202,7 @@ class _RoleCard extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.check_rounded,
+                      MyIcons.checkRounded,
                       size: 16.r,
                       color: AppColors.textOnPrimary,
                     ),

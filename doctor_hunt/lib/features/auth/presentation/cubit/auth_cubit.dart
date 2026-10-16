@@ -1,29 +1,16 @@
-import 'dart:io';
-
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/services/cloudinary_service.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/services/auth_service.dart';
-import '../../../../core/services/user_service.dart';
-import '../../../doctors/models/doctor.dart';
-import '../../data/models/user_model.dart';
+import '../../../../core/enums/user_role.dart';
+import '../../../../i18n/strings.g.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitialState());
 
   final _authService = sl<AuthService>();
-  final _userService = sl<UserService>();
-  final _cloudinary = sl<CloudinaryService>();
-
-  //  State fields
-  File? imageFile;
-  String? _existingImageUrl;
-
-  String? get _uid => _authService.currentUser?.uid;
 
   Future<void> login({required String email, required String password}) async {
     emit(AuthLoadingState());
@@ -34,21 +21,17 @@ class AuthCubit extends Cubit<AuthState> {
         final role = await _authService.getUserRole(user.uid);
         if (role == null) {
           await _authService.logout();
-          emit(AuthErrorState('No account found with this email.'));
+          emit(AuthErrorState(t.auth.errors.noAccountFound));
           return;
         }
         if (role == UserRole.admin) {
           await _authService.logout();
-          emit(
-            AuthErrorState(
-              'You cannot log in here. Please use the admin login screen.',
-            ),
-          );
+          emit(AuthErrorState(t.auth.errors.useAdminLogin));
           return;
         }
         emit(AuthLoginSuccessState(role.name));
       } else {
-        emit(AuthErrorState('User not found after login'));
+        emit(AuthErrorState(t.auth.errors.userNotFound));
       }
     } catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
@@ -59,7 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoadingState());
     try {
       await _authService.sendPasswordResetEmail(email);
-      emit(AuthPasswordResetSuccessState('Password reset email sent'));
+      emit(AuthPasswordResetSuccessState(t.auth.resetEmailSent));
     } catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
     }
@@ -76,121 +59,10 @@ class AuthCubit extends Cubit<AuthState> {
       }
       if (role == UserRole.admin) {
         await _authService.logout();
-        emit(
-          AuthErrorState(
-            'You cannot log in here. Please use the admin login screen.',
-          ),
-        );
+        emit(AuthErrorState(t.auth.errors.useAdminLogin));
         return;
       }
       emit(AuthLoginSuccessState(role.name));
-    } catch (e) {
-      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
-    }
-  }
-
-  Future<void> loadCurrentProfile() async {
-    if (_uid == null) {
-      emit(AuthErrorState('No signed-in user'));
-      return;
-    }
-
-    emit(AuthLoadingState());
-    try {
-      final user = await _userService.getUser(_uid!);
-      if (user is Doctor) {
-        _existingImageUrl = user.imageUrl;
-        emit(AuthProfileLoadedState(user));
-      } else {
-        emit(AuthErrorState('Profile not found'));
-      }
-    } catch (e) {
-      emit(AuthErrorState('Failed to load profile: $e'));
-    }
-  }
-
-  void setImage(File file) {
-    imageFile = file;
-    emit(AuthInitialState());
-  }
-
-  Future<String?> _uploadImageToCloudinary() async {
-    if (imageFile == null) return _existingImageUrl;
-
-    try {
-      final url = await _cloudinary.uploadImage(filePath: imageFile!.path);
-      return url;
-    } catch (e) {
-      debugPrint('Cloudinary upload failed: $e');
-      return null;
-    }
-  }
-
-  Future<void> updateDoctor({
-    required String bio,
-    required String address,
-    required String openHour,
-    required String closeHour,
-    required String phone1,
-    required String phone2,
-    required String? specialization,
-  }) async {
-    if (_uid == null) {
-      emit(AuthErrorState('No signed-in user'));
-      return;
-    }
-
-    emit(AuthLoadingState());
-
-    try {
-      // 1. Upload image if one was picked
-      final imageUrl = await _uploadImageToCloudinary();
-
-      // 2. Build the update map
-      final updateData = <String, dynamic>{
-        'bio': bio.trim(),
-        'address': address.trim(),
-        'openHour': openHour.trim(),
-        'closeHour': closeHour.trim(),
-        'phone1': phone1.trim(),
-        'phone2': phone2.trim(),
-        'specialization': specialization,
-      };
-
-      if (imageUrl != null) {
-        updateData['image'] = imageUrl;
-      }
-
-      // 3. Write to Firestore
-      await _userService.updateUser(_uid!, updateData, role: UserRole.doctor);
-
-      emit(AuthSuccessState(message: 'Profile updated successfully'));
-    } catch (e) {
-      emit(AuthErrorState('Failed to update profile: $e'));
-    }
-  }
-
-  Future<void> registerDoctor({
-    required String name,
-    required String email,
-    required String password,
-    required String phone,
-    required String specialty,
-    required String bio,
-    required int experienceYears,
-  }) async {
-    emit(AuthLoadingState());
-    try {
-      await _authService.registerDoctor(
-        name: name,
-        email: email,
-        password: password,
-        phone: phone,
-        specialty: specialty,
-        bio: bio,
-        experienceYears: experienceYears,
-      );
-      emit(AuthSuccessState(message: 'Registration successful'));
     } catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
     }
@@ -210,7 +82,7 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
         phone: phone,
       );
-      emit(AuthSuccessState(message: 'Registration successful'));
+      emit(AuthSuccessState(message: t.auth.registrationSuccessful));
     } catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
     }

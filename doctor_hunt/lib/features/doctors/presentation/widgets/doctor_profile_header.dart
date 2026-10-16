@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class DoctorProfileHeader extends StatelessWidget {
   const DoctorProfileHeader({
@@ -32,7 +33,7 @@ class DoctorProfileHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.shadow.withValues(alpha: 0.04),
             blurRadius: 10.r,
             offset: const Offset(0, 4),
           ),
@@ -51,7 +52,7 @@ class DoctorProfileHeader extends StatelessWidget {
                     height: 80.r,
                     fit: BoxFit.cover,
                     errorWidget: (_, _, _) => Icon(
-                      Icons.person,
+                      MyIcons.person,
                       size: 80.r,
                       color: AppColors.primary,
                     ),
@@ -62,7 +63,7 @@ class DoctorProfileHeader extends StatelessWidget {
                     height: 80.r,
                     fit: BoxFit.cover,
                     errorBuilder: (_, _, _) => Icon(
-                      Icons.person,
+                      MyIcons.person,
                       size: 80.r,
                       color: AppColors.primary,
                     ),
@@ -85,8 +86,8 @@ class DoctorProfileHeader extends StatelessWidget {
                     5,
                     (i) => Icon(
                       i < rating
-                          ? Icons.star_rounded
-                          : Icons.star_border_rounded,
+                          ? MyIcons.starRounded
+                          : MyIcons.starBorderRounded,
                       size: 16.r,
                       color: AppColors.star,
                     ),
@@ -100,7 +101,7 @@ class DoctorProfileHeader extends StatelessWidget {
           GestureDetector(
             onTap: onFavoriteToggle,
             child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
+              isFavorite ? MyIcons.favorite : MyIcons.favoriteBorder,
               color: isFavorite ? AppColors.error : AppColors.textHint,
               size: 20.r,
             ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../models/doctor.dart';
+import '../../../../core/models/doctor.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class FavoriteDoctorGridCard extends StatelessWidget {
   const FavoriteDoctorGridCard({
@@ -26,7 +27,7 @@ class FavoriteDoctorGridCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: AppColors.shadow.withValues(alpha: 0.04),
               blurRadius: 10.r,
               offset: const Offset(0, 4),
             ),
@@ -79,8 +80,8 @@ class FavoriteDoctorGridCard extends StatelessWidget {
                 onTap: onFavoriteToggle,
                 child: Icon(
                   doctor.isFavorite
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
+                      ? MyIcons.favoriteRounded
+                      : MyIcons.favoriteBorderRounded,
                   color: doctor.isFavorite
                       ? AppColors.error
                       : AppColors.textSecondary,

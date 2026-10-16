@@ -6,8 +6,8 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/services/user_service.dart';
-import '../../../../features/auth/data/models/patient_model.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/patient_model.dart';
+import '../../../../core/models/doctor.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {

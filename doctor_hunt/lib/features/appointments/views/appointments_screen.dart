@@ -16,6 +16,8 @@ import 'widgets/appointment_card.dart';
 import 'widgets/appointment_empty_state.dart';
 import 'widgets/appointment_shimmer.dart';
 import 'widgets/appointment_tab_bar.dart';
+import '../../../core/utils/snack_bar_helper.dart';
+import '../../../core/constants/my_icons.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   final bool showBackButton;
@@ -35,9 +37,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
       create: (context) => AppointmentsCubit()..loadAppointments(),
       child: AppBackground(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.transparent,
             elevation: 0,
             automaticallyImplyLeading: false,
             leading: widget.showBackButton
@@ -91,21 +93,21 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                             appointments: state.upcoming,
                             emptyTitle: t.appointments.noUpcoming,
                             emptySubtitle: t.appointments.noUpcomingSubtitle,
-                            emptyIcon: Icons.calendar_today_rounded,
+                            emptyIcon: MyIcons.calendarTodayRounded,
                             tabIndex: 0,
                           ),
                           _AppointmentList(
                             appointments: state.completed,
                             emptyTitle: t.appointments.noCompleted,
                             emptySubtitle: t.appointments.noCompletedSubtitle,
-                            emptyIcon: Icons.check_circle_outline_rounded,
+                            emptyIcon: MyIcons.checkCircleOutlineRounded,
                             tabIndex: 1,
                           ),
                           _AppointmentList(
                             appointments: state.cancelled,
                             emptyTitle: t.appointments.noCancelled,
                             emptySubtitle: t.appointments.noCancelledSubtitle,
-                            emptyIcon: Icons.cancel_outlined,
+                            emptyIcon: MyIcons.cancelOutlined,
                             tabIndex: 2,
                           ),
                         ],
@@ -204,15 +206,7 @@ class _AppointmentList extends StatelessWidget {
     if (confirmed == true && context.mounted) {
       await context.read<AppointmentsCubit>().cancelAppointment(appt.id);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.appointments.cancelSuccess),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.show(context, t.appointments.cancelSuccess);
       }
     }
   }
@@ -226,29 +220,15 @@ class _AppointmentList extends StatelessWidget {
             rating: rating,
           );
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.appointments.reviewSuccess),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: AppColors.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
+        SnackBarHelper.show(
+          context,
+          t.appointments.reviewSuccess,
+          color: AppColors.primary,
         );
       }
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.appointments.reviewFailed),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: AppColors.error,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, t.appointments.reviewFailed);
       }
     }
   }

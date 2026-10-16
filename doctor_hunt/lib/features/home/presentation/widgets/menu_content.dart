@@ -13,6 +13,7 @@ import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
 import '../pages/drawer_screen.dart';
 import '../../../auth/presentation/widgets/logout_dialog.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class MenuContent extends StatelessWidget {
   const MenuContent({super.key});
@@ -65,7 +66,7 @@ class MenuContent extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   )
                                 : Icon(
-                                    Icons.person_rounded,
+                                    MyIcons.personRounded,
                                     color: AppColors.textOnPrimary,
                                     size: 32.r,
                                   ),
@@ -89,7 +90,7 @@ class MenuContent extends StatelessWidget {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.phone_rounded,
+                                      MyIcons.phoneRounded,
                                       color: AppColors.textOnPrimary,
                                       size: 14.r,
                                     ),
@@ -115,7 +116,7 @@ class MenuContent extends StatelessWidget {
                     60.verticalSpace,
                     // Menu Items
                     _MenuItem(
-                      icon: Icons.account_circle_rounded,
+                      icon: MyIcons.accountCircleRounded,
                       title: t.menu.profile,
                       onTap: () {
                         DrawerScreen.of(context)?.closeDrawer();
@@ -123,14 +124,14 @@ class MenuContent extends StatelessWidget {
                       },
                     ),
                     _MenuItem(
-                      icon: Icons.person_rounded,
+                      icon: MyIcons.personRounded,
                       title: t.menu.home,
                       onTap: () {
                         DrawerScreen.of(context)?.closeDrawer();
                       },
                     ),
                     _MenuItem(
-                      icon: Icons.favorite_rounded,
+                      icon: MyIcons.favoriteRounded,
                       title: t.menu.favourites,
                       onTap: () {
                         DrawerScreen.of(context)?.closeDrawer();
@@ -138,7 +139,7 @@ class MenuContent extends StatelessWidget {
                       },
                     ),
                     _MenuItem(
-                      icon: Icons.calendar_month_rounded,
+                      icon: MyIcons.calendarMonthRounded,
                       title: t.menu.myAppointments,
                       onTap: () {
                         DrawerScreen.of(context)?.closeDrawer();
@@ -146,7 +147,7 @@ class MenuContent extends StatelessWidget {
                       },
                     ),
                     _MenuItem(
-                      icon: Icons.settings_rounded,
+                      icon: MyIcons.settingsRounded,
                       title: t.menu.settings,
                       onTap: () {
                         DrawerScreen.of(context)?.closeDrawer();
@@ -172,7 +173,7 @@ class MenuContent extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.logout_rounded,
+                              MyIcons.logoutRounded,
                               color: AppColors.textOnPrimary,
                               size: 24.r,
                             ),
@@ -226,7 +227,7 @@ class _MenuItem extends StatelessWidget {
               ),
             ),
             Icon(
-              Icons.chevron_right_rounded,
+              MyIcons.chevronRightRounded,
               color: AppColors.background,
               size: 24.r,
             ),

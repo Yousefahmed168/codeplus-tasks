@@ -64,11 +64,7 @@
     "roles": {
       "patient": {
         "title": "Patient",
-        "description": "Find doctors, book appointments, and manage your medical records."
-      },
-      "doctor": {
-        "title": "Doctor",
-        "description": "Manage appointments, patients, and your professional profile."
+        "description": "Find doctors, book appointments, and manage your visits."
       }
     },
     "errorNoRole": "Please select a role"
@@ -79,19 +75,11 @@
       "subtitle": "You can search doctors, book appointments and manage your health",
       "forgotPassword": "Forgot password",
       "forgotPasswordTitle": "Forgot password",
-      "forgotPasswordSubtitle": "Enter your email for the verification process, we will send 4 digits code to your email.",
-      "enterCodeTitle": "Enter 4 Digits Code",
-      "enterCodeSubtitle": "Enter the 4 digits code that you received on your email.",
-      "resetPasswordTitle": "Reset Password",
-      "resetPasswordSubtitle": "Set the new password for your account so you can login and access all the features.",
-      "newPassword": "New Password",
-      "reenterPassword": "Re-enter Password",
-      "updatePassword": "Update Password",
-      "passwordUpdatedSuccess": "Password updated successfully!",
-      "passwordsDoNotMatch": "Passwords do not match",
-      "invalidCode": "Please enter the 4-digit code",
+      "forgotPasswordSubtitle": "Enter your email and we will send you a link to reset your password.",
       "forgotPasswordSend": "Send Reset Link",
+      "forgotPasswordSending": "Sending...",
       "forgotPasswordSuccess": "Reset link sent! Check your email",
+      "forgotPasswordError": "Unable to send the reset email. Please try again.",
       "noAccount": "Dont have an account? ",
       "joinUs": "Join us",
       "submitBtn": "Login",
@@ -108,11 +96,14 @@
       "haveAccount": "Have an account? ",
       "loginLink": "Log in",
       "submitBtn": "Sign up",
-      "specialtyHint": "Specialty (e.g. Cardiology)",
-      "bioHint": "Short bio about yourself",
-      "experienceHint": "Years of experience",
-      "creatingAccount": "Creating account...",
-      "doctorNameHint": "Dr. Name"
+      "creatingAccount": "Creating account..."
+    },
+    "resetEmailSent": "Password reset email sent",
+    "registrationSuccessful": "Registration successful",
+    "errors": {
+      "noAccountFound": "No account found with this email.",
+      "useAdminLogin": "You cannot log in here. Please use the admin login screen.",
+      "userNotFound": "User not found after login"
     }
   },
   "home": {
@@ -201,7 +192,9 @@
     "afternoonSlots": "Afternoon $count slots",
     "eveningSlots": "Evening $count slots",
     "proceed": "Proceed",
-    "nextAvailability": "Next availability on Wed, 24 Feb",
+    "nextAvailabilityOn": "Next availability on $date",
+    "noUpcomingDates": "No upcoming availability",
+    "clinicLocationLabel": "Clinic location: $location",
     "or": "OR",
     "contactClinic": "Contact Clinic"
   },

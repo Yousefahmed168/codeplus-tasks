@@ -7,7 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/di/service_locator.dart';
 import 'core/routes/app_router.dart';
+import 'core/services/local/shared_pref.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/colors.dart';
 import 'firebase_options.dart';
 import 'i18n/strings.g.dart';
 
@@ -31,6 +33,9 @@ void main() async {
   // Register services with get_it
   setupServiceLocator();
 
+  // Initialize local preferences (onboarding flag, cached ids)
+  await SharedPref.init();
+
   // Initialize slang locale
   LocaleSettings.useDeviceLocale();
 
@@ -43,7 +48,7 @@ void main() async {
   // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
+      statusBarColor: AppColors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ),
   );

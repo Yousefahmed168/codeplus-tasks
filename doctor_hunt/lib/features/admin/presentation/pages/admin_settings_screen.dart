@@ -9,7 +9,9 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/string_utils.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminSettingsScreen extends StatefulWidget {
   const AdminSettingsScreen({super.key});
@@ -22,30 +24,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
   User? get _user => FirebaseAuth.instance.currentUser;
 
   @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    setState(() {});
-  }
-
-  String _getInitials(String name) {
-    if (name.isEmpty) return 'A';
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-    }
-    return parts[0][0].toUpperCase();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = _user;
     final displayName = user?.displayName ?? 'Administrator';
     final email = user?.email ?? 'admin@doctorhunt.com';
-    final initials = _getInitials(displayName);
+    final initials = StringUtils.getInitials(displayName);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -119,7 +102,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                         : null,
                   ),
                   child: user?.photoURL == null || user!.photoURL!.isEmpty
-                      ? Icon(Icons.person, color: AppColors.primary, size: 24.r)
+                      ? Icon(MyIcons.person, color: AppColors.primary, size: 24.r)
                       : null,
                 ),
                 12.horizontalSpace,
@@ -140,7 +123,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
 
           // Admin Profile
           _buildNavRow(
-            icon: Icons.person_outline,
+            icon: MyIcons.personOutline,
             title: t.admin.settings.adminProfile,
             subtitle: t.admin.settings.adminProfileDesc,
             onTap: () => context.push(AppRoutes.editAdminProfile),
@@ -149,7 +132,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
 
           // Change Password
           _buildNavRow(
-            icon: Icons.lock_outline,
+            icon: MyIcons.lockOutline,
             title: t.admin.settings.changePassword,
             subtitle: t.admin.settings.changePasswordDesc,
             onTap: () => context.push(AppRoutes.changePassword),
@@ -158,7 +141,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
 
           // App Information
           _buildInfoRow(
-            icon: Icons.info_outline,
+            icon: MyIcons.infoOutline,
             title: t.admin.settings.appInformation,
             subtitle: t.admin.settings.appVersion,
             version: 'v1.0.0',
@@ -177,7 +160,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   context.go(AppRoutes.role);
                 }
               },
-              icon: Icon(Icons.logout, color: AppColors.error, size: 20.r),
+              icon: Icon(MyIcons.logout, color: AppColors.error, size: 20.r),
               label: Text(
                 t.common.logout,
                 style: context.semiBold16.copyWith(color: AppColors.error),
@@ -241,7 +224,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
               ),
             ),
             Icon(
-              Icons.chevron_right_rounded,
+              MyIcons.chevronRightRounded,
               color: AppColors.textHint,
               size: 24.r,
             ),

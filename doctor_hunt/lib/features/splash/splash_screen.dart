@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/di/service_locator.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/services/local/shared_pref.dart';
 import '../../core/theme/style_atoms.dart';
 import '../../core/utils/app_images.dart';
 import '../../core/widgets/widgets.dart';
@@ -31,8 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final currentUser = sl<AuthService>().currentUser;
     if (currentUser == null) {
-      // Not logged in → go to role selection (which leads to login/register)
-      context.go(AppRoutes.role);
+      // First launch → onboarding; afterwards → role selection.
+      context.go(
+        SharedPref.isOnboardingShown() ? AppRoutes.role : AppRoutes.onboarding,
+      );
     } else {
       // Logged in → check role
       final role = await sl<AuthService>().getUserRole(currentUser.uid);

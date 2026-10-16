@@ -1,8 +1,8 @@
-import '../theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants/my_icons.dart';
-import '../routes/navigations.dart';
+import '../theme/colors.dart';
 
 class CustomBackButton extends StatelessWidget {
   final VoidCallback? onTap;
@@ -12,7 +12,10 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? () => pop(context),
+      onTap: onTap ??
+          () {
+            if (context.canPop()) context.pop();
+          },
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(

@@ -17,9 +17,11 @@ import '../../../../core/services/favorite_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/app_background.dart';
+import '../../../../core/widgets/dialogs.dart';
 import '../../../../core/widgets/main_button.dart';
-import '../../models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
 
 class SelectTimeScreen extends StatefulWidget {
   const SelectTimeScreen({super.key, required this.doctor});
@@ -31,6 +33,20 @@ class SelectTimeScreen extends StatefulWidget {
 }
 
 class _SelectTimeScreenState extends State<SelectTimeScreen> {
+  /// Monday-first, matching [DateTime.weekday] (1 = Monday).
+  static const List<String> _weekdayNames = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+
+  /// Slots before this minute-of-day are "afternoon", the rest "evening".
+  static const int _afternoonCutoffMinutes = 17 * 60; // 5:00 PM
+
   late List<DateTime> _availableDates;
   DateTime? _selectedDate;
   String? _selectedTime;
@@ -38,35 +54,14 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   bool _isBooking = false;
   bool _isFavorite = false;
 
-  final List<String> _afternoonSlots = [
-    '1:00 PM',
-    '1:30 PM',
-    '2:00 PM',
-    '2:30 PM',
-    '3:00 PM',
-    '3:30 PM',
-    '4:00 PM',
-  ];
-
-  final List<String> _eveningSlots = [
-    '5:00 PM',
-    '5:30 PM',
-    '6:00 PM',
-    '6:30 PM',
-    '7:00 PM',
-  ];
-
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    _availableDates = [
-      now,
-      now.add(const Duration(days: 1)),
-      now.add(const Duration(days: 2)),
-    ];
-    _selectedDate =
-        _availableDates[1]; // default to Tomorrow (as in screenshot)
+    _availableDates = _buildAvailableDates();
+    _selectedDate = _availableDates.firstWhere(
+      (date) => _slotsForDate(date).isNotEmpty,
+      orElse: () => _availableDates.first,
+    );
 
     sl<AdminService>().getCentralClinicLocation().then((loc) {
       if (mounted) setState(() => _clinicLocation = loc);
@@ -81,6 +76,83 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
         if (mounted) setState(() => _isFavorite = val);
       });
     }
+  }
+
+  /// The next bookable dates, limited to the doctor's working days.
+  List<DateTime> _buildAvailableDates({int maxDays = 14, int limit = 5}) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final workingDays = widget.doctor.workingDays
+        .map((day) => day.toLowerCase().trim())
+        .toSet();
+
+    final dates = <DateTime>[];
+    for (var i = 0; i < maxDays && dates.length < limit; i++) {
+      final date = today.add(Duration(days: i));
+      final weekday = _weekdayNames[date.weekday - 1].toLowerCase();
+      if (workingDays.isNotEmpty && !workingDays.contains(weekday)) continue;
+      dates.add(date);
+    }
+
+    // Always render at least today so the empty state can explain itself.
+    if (dates.isEmpty) dates.add(today);
+    return dates;
+  }
+
+  /// Parses a time such as `09:00 AM` into minutes since midnight.
+  int _parseMinutes(String time) {
+    final parts = time.trim().split(' ');
+    final hm = parts.first.split(':');
+    if (hm.length != 2) return 0;
+    var hours = int.tryParse(hm[0]) ?? 0;
+    final minutes = int.tryParse(hm[1]) ?? 0;
+    final period = parts.length > 1 ? parts[1].toUpperCase() : '';
+    if (period == 'PM' && hours != 12) hours += 12;
+    if (period == 'AM' && hours == 12) hours = 0;
+    return hours * 60 + minutes;
+  }
+
+  String _formatMinutes(int minutes) {
+    final reference = DateTime(2000, 1, 1, minutes ~/ 60, minutes % 60);
+    return DateFormat('h:mm a').format(reference);
+  }
+
+  /// Bookable slot labels for [date], derived from the doctor's working hours
+  /// and slot duration. Past slots are removed for today.
+  List<String> _slotsForDate(DateTime date) {
+    final start = _parseMinutes(widget.doctor.startTime);
+    final end = _parseMinutes(widget.doctor.endTime);
+    final step = widget.doctor.slotDuration > 0
+        ? widget.doctor.slotDuration
+        : 30;
+    if (end <= start) return const [];
+
+    final now = DateTime.now();
+    final isToday = DateTime(date.year, date.month, date.day) ==
+        DateTime(now.year, now.month, now.day);
+
+    final slots = <String>[];
+    for (var minute = start; minute + step <= end; minute += step) {
+      if (isToday && minute <= now.hour * 60 + now.minute) continue;
+      slots.add(_formatMinutes(minute));
+    }
+    return slots;
+  }
+
+  List<String> _afternoonSlotsFor(DateTime date) => _slotsForDate(date)
+      .where((label) => _parseMinutes(label) < _afternoonCutoffMinutes)
+      .toList();
+
+  List<String> _eveningSlotsFor(DateTime date) => _slotsForDate(date)
+      .where((label) => _parseMinutes(label) >= _afternoonCutoffMinutes)
+      .toList();
+
+  /// The first bookable date strictly after [from], or null if none.
+  DateTime? _nextAvailableDate(DateTime from) {
+    for (final date in _availableDates) {
+      if (date.isAfter(from) && _slotsForDate(date).isNotEmpty) return date;
+    }
+    return null;
   }
 
   String _getDateLabel(DateTime date) {
@@ -100,10 +172,10 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         leading: CustomBackButton(),
         title: Text(t.selectTime.title, style: context.bold24.textPrimary),
         centerTitle: false,
@@ -149,7 +221,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
               itemBuilder: (context, index) {
                 final date = _availableDates[index];
                 final isSelected = date == _selectedDate;
-                final slotsCount = index == 0 ? 0 : (index == 1 ? 9 : 10);
+                final slotsCount = _slotsForDate(date).length;
 
                 return GestureDetector(
                   onTap: () {
@@ -224,50 +296,56 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                   ],
 
                   if (_selectedDate != null &&
-                      _selectedDate != _availableDates[0]) ...[
+                      _slotsForDate(_selectedDate!).isNotEmpty) ...[
                     // Afternoon
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        t.selectTime.afternoonSlots(
-                          count: _afternoonSlots.length,
+                    if (_afternoonSlotsFor(_selectedDate!).isNotEmpty) ...[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          t.selectTime.afternoonSlots(
+                            count: _afternoonSlotsFor(_selectedDate!).length,
+                          ),
+                          style: context.bold18.textPrimary,
                         ),
-                        style: context.bold18.textPrimary,
                       ),
-                    ),
-                    16.verticalSpace,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Wrap(
-                        spacing: 12.w,
-                        runSpacing: 12.h,
-                        children: _afternoonSlots
-                            .map((time) => _buildTimeSlot(time))
-                            .toList(),
+                      16.verticalSpace,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 12.w,
+                          runSpacing: 12.h,
+                          children: _afternoonSlotsFor(_selectedDate!)
+                              .map((time) => _buildTimeSlot(time))
+                              .toList(),
+                        ),
                       ),
-                    ),
-                    32.verticalSpace,
+                      32.verticalSpace,
+                    ],
 
                     // Evening
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        t.selectTime.eveningSlots(count: _eveningSlots.length),
-                        style: context.bold18.textPrimary,
+                    if (_eveningSlotsFor(_selectedDate!).isNotEmpty) ...[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          t.selectTime.eveningSlots(
+                            count: _eveningSlotsFor(_selectedDate!).length,
+                          ),
+                          style: context.bold18.textPrimary,
+                        ),
                       ),
-                    ),
-                    16.verticalSpace,
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Wrap(
-                        spacing: 12.w,
-                        runSpacing: 12.h,
-                        children: _eveningSlots
-                            .map((time) => _buildTimeSlot(time))
-                            .toList(),
+                      16.verticalSpace,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 12.w,
+                          runSpacing: 12.h,
+                          children: _eveningSlotsFor(_selectedDate!)
+                              .map((time) => _buildTimeSlot(time))
+                              .toList(),
+                        ),
                       ),
-                    ),
-                    40.verticalSpace,
+                      32.verticalSpace,
+                    ],
 
                     // Proceed Button
                     MainButton(
@@ -279,8 +357,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                           ? () async {
                               final currentUser = sl<AuthService>().currentUser;
                               if (currentUser == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(t.favorite.pleaseLogin)),
+                                SnackBarHelper.showWarning(
+                                  context,
+                                  t.favorite.pleaseLogin,
                                 );
                                 return;
                               }
@@ -326,9 +405,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                               } catch (e) {
                                 if (mounted) {
                                   // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('${t.common.errorGeneric}: $e')),
-                                  );
+                                  SnackBarHelper.showError(context, '${t.common.errorGeneric}: $e');
                                 }
                               } finally {
                                 if (mounted) setState(() => _isBooking = false);
@@ -337,18 +414,34 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                           : null,
                     ),
                   ] else ...[
-                    // Empty state for Today
+                    // Empty state — the selected day has no bookable slots left.
                     40.verticalSpace,
                     Text(
                       t.selectTime.noSlotsAvailable,
                       style: context.regular14.textSecondary,
                     ),
                     24.verticalSpace,
-                    MainButton(
-                      text: t.selectTime.nextAvailability,
-                      onPressed: () {},
-                      bgColor: AppColors.primary,
-                      textColor: AppColors.textOnPrimary,
+                    Builder(
+                      builder: (context) {
+                        final next = _selectedDate == null
+                            ? null
+                            : _nextAvailableDate(_selectedDate!);
+                        return MainButton(
+                          text: next == null
+                              ? t.selectTime.noUpcomingDates
+                              : t.selectTime.nextAvailabilityOn(
+                                  date: _getDateLabel(next),
+                                ),
+                          onPressed: next == null
+                              ? null
+                              : () => setState(() {
+                                    _selectedDate = next;
+                                    _selectedTime = null;
+                                  }),
+                          bgColor: AppColors.primary,
+                          textColor: AppColors.textOnPrimary,
+                        );
+                      },
                     ),
                     24.verticalSpace,
                     Text(
@@ -358,7 +451,12 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                     24.verticalSpace,
                     MainButton(
                       text: t.selectTime.contactClinic,
-                      onPressed: () {},
+                      onPressed: () => showMyDialog(
+                        context,
+                        t.selectTime.clinicLocationLabel(
+                          location: _clinicLocation,
+                        ),
+                      ),
                       bgColor: AppColors.surface,
                       textColor: AppColors.primary,
                       borderColor: AppColors.textHint,

@@ -7,6 +7,8 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../../core/widgets/password_text_form_field.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -48,30 +50,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       await user.updatePassword(_newPasswordCtrl.text.trim());
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.changePassword.success),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showSuccess(context, t.changePassword.success);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.changePassword.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.changePassword.failed}: $e');
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -109,7 +93,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: _currentPasswordCtrl,
                 hintText: '••••••••',
                 prefixIcon: Icon(
-                  Icons.lock_outline,
+                  MyIcons.lockOutline,
                   color: AppColors.textHint,
                   size: 20.r,
                 ),
@@ -128,7 +112,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: _newPasswordCtrl,
                 hintText: '••••••••',
                 prefixIcon: Icon(
-                  Icons.lock_outline,
+                  MyIcons.lockOutline,
                   color: AppColors.textHint,
                   size: 20.r,
                 ),
@@ -148,7 +132,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: _confirmPasswordCtrl,
                 hintText: '••••••••',
                 prefixIcon: Icon(
-                  Icons.lock_outline,
+                  MyIcons.lockOutline,
                   color: AppColors.textHint,
                   size: 20.r,
                 ),

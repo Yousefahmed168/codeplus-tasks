@@ -7,7 +7,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/constants/assets.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../widgets/home_header.dart';
 import '../widgets/live_doctor_card.dart';
 import '../widgets/category_card.dart';
@@ -16,6 +16,9 @@ import '../widgets/feature_doctor_card.dart';
 import '../../../../i18n/strings.g.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/widgets/doctor_shimmer.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback? onAvatarTap;
@@ -38,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider(
       create: (context) => HomeCubit()..loadHomeData(),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         body: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
@@ -84,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         CategoryCard(
-                          iconData: Icons.favorite_rounded,
+                          iconData: MyIcons.favoriteRounded,
                           gradientColors: [
                             AppColors.success,
                             AppColors.success.withValues(alpha: 0.7),
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         CategoryCard(
-                          iconData: Icons.wc_rounded,
+                          iconData: MyIcons.wcRounded,
                           gradientColors: [
                             AppColors.error,
                             AppColors.error.withValues(alpha: 0.5),
@@ -113,13 +116,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) {
                       if (state is HomeLoading) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 40.h),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primary,
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionHeader(
+                              title: t.home.popularDoctor,
+                              showSeeAll: true,
                             ),
-                          ),
+                            12.verticalSpace,
+                            SizedBox(
+                              height: 220.h,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                itemCount: 3,
+                                separatorBuilder: (_, _) => 14.horizontalSpace,
+                                itemBuilder: (_, _) => const DoctorCardShimmer(),
+                              ),
+                            ),
+                          ],
                         );
                       }
                       if (state is HomeError) {
@@ -232,31 +248,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     : AppImages.doctor,
                 name: doctor.name ?? 'Unknown',
                 rating: doctor.rating ?? 0,
-                hourlyRate: 50.0,
+                hourlyRate: doctor.consultationFee,
                 isFavorite: isFav,
                 onFavoriteTap: () async {
                   await context.read<HomeCubit>().toggleFavorite(doctor.uid!);
                   if (isFav && context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          t.favorite.doctorRemoved(doctorName: doctor.name ?? 'Doctor'),
-                        ),
-                        action: SnackBarAction(
-                          label: t.common.undo,
-                          textColor: AppColors.primary,
-                          onPressed: () async {
-                            await context.read<HomeCubit>().toggleFavorite(
-                              doctor.uid!,
-                            );
-                          },
-                        ),
-                        duration: const Duration(seconds: 3),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
+                    SnackBarHelper.show(
+                      context,
+                      t.favorite.doctorRemoved(doctorName: doctor.name ?? 'Doctor'),
+                      action: SnackBarAction(
+                        label: t.common.undo,
+                        textColor: AppColors.primary,
+                        onPressed: () async {
+                          await context.read<HomeCubit>().toggleFavorite(
+                            doctor.uid!,
+                          );
+                        },
                       ),
+                      duration: const Duration(seconds: 3),
                     );
                   }
                 },
@@ -298,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   2.horizontalSpace,
                   Icon(
-                    Icons.chevron_right_rounded,
+                    MyIcons.chevronRightRounded,
                     size: 16.r,
                     color: AppColors.textSecondary,
                   ),

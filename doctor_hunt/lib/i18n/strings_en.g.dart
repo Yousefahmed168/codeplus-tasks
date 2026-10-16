@@ -198,6 +198,14 @@ class Translations$auth$en {
 	// Translations
 	late final Translations$auth$login$en login = Translations$auth$login$en._(_root);
 	late final Translations$auth$register$en register = Translations$auth$register$en._(_root);
+
+	/// en: 'Password reset email sent'
+	String get resetEmailSent => 'Password reset email sent';
+
+	/// en: 'Registration successful'
+	String get registrationSuccessful => 'Registration successful';
+
+	late final Translations$auth$errors$en errors = Translations$auth$errors$en._(_root);
 }
 
 // Path: home
@@ -481,8 +489,14 @@ class Translations$selectTime$en {
 	/// en: 'Proceed'
 	String get proceed => 'Proceed';
 
-	/// en: 'Next availability on Wed, 24 Feb'
-	String get nextAvailability => 'Next availability on Wed, 24 Feb';
+	/// en: 'Next availability on $date'
+	String nextAvailabilityOn({required Object date}) => 'Next availability on ${date}';
+
+	/// en: 'No upcoming availability'
+	String get noUpcomingDates => 'No upcoming availability';
+
+	/// en: 'Clinic location: $location'
+	String clinicLocationLabel({required Object location}) => 'Clinic location: ${location}';
 
 	/// en: 'OR'
 	String get or => 'OR';
@@ -863,7 +877,6 @@ class Translations$roleSelection$roles$en {
 
 	// Translations
 	late final Translations$roleSelection$roles$patient$en patient = Translations$roleSelection$roles$patient$en._(_root);
-	late final Translations$roleSelection$roles$doctor$en doctor = Translations$roleSelection$roles$doctor$en._(_root);
 }
 
 // Path: auth.login
@@ -886,44 +899,20 @@ class Translations$auth$login$en {
 	/// en: 'Forgot password'
 	String get forgotPasswordTitle => 'Forgot password';
 
-	/// en: 'Enter your email for the verification process, we will send 4 digits code to your email.'
-	String get forgotPasswordSubtitle => 'Enter your email for the verification process, we will send 4 digits code to your email.';
-
-	/// en: 'Enter 4 Digits Code'
-	String get enterCodeTitle => 'Enter 4 Digits Code';
-
-	/// en: 'Enter the 4 digits code that you received on your email.'
-	String get enterCodeSubtitle => 'Enter the 4 digits code that you received on your email.';
-
-	/// en: 'Reset Password'
-	String get resetPasswordTitle => 'Reset Password';
-
-	/// en: 'Set the new password for your account so you can login and access all the features.'
-	String get resetPasswordSubtitle => 'Set the new password for your account so you can login and access all the features.';
-
-	/// en: 'New Password'
-	String get newPassword => 'New Password';
-
-	/// en: 'Re-enter Password'
-	String get reenterPassword => 'Re-enter Password';
-
-	/// en: 'Update Password'
-	String get updatePassword => 'Update Password';
-
-	/// en: 'Password updated successfully!'
-	String get passwordUpdatedSuccess => 'Password updated successfully!';
-
-	/// en: 'Passwords do not match'
-	String get passwordsDoNotMatch => 'Passwords do not match';
-
-	/// en: 'Please enter the 4-digit code'
-	String get invalidCode => 'Please enter the 4-digit code';
+	/// en: 'Enter your email and we will send you a link to reset your password.'
+	String get forgotPasswordSubtitle => 'Enter your email and we will send you a link to reset your password.';
 
 	/// en: 'Send Reset Link'
 	String get forgotPasswordSend => 'Send Reset Link';
 
+	/// en: 'Sending...'
+	String get forgotPasswordSending => 'Sending...';
+
 	/// en: 'Reset link sent! Check your email'
 	String get forgotPasswordSuccess => 'Reset link sent! Check your email';
+
+	/// en: 'Unable to send the reset email. Please try again.'
+	String get forgotPasswordError => 'Unable to send the reset email. Please try again.';
 
 	/// en: 'Dont have an account? '
 	String get noAccount => 'Dont have an account? ';
@@ -976,20 +965,26 @@ class Translations$auth$register$en {
 	/// en: 'Sign up'
 	String get submitBtn => 'Sign up';
 
-	/// en: 'Specialty (e.g. Cardiology)'
-	String get specialtyHint => 'Specialty (e.g. Cardiology)';
-
-	/// en: 'Short bio about yourself'
-	String get bioHint => 'Short bio about yourself';
-
-	/// en: 'Years of experience'
-	String get experienceHint => 'Years of experience';
-
 	/// en: 'Creating account...'
 	String get creatingAccount => 'Creating account...';
+}
 
-	/// en: 'Dr. Name'
-	String get doctorNameHint => 'Dr. Name';
+// Path: auth.errors
+class Translations$auth$errors$en {
+	Translations$auth$errors$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'No account found with this email.'
+	String get noAccountFound => 'No account found with this email.';
+
+	/// en: 'You cannot log in here. Please use the admin login screen.'
+	String get useAdminLogin => 'You cannot log in here. Please use the admin login screen.';
+
+	/// en: 'User not found after login'
+	String get userNotFound => 'User not found after login';
 }
 
 // Path: admin.chooseRole
@@ -1471,23 +1466,8 @@ class Translations$roleSelection$roles$patient$en {
 	/// en: 'Patient'
 	String get title => 'Patient';
 
-	/// en: 'Find doctors, book appointments, and manage your medical records.'
-	String get description => 'Find doctors, book appointments, and manage your medical records.';
-}
-
-// Path: roleSelection.roles.doctor
-class Translations$roleSelection$roles$doctor$en {
-	Translations$roleSelection$roles$doctor$en._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Doctor'
-	String get title => 'Doctor';
-
-	/// en: 'Manage appointments, patients, and your professional profile.'
-	String get description => 'Manage appointments, patients, and your professional profile.';
+	/// en: 'Find doctors, book appointments, and manage your visits.'
+	String get description => 'Find doctors, book appointments, and manage your visits.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1546,27 +1526,17 @@ extension on Translations {
 			'roleSelection.title' => 'Choose your role',
 			'roleSelection.subtitle' => 'The selected role determines the experience and available features.',
 			'roleSelection.roles.patient.title' => 'Patient',
-			'roleSelection.roles.patient.description' => 'Find doctors, book appointments, and manage your medical records.',
-			'roleSelection.roles.doctor.title' => 'Doctor',
-			'roleSelection.roles.doctor.description' => 'Manage appointments, patients, and your professional profile.',
+			'roleSelection.roles.patient.description' => 'Find doctors, book appointments, and manage your visits.',
 			'roleSelection.errorNoRole' => 'Please select a role',
 			'auth.login.title' => 'Welcome back',
 			'auth.login.subtitle' => 'You can search doctors, book appointments and manage your health',
 			'auth.login.forgotPassword' => 'Forgot password',
 			'auth.login.forgotPasswordTitle' => 'Forgot password',
-			'auth.login.forgotPasswordSubtitle' => 'Enter your email for the verification process, we will send 4 digits code to your email.',
-			'auth.login.enterCodeTitle' => 'Enter 4 Digits Code',
-			'auth.login.enterCodeSubtitle' => 'Enter the 4 digits code that you received on your email.',
-			'auth.login.resetPasswordTitle' => 'Reset Password',
-			'auth.login.resetPasswordSubtitle' => 'Set the new password for your account so you can login and access all the features.',
-			'auth.login.newPassword' => 'New Password',
-			'auth.login.reenterPassword' => 'Re-enter Password',
-			'auth.login.updatePassword' => 'Update Password',
-			'auth.login.passwordUpdatedSuccess' => 'Password updated successfully!',
-			'auth.login.passwordsDoNotMatch' => 'Passwords do not match',
-			'auth.login.invalidCode' => 'Please enter the 4-digit code',
+			'auth.login.forgotPasswordSubtitle' => 'Enter your email and we will send you a link to reset your password.',
 			'auth.login.forgotPasswordSend' => 'Send Reset Link',
+			'auth.login.forgotPasswordSending' => 'Sending...',
 			'auth.login.forgotPasswordSuccess' => 'Reset link sent! Check your email',
+			'auth.login.forgotPasswordError' => 'Unable to send the reset email. Please try again.',
 			'auth.login.noAccount' => 'Dont have an account? ',
 			'auth.login.joinUs' => 'Join us',
 			'auth.login.submitBtn' => 'Login',
@@ -1581,11 +1551,12 @@ extension on Translations {
 			'auth.register.haveAccount' => 'Have an account? ',
 			'auth.register.loginLink' => 'Log in',
 			'auth.register.submitBtn' => 'Sign up',
-			'auth.register.specialtyHint' => 'Specialty (e.g. Cardiology)',
-			'auth.register.bioHint' => 'Short bio about yourself',
-			'auth.register.experienceHint' => 'Years of experience',
 			'auth.register.creatingAccount' => 'Creating account...',
-			'auth.register.doctorNameHint' => 'Dr. Name',
+			'auth.resetEmailSent' => 'Password reset email sent',
+			'auth.registrationSuccessful' => 'Registration successful',
+			'auth.errors.noAccountFound' => 'No account found with this email.',
+			'auth.errors.useAdminLogin' => 'You cannot log in here. Please use the admin login screen.',
+			'auth.errors.userNotFound' => 'User not found after login',
 			'home.liveDoctors' => 'Live Doctors',
 			'home.popularDoctor' => 'Popular Doctor',
 			'home.featureDoctor' => 'Feature Doctor',
@@ -1659,7 +1630,9 @@ extension on Translations {
 			'selectTime.afternoonSlots' => ({required Object count}) => 'Afternoon ${count} slots',
 			'selectTime.eveningSlots' => ({required Object count}) => 'Evening ${count} slots',
 			'selectTime.proceed' => 'Proceed',
-			'selectTime.nextAvailability' => 'Next availability on Wed, 24 Feb',
+			'selectTime.nextAvailabilityOn' => ({required Object date}) => 'Next availability on ${date}',
+			'selectTime.noUpcomingDates' => 'No upcoming availability',
+			'selectTime.clinicLocationLabel' => ({required Object location}) => 'Clinic location: ${location}',
 			'selectTime.or' => 'OR',
 			'selectTime.contactClinic' => 'Contact Clinic',
 			'admin.chooseRole.title' => 'Admin',

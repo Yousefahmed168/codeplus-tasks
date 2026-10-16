@@ -6,9 +6,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/widgets/main_button.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminDoctorDetailsScreen extends StatefulWidget {
   final Doctor doctor;
@@ -69,7 +70,7 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                 ),
                 child: _doctor.imageUrl == null || _doctor.imageUrl!.isEmpty
                     ? Icon(
-                        Icons.person,
+                        MyIcons.person,
                         color: AppColors.primary,
                         size: 48.r,
                       )
@@ -175,19 +176,19 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildInfoRow(
-            icon: Icons.medical_services_outlined,
+            icon: MyIcons.medicalServicesOutlined,
             label: t.admin.doctorDetails.specialty,
             value: _doctor.specialization ?? 'General',
           ),
           Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
-            icon: Icons.star_border,
+            icon: MyIcons.starBorder,
             label: t.doctorDetails.reviews,
             value: '${_doctor.rating ?? 0.0}',
           ),
           Divider(height: 32.h, color: AppColors.border),
           _buildInfoRow(
-            icon: Icons.attach_money,
+            icon: MyIcons.attachMoney,
             label: t.admin.createDoctor.feeLabel,
             value: '\$${_doctor.consultationFee.toStringAsFixed(2)}',
           ),

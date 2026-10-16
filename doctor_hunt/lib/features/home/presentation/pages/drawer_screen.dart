@@ -131,7 +131,7 @@ class DrawerScreenState extends State<DrawerScreen>
                   onTap: closeDrawer,
                   behavior: HitTestBehavior.opaque,
                   child: Container(
-                    color: Colors.transparent,
+                    color: AppColors.transparent,
                   ),
                 ),
               ),

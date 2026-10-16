@@ -7,6 +7,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 import 'appointment_status_chip.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AppointmentCard extends StatefulWidget {
   final AppointmentModel appointment;
@@ -107,13 +108,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 Row(
                   children: [
                     _detailItem(
-                      Icons.calendar_today_rounded,
+                      MyIcons.calendarTodayRounded,
                       t.appointments.appointmentDate,
                       dateStr,
                     ),
                     20.horizontalSpace,
                     _detailItem(
-                      Icons.access_time_rounded,
+                      MyIcons.accessTimeRounded,
                       t.appointments.appointmentTime,
                       appt.timeSlot,
                     ),
@@ -123,13 +124,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 Row(
                   children: [
                     _detailItem(
-                      Icons.person_outline_rounded,
+                      MyIcons.personOutlineRounded,
                       t.appointments.patient,
                       appt.patientName,
                     ),
                     20.horizontalSpace,
                     _detailItem(
-                      Icons.attach_money_rounded,
+                      MyIcons.attachMoneyRounded,
                       t.appointments.consultationFee,
                       '\$${appt.doctorFee.toStringAsFixed(2)}',
                     ),
@@ -220,7 +221,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
     width: 58.r,
     height: 58.r,
     color: AppColors.primary.withValues(alpha: 0.1),
-    child: Icon(Icons.person_rounded, color: AppColors.primary, size: 30.r),
+    child: Icon(MyIcons.personRounded, color: AppColors.primary, size: 30.r),
   );
 
   Widget _detailItem(IconData icon, String label, String value) => Expanded(
@@ -271,8 +272,8 @@ class _StarRatingRow extends StatelessWidget {
             padding: EdgeInsets.only(right: 4.w),
             child: Icon(
               rating >= starValue
-                  ? Icons.star_rounded
-                  : Icons.star_outline_rounded,
+                  ? MyIcons.starRounded
+                  : MyIcons.starOutlineRounded,
               color: AppColors.star,
               size: 26.r,
             ),

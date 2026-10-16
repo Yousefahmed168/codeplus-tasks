@@ -5,6 +5,7 @@ import '../../../../core/enums/app_language.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 /// Bottom sheet that lists the languages the app can be displayed in.
 ///
@@ -62,7 +63,7 @@ class LanguagePickerSheet extends StatelessWidget {
               title: Text(_labelFor(language), style: context.medium14.textPrimary),
               trailing: language == selected
                   ? Icon(
-                      Icons.check_circle_rounded,
+                      MyIcons.checkCircleRounded,
                       color: AppColors.primary,
                       size: 22.r,
                     )

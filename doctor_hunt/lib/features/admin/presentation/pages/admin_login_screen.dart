@@ -1,9 +1,9 @@
 import '../../../../core/widgets/password_text_form_field.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../auth/presentation/widgets/forgot_password_dialog.dart';
@@ -14,6 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../i18n/strings.g.dart';
 import '../cubit/admin_login_cubit.dart';
 import '../cubit/admin_login_state.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -23,14 +25,43 @@ class AdminLoginScreen extends StatefulWidget {
 }
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
+  static const String _rememberMeKey = 'admin_remember_me';
+  static const String _savedEmailKey = 'admin_saved_email';
+
   final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController(
-    text: kDebugMode ? "admin@gmail.com" : "",
-  );
-  final _passwordCtrl = TextEditingController(
-    text: kDebugMode ? "12345678" : "",
-  );
+  final _emailCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
   bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreRememberMe();
+  }
+
+  Future<void> _restoreRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    final remember = prefs.getBool(_rememberMeKey) ?? false;
+    final savedEmail = prefs.getString(_savedEmailKey);
+    if (!mounted) return;
+    setState(() {
+      _rememberMe = remember;
+      if (remember && savedEmail != null && savedEmail.isNotEmpty) {
+        _emailCtrl.text = savedEmail;
+      }
+    });
+  }
+
+  Future<void> _persistRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_rememberMe) {
+      await prefs.setBool(_rememberMeKey, true);
+      await prefs.setString(_savedEmailKey, _emailCtrl.text.trim());
+    } else {
+      await prefs.remove(_rememberMeKey);
+      await prefs.remove(_savedEmailKey);
+    }
+  }
 
   @override
   void dispose() {
@@ -41,6 +72,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   void _login(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
+    _persistRememberMe();
     context.read<AdminLoginCubit>().login(
       _emailCtrl.text.trim(),
       _passwordCtrl.text.trim(),
@@ -56,16 +88,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
           if (state is AdminLoginSuccess) {
             context.go(AppRoutes.adminMain);
           } else if (state is AdminLoginError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-              ),
-            );
+            SnackBarHelper.showError(context, state.message);
           }
         },
         builder: (context, state) {
@@ -110,7 +133,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       hintText: t.common.email,
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon: Icon(
-                        Icons.email_outlined,
+                        MyIcons.emailOutlined,
                         color: AppColors.textHint,
                         size: 20.r,
                       ),
@@ -177,7 +200,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.shield_rounded,
+                          MyIcons.shieldRounded,
                           color: AppColors.primary,
                           size: 16.r,
                         ),

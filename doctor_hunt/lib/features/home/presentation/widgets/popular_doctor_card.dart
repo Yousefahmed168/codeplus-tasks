@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class PopularDoctorCard extends StatelessWidget {
   final String imagePath;
@@ -56,7 +57,7 @@ class PopularDoctorCard extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorWidget: (_, _, _) => Center(
                           child: Icon(
-                            Icons.person,
+                            MyIcons.person,
                             size: 60.r,
                             color: AppColors.primary,
                           ),
@@ -67,7 +68,7 @@ class PopularDoctorCard extends StatelessWidget {
                         fit: BoxFit.fill,
                         errorBuilder: (_, _, _) => Center(
                           child: Icon(
-                            Icons.person,
+                            MyIcons.person,
                             size: 50.r,
                             color: AppColors.primary,
                           ),
@@ -106,10 +107,10 @@ class PopularDoctorCard extends StatelessWidget {
                     children: List.generate(5, (index) {
                       return Icon(
                         index < rating.floor()
-                            ? Icons.star_rounded
+                            ? MyIcons.starRounded
                             : (index < rating
-                                  ? Icons.star_half_rounded
-                                  : Icons.star_outline_rounded),
+                                  ? MyIcons.starHalfRounded
+                                  : MyIcons.starOutlineRounded),
                         color: AppColors.star,
                         size: 14.r,
                       );

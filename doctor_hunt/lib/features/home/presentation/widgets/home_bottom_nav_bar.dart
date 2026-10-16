@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -35,23 +36,23 @@ class HomeBottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavBarItem(
-            icon: Icons.home_rounded,
+            icon: MyIcons.homeRounded,
             isSelected: currentIndex == 0,
             onTap: () => onTap?.call(0),
           ),
           _NavBarItem(
-            icon: Icons.favorite_rounded,
+            icon: MyIcons.favoriteRounded,
             isSelected: currentIndex == 1,
             badgeCount: favoritesCount,
             onTap: () => onTap?.call(1),
           ),
           _NavBarItem(
-            icon: Icons.menu_book_rounded,
+            icon: MyIcons.menuBookRounded,
             isSelected: currentIndex == 2,
             onTap: () => onTap?.call(2),
           ),
           _NavBarItem(
-            icon: Icons.settings_rounded,
+            icon: MyIcons.settingsRounded,
             isSelected: currentIndex == 3,
             onTap: () => onTap?.call(3),
           ),

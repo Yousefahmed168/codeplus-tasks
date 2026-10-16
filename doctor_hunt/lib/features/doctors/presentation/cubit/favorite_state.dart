@@ -1,6 +1,6 @@
 ﻿import 'package:flutter/foundation.dart';
 
-import '../../models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 
 @immutable
 abstract class FavoriteState {}

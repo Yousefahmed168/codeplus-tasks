@@ -13,10 +13,11 @@ import '../../../../i18n/strings.g.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/social_button.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key, this.role});
-  final String? role;
+  const RegisterScreen({super.key});
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -27,12 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   final _confirmPasswordCtrl = TextEditingController();
-  final _phoneCtrl = TextEditingController();
-  final _specialtyCtrl = TextEditingController();
-  final _bioCtrl = TextEditingController();
-  final _experienceCtrl = TextEditingController();
   bool _agreeToTerms = false;
-  bool get _isDoctor => widget.role == 'doctor';
 
   @override
   void dispose() {
@@ -40,42 +36,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
     _confirmPasswordCtrl.dispose();
-    _phoneCtrl.dispose();
-    _specialtyCtrl.dispose();
-    _bioCtrl.dispose();
-    _experienceCtrl.dispose();
     super.dispose();
   }
 
   void _register() {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreeToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(t.auth.register.acceptTermsError),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      SnackBarHelper.showError(context, t.auth.register.acceptTermsError);
       return;
     }
-    if (_isDoctor) {
-      context.read<AuthCubit>().registerDoctor(
-        name: _nameCtrl.text.trim(),
-        email: _emailCtrl.text.trim(),
-        password: _passwordCtrl.text,
-        phone: _phoneCtrl.text.trim(),
-        specialty: _specialtyCtrl.text.trim(),
-        bio: _bioCtrl.text.trim(),
-        experienceYears: int.tryParse(_experienceCtrl.text.trim()) ?? 0,
-      );
-    } else {
-      context.read<AuthCubit>().registerPatient(
-        name: _nameCtrl.text.trim(),
-        email: _emailCtrl.text.trim(),
-        password: _passwordCtrl.text,
-        phone: _phoneCtrl.text.trim(),
-      );
-    }
+    context.read<AuthCubit>().registerPatient(
+      name: _nameCtrl.text.trim(),
+      email: _emailCtrl.text.trim(),
+      password: _passwordCtrl.text,
+      phone: '',
+    );
   }
 
   @override
@@ -84,18 +59,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error),
-                backgroundColor: AppColors.error,
-              ),
-            );
+            SnackBarHelper.showError(context, state.error);
           } else if (state is AuthSuccessState) {
-            if (_isDoctor) {
-              context.go(AppRoutes.updateDoctorProfile);
-            } else {
-              context.go(AppRoutes.home);
-            }
+            context.go(AppRoutes.home);
           } else if (state is AuthLoginSuccessState) {
             // Emitted after Google sign-in on the register screen
             if (state.roleName == null) {
@@ -149,26 +115,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context.read<AuthCubit>().loginWithGoogle(),
                         ),
                       ),
-                      12.horizontalSpace,
-                      Expanded(
-                        child: SocialButton(
-                          label: t.common.facebook,
-                          icon: SvgPicture.asset(
-                            AppImages.facebook,
-                            width: 20.r,
-                            height: 20.r,
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
                     ],
                   ),
                   30.verticalSpace,
                   CustomTextFormField(
                     controller: _nameCtrl,
-                    hintText: _isDoctor
-                        ? t.auth.register.doctorNameHint
-                        : t.common.name,
+                    hintText: t.common.name,
                     keyboardType: TextInputType.name,
                     validator: (v) {
                       if (v == null || v.isEmpty) {
@@ -232,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           decoration: BoxDecoration(
                             color: _agreeToTerms
                                 ? AppColors.primary
-                                : Colors.transparent,
+                                : AppColors.transparent,
                             border: Border.all(
                               color: _agreeToTerms
                                   ? AppColors.primary
@@ -243,7 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           child: _agreeToTerms
                               ? Icon(
-                                  Icons.check,
+                                  MyIcons.check,
                                   size: 14.r,
                                   color: AppColors.textOnPrimary,
                                 )

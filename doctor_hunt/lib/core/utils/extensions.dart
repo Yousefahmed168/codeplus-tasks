@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
+
 /// String Extensions
 extension StringExtension on String {
   /// Capitalizes first letter of the string
@@ -15,26 +17,13 @@ extension StringExtension on String {
   }
 
   /// Checks if string is a valid email
-  bool get isValidEmail {
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-    return emailRegex.hasMatch(this);
-  }
+  bool get isValidEmail => AppConstants.emailRegex.hasMatch(this);
 
   /// Checks if string is a valid phone number
-  bool get isValidPhone {
-    final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-    return phoneRegex.hasMatch(this);
-  }
+  bool get isValidPhone => AppConstants.phoneRegex.hasMatch(this);
 
   /// Checks if string is a valid URL
-  bool get isValidUrl {
-    final urlRegex = RegExp(
-      r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
-    );
-    return urlRegex.hasMatch(this);
-  }
+  bool get isValidUrl => AppConstants.urlRegex.hasMatch(this);
 
   /// Removes all whitespace from string
   String removeWhitespace() {
@@ -70,39 +59,6 @@ extension ContextExtension on BuildContext {
 
   /// Returns if keyboard is visible
   bool get isKeyboardVisible => MediaQuery.of(this).viewInsets.bottom > 0;
-
-  /// Shows snackbar with message
-  void showSnackBar(
-    String message, {
-    Duration duration = const Duration(seconds: 3),
-    SnackBarAction? action,
-  }) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(content: Text(message), duration: duration, action: action),
-    );
-  }
-
-  /// Shows error snackbar
-  void showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: colorScheme.error,
-        duration: const Duration(seconds: 4),
-      ),
-    );
-  }
-
-  /// Shows success snackbar
-  void showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
 
   /// Hides keyboard
   void hideKeyboard() {

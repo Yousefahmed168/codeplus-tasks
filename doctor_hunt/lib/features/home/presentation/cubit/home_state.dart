@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../features/auth/data/models/patient_model.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/patient_model.dart';
+import '../../../../core/models/doctor.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();

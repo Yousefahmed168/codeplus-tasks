@@ -1,5 +1,5 @@
 
-import '../../../doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../core/widgets/custom_back_button.dart';
@@ -17,6 +17,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class FindDoctorScreen extends StatefulWidget {
   const FindDoctorScreen({super.key});
@@ -49,7 +50,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   Widget build(BuildContext context) {
     return AppBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,13 +90,13 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                             setState(() => _searchQuery = '');
                           },
                           child: Icon(
-                            Icons.close_rounded,
+                            MyIcons.closeRounded,
                             color: AppColors.textSecondary,
                             size: 20.r,
                           ),
                         ),
                         prefixIcon: Icon(
-                          Icons.search_rounded,
+                          MyIcons.searchRounded,
                           color: AppColors.success,
                           size: 16.r,
                         ),
@@ -167,7 +168,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.search_off_rounded,
+                  MyIcons.searchOffRounded,
                   size: 64.r,
                   color: AppColors.textHint.withValues(alpha: 0.5),
                 ),
@@ -211,7 +212,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.shadow.withValues(alpha: 0.06),
               blurRadius: 12.r,
               offset: const Offset(0, 4),
             ),
@@ -273,7 +274,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                   6.verticalSpace,
                   Row(
                     children: [
-                      Icon(Icons.star_rounded, size: 14.r, color: AppColors.star),
+                      Icon(MyIcons.starRounded, size: 14.r, color: AppColors.star),
                       4.horizontalSpace,
                       Text(
                         (doctor.rating ?? 0).toStringAsFixed(1),

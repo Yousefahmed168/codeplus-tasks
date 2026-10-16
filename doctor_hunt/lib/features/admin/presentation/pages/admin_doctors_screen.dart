@@ -11,8 +11,11 @@ import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../widgets/admin_doctor_card.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/widgets/doctor_shimmer.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminDoctorsScreen extends StatefulWidget {
   const AdminDoctorsScreen({super.key});
@@ -59,19 +62,11 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
               if (doctor.uid != null) {
                 await sl<AdminService>().deleteDoctor(doctor.uid!);
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        t.admin.doctors.deleted.replaceAll(
-                          '@name',
-                          doctor.name ?? '',
-                        ),
-                      ),
-                      backgroundColor: AppColors.error,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
+                  SnackBarHelper.showError(
+                    context,
+                    t.admin.doctors.deleted.replaceAll(
+                      '@name',
+                      doctor.name ?? '',
                     ),
                   );
                 }
@@ -103,7 +98,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(AppRoutes.createDoctor),
         backgroundColor: AppColors.primary,
-        icon: Icon(Icons.add, color: AppColors.textOnPrimary, size: 20.r),
+        icon: Icon(MyIcons.add, color: AppColors.textOnPrimary, size: 20.r),
         label: Text(
           t.admin.doctors.addDoctor,
           style: context.semiBold14.copyWith(color: AppColors.textOnPrimary),
@@ -118,8 +113,15 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting &&
             !snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
+          return ListView(
+            padding: EdgeInsets.all(16.r),
+            children: [
+              const DoctorListRowShimmer(),
+              12.verticalSpace,
+              const DoctorListRowShimmer(),
+              12.verticalSpace,
+              const DoctorListRowShimmer(),
+            ],
           );
         }
 
@@ -145,7 +147,9 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
         }).toList();
 
         final totalDoctors = allDoctors.length;
-        final activeDoctors = allDoctors.length;
+        final activeDoctors = allDoctors
+            .where((doctor) => doctor.isActive)
+            .length;
 
         final categoryPills = [
           'All',
@@ -164,7 +168,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
             CustomTextFormField(
               maxLines: 1,
               hintText: t.admin.doctors.searchHint,
-              prefixIcon: Icon(Icons.search, size: 20.r),
+              prefixIcon: Icon(MyIcons.search, size: 20.r),
               controller: _searchCtrl,
               onChange: (v) => setState(() => _searchQuery = v),
             ),
@@ -232,13 +236,13 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
             Row(
               children: [
                 _buildStatCard(
-                  icon: Icons.people_outline,
+                  icon: MyIcons.peopleOutline,
                   label: t.admin.doctors.totalDoctors,
                   count: totalDoctors,
                 ),
                 16.horizontalSpace,
                 _buildStatCard(
-                  icon: Icons.check_circle_outline,
+                  icon: MyIcons.checkCircleOutline,
                   label: t.admin.doctors.active,
                   count: activeDoctors,
                   isGreen: true,

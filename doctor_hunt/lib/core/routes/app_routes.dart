@@ -9,7 +9,7 @@ import '../../features/appointments/views/appointments_screen.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
-import '../../features/doctors/models/doctor.dart';
+import '../../core/models/doctor.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
 import '../../features/doctors/presentation/pages/select_time_screen.dart';
 import '../../features/doctors/presentation/pages/favorite_doctors_screen.dart';
@@ -40,7 +40,6 @@ class AppRoutes {
   static const String doctorDetails = '/doctor-details';
   static const String search = '/search';
   static const String selectTime = '/select-time';
-  static const String updateDoctorProfile = '/update-doctor-profile';
   static const String patientSettings = '/patient-settings';
   static const String privacyPolicy = '/privacy-policy';
   static const String helpCenter = '/help-center';
@@ -93,16 +92,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.register,
-      pageBuilder: (context, state) {
-        final role = state.extra as String?;
-        return _slidePage(
-          key: state.pageKey,
-          child: BlocProvider(
-            create: (_) => AuthCubit(),
-            child: RegisterScreen(role: role),
-          ),
-        );
-      },
+      pageBuilder: (context, state) => _slidePage(
+        key: state.pageKey,
+        child: BlocProvider(
+          create: (_) => AuthCubit(),
+          child: const RegisterScreen(),
+        ),
+      ),
     ),
     GoRoute(
       path: AppRoutes.home,

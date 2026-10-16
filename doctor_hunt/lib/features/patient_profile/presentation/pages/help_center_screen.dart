@@ -5,6 +5,8 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 
 import '../../../../core/widgets/widgets.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});
@@ -27,7 +29,7 @@ class HelpCenterScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leadingWidth: 70.w,
         leading: Padding(
@@ -75,11 +77,10 @@ class HelpCenterScreen extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: 12.h),
                   child: InkWell(
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(t.helpCenter.selectedIssue(issue: issue)),
-                          backgroundColor: AppColors.primary,
-                        ),
+                      SnackBarHelper.show(
+                        context,
+                        t.helpCenter.selectedIssue(issue: issue),
+                        color: AppColors.primary,
                       );
                     },
                     borderRadius: BorderRadius.circular(12.r),
@@ -111,7 +112,7 @@ class HelpCenterScreen extends StatelessWidget {
                             ),
                           ),
                           Icon(
-                            Icons.chevron_right_rounded,
+                            MyIcons.chevronRightRounded,
                             color: AppColors.helpText,
                             size: 22.r,
                           ),

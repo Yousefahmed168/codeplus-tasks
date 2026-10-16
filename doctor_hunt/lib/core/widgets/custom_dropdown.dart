@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/style_atoms.dart';
+import '../../core/constants/my_icons.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   const CustomDropdown({
@@ -28,7 +29,7 @@ class CustomDropdown<T> extends StatelessWidget {
       initialValue: value,
       isExpanded: isExpanded,
       dropdownColor: Colors.white,
-      icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.textHint, size: 20),
+      icon: const Icon(MyIcons.keyboardArrowDown, color: AppColors.textHint, size: 20),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,

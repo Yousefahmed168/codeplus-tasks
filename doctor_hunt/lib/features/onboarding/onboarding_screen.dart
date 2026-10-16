@@ -1,6 +1,7 @@
 import '../../core/theme/colors.dart';
 import '../../core/utils/app_images.dart';
 import '../../i18n/strings.g.dart';
+import '../../core/services/local/shared_pref.dart';
 import '../../core/widgets/widgets.dart';
 import '../../core/theme/style_atoms.dart';
 import '../../core/routes/app_routes.dart';
@@ -51,7 +52,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void _finishOnboarding() {
+  Future<void> _finishOnboarding() async {
+    await SharedPref.setOnboardingShown();
+    if (!mounted) return;
     context.go(AppRoutes.role);
   }
 

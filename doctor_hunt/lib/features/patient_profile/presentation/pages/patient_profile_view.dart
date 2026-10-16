@@ -5,6 +5,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 /// The editable field of the profile screen.
 enum ProfileField { none, name, phone }
@@ -140,7 +141,7 @@ class _EditableInfoRow extends StatelessWidget {
             IconButton(
               onPressed: onStopEditing,
               icon: Icon(
-                Icons.check_circle_rounded,
+                MyIcons.checkCircleRounded,
                 color: AppColors.primary,
                 size: 26.r,
               ),
@@ -179,7 +180,7 @@ class _EditableInfoRow extends StatelessWidget {
             ),
             8.horizontalSpace,
             Icon(
-              Icons.edit_outlined,
+              MyIcons.editOutlined,
               color: AppColors.primary,
               size: 20.r,
             ),

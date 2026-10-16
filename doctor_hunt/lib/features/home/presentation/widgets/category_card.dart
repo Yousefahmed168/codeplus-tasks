@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class CategoryCard extends StatelessWidget {
   final String? svgAssetPath;
@@ -52,7 +53,7 @@ class CategoryCard extends StatelessWidget {
                     ),
                   )
                 : Icon(
-                    iconData ?? Icons.medical_services_outlined,
+                    iconData ?? MyIcons.medicalServicesOutlined,
                     color: AppColors.textOnPrimary,
                     size: 36.r,
                   ),

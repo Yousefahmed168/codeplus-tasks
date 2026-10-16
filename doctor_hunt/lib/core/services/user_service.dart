@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../features/auth/data/models/user_model.dart';
+import '../../core/enums/user_role.dart';
 import 'package:flutter/foundation.dart';
-import '../../features/doctors/models/doctor.dart';
-import '../../features/auth/data/models/patient_model.dart';
+import '../../core/models/doctor.dart';
+import '../../core/models/patient_model.dart';
 import 'auth_service.dart';
 
 /// Singleton for reading and writing user documents in Firestore.

@@ -3,6 +3,7 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class LiveDoctorCard extends StatelessWidget {
   final String imagePath;
@@ -41,7 +42,7 @@ class LiveDoctorCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.circle, size: 6.r, color: AppColors.textOnPrimary),
+                    Icon(MyIcons.circle, size: 6.r, color: AppColors.textOnPrimary),
                     4.horizontalSpace,
                     Text(
                       t.home.live,
@@ -71,7 +72,7 @@ class LiveDoctorCard extends StatelessWidget {
                   ],
                 ),
                 child: Icon(
-                  Icons.play_arrow_rounded,
+                  MyIcons.playArrowRounded,
                   color: AppColors.textOnPrimary,
                   size: 24.r,
                 ),

@@ -4,6 +4,7 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AppointmentSuccessDialog extends StatelessWidget {
   final String doctorName;
@@ -45,7 +46,7 @@ class AppointmentSuccessDialog extends StatelessWidget {
               ),
               child: Center(
                 child: Icon(
-                  Icons.thumb_up_rounded,
+                  MyIcons.thumbUpRounded,
                   color: AppColors.success,
                   size: 64.r,
                 ),

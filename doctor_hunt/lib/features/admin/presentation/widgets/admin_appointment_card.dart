@@ -5,6 +5,8 @@ import '../../../../core/models/appointment_model.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../i18n/strings.g.dart';
+import 'appointment_status_pill.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminAppointmentCard extends StatelessWidget {
   final AppointmentModel appointment;
@@ -92,7 +94,7 @@ class AdminAppointmentCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      _buildStatusChip(context, appointment.status),
+                      AppointmentStatusPill(status: appointment.status),
                     ],
                   ),
                 ),
@@ -109,19 +111,19 @@ class AdminAppointmentCard extends StatelessWidget {
                     children: [
                       _detailItem(
                         context,
-                        Icons.calendar_today_outlined,
+                        MyIcons.calendarTodayOutlined,
                         t.admin.appointments.date,
                         dateStr,
                       ),
                       _detailItem(
                         context,
-                        Icons.access_time_rounded,
+                        MyIcons.accessTimeRounded,
                         t.admin.appointments.time,
                         appointment.timeSlot,
                       ),
                       _detailItem(
                         context,
-                        Icons.attach_money_rounded,
+                        MyIcons.attachMoneyRounded,
                         t.admin.appointments.fee,
                         '\$${appointment.doctorFee.toStringAsFixed(2)}',
                       ),
@@ -153,7 +155,7 @@ class AdminAppointmentCard extends StatelessWidget {
                         children: [
                           if (appointment.reviewRating != null) ...[
                             Icon(
-                              Icons.star_rounded,
+                              MyIcons.starRounded,
                               size: 16.r,
                               color: AppColors.star,
                             ),
@@ -191,50 +193,6 @@ class AdminAppointmentCard extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 14.h),
             child: _buildActionButtons(context),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusChip(BuildContext context, AppointmentStatus status) {
-    Color chipBg;
-    Color chipColor;
-    String label;
-
-    switch (status) {
-      case AppointmentStatus.upcoming:
-        chipBg = AppColors.success.withValues(alpha: 0.12);
-        chipColor = AppColors.success;
-        label = t.admin.appointments.upcoming;
-        break;
-      case AppointmentStatus.completed:
-        chipBg = AppColors.primary.withValues(alpha: 0.12);
-        chipColor = AppColors.primary;
-        label = t.admin.appointments.completed;
-        break;
-      case AppointmentStatus.cancelled:
-        chipBg = AppColors.error.withValues(alpha: 0.12);
-        chipColor = AppColors.error;
-        label = t.admin.appointments.cancelled;
-        break;
-    }
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: chipBg,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6.r,
-            height: 6.r,
-            decoration: BoxDecoration(color: chipColor, shape: BoxShape.circle),
-          ),
-          6.horizontalSpace,
-          Text(label, style: context.semiBold12.copyWith(color: chipColor)),
         ],
       ),
     );
@@ -323,7 +281,7 @@ class AdminAppointmentCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.check_rounded,
+                    MyIcons.checkRounded,
                     size: 16.r,
                     color: AppColors.textOnPrimary,
                   ),

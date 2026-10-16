@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class FeatureDoctorCard extends StatelessWidget {
   final String imagePath;
@@ -56,8 +57,8 @@ class FeatureDoctorCard extends StatelessWidget {
                   onTap: onFavoriteTap,
                   child: Icon(
                     isFavorite
-                        ? Icons.favorite_rounded
-                        : Icons.favorite_border_rounded,
+                        ? MyIcons.favoriteRounded
+                        : MyIcons.favoriteBorderRounded,
                     size: 16.r,
                     color: isFavorite ? AppColors.error : AppColors.textLight,
                   ),
@@ -66,7 +67,7 @@ class FeatureDoctorCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      Icons.star_rounded,
+                      MyIcons.starRounded,
                       size: 14.r,
                       color: AppColors.star,
                     ),
@@ -92,7 +93,7 @@ class FeatureDoctorCard extends StatelessWidget {
                       height: 50.r,
                       fit: BoxFit.cover,
                       errorWidget: (_, _, _) => Icon(
-                        Icons.person,
+                        MyIcons.person,
                         size: 30.r,
                         color: AppColors.primary,
                       ),
@@ -103,7 +104,7 @@ class FeatureDoctorCard extends StatelessWidget {
                       height: 50.r,
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => Icon(
-                        Icons.person,
+                        MyIcons.person,
                         size: 30.r,
                         color: AppColors.primary,
                       ),

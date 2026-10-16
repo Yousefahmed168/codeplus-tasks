@@ -10,7 +10,7 @@ import '../../../../core/enums/app_language.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/utils/constants.dart';
-import '../../../auth/data/models/patient_model.dart';
+import '../../../../core/models/patient_model.dart';
 import 'patient_settings_state.dart';
 
 /// Owns the settings screen: stored preferences, the app version and the live

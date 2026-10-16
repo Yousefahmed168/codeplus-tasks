@@ -11,6 +11,8 @@ import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import '../../../../i18n/strings.g.dart';
 import '../cubit/admin_appointment_details_cubit.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../widgets/appointment_status_pill.dart';
 
 class AdminAppointmentDetailsScreen extends StatelessWidget {
   const AdminAppointmentDetailsScreen({super.key});
@@ -53,38 +55,11 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
     >(
       listener: (context, state) {
         if (state.successAction == 'cancelled') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(t.admin.appointments.cancelSuccess),
-              backgroundColor: AppColors.destructiveRed,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          );
+          SnackBarHelper.show(context, t.admin.appointments.cancelSuccess, color: AppColors.destructiveRed);
         } else if (state.successAction == 'completed') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(t.admin.appointments.completeSuccess),
-              backgroundColor: AppColors.emeraldGreen,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          );
+          SnackBarHelper.show(context, t.admin.appointments.completeSuccess, color: AppColors.emeraldGreen);
         } else if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          );
+          SnackBarHelper.showError(context, state.errorMessage!);
         }
       },
       builder: (context, state) {
@@ -219,7 +194,7 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
                       t.admin.appointments.appointment,
                       style: context.bold16.textPrimary,
                     ),
-                    _buildStatusPill(context, appt.status),
+                    AppointmentStatusPill(status: appt.status),
                   ],
                 ),
                 8.h.verticalSpace,
@@ -424,50 +399,6 @@ class _AdminAppointmentDetailsView extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusPill(BuildContext context, AppointmentStatus status) {
-    Color pillBg;
-    Color pillColor;
-    String label;
-
-    switch (status) {
-      case AppointmentStatus.upcoming:
-        pillBg = AppColors.mintTileBackground;
-        pillColor = AppColors.emeraldGreen;
-        label = t.admin.appointments.upcoming;
-        break;
-      case AppointmentStatus.completed:
-        pillBg = AppColors.primary.withValues(alpha: 0.12);
-        pillColor = AppColors.primary;
-        label = t.admin.appointments.completed;
-        break;
-      case AppointmentStatus.cancelled:
-        pillBg = AppColors.destructiveRedLight;
-        pillColor = AppColors.destructiveRed;
-        label = t.admin.appointments.cancelled;
-        break;
-    }
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: pillBg,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6.w,
-            height: 6.h,
-            decoration: BoxDecoration(color: pillColor, shape: BoxShape.circle),
-          ),
-          6.w.horizontalSpace,
-          Text(label, style: context.semiBold12.copyWith(color: pillColor)),
         ],
       ),
     );

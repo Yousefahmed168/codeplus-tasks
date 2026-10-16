@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../i18n/strings.g.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class HomeHeader extends StatelessWidget {
   final TextEditingController? searchController;
@@ -81,7 +82,7 @@ class HomeHeader extends StatelessWidget {
                       GestureDetector(
                         onTap: () => DrawerScreen.of(context)?.toggleDrawer(),
                         child: Icon(
-                          Icons.menu_rounded,
+                          MyIcons.menuRounded,
                           color: AppColors.textOnPrimary,
                           size: 28.r,
                         ),
@@ -121,7 +122,7 @@ class HomeHeader extends StatelessWidget {
                                 placeholder: (_, _) => Container(
                                   color: AppColors.textOnPrimary.withValues(alpha: 0.3),
                                   child: Icon(
-                                    Icons.person_rounded,
+                                    MyIcons.personRounded,
                                     color: AppColors.textOnPrimary,
                                     size: 26.r,
                                   ),
@@ -144,13 +145,13 @@ class HomeHeader extends StatelessWidget {
                 suffixIcon: GestureDetector(
                   onTap: onClearSearch,
                   child: Icon(
-                    Icons.close_rounded,
+                    MyIcons.closeRounded,
                     color: AppColors.textSecondary,
                     size: 20.r,
                   ),
                 ),
                 prefixIcon: Icon(
-                  Icons.search_rounded,
+                  MyIcons.searchRounded,
                   color: AppColors.success,
                   size: 16.r,
                 ),

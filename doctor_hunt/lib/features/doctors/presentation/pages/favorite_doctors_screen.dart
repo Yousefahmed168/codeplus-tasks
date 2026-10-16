@@ -14,6 +14,8 @@ import '../../../../core/services/auth_service.dart';
 import '../../../../i18n/strings.g.dart';
 import '../cubit/favorite_cubit.dart';
 import '../cubit/favorite_state.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class FavoriteDoctorsScreen extends StatelessWidget {
   const FavoriteDoctorsScreen({super.key});
@@ -25,7 +27,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
     if (patientUid == null) {
       return AppBackground(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           body: Center(
             child: Text(
               t.favorite.pleaseLogin,
@@ -40,9 +42,9 @@ class FavoriteDoctorsScreen extends StatelessWidget {
       create: (context) => FavoriteCubit()..loadFavorites(),
       child: AppBackground(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.transparent,
             elevation: 0,
             leadingWidth: 64.w,
             title: Text(
@@ -91,7 +93,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.favorite_border_rounded,
+                          MyIcons.favoriteBorderRounded,
                           size: 64.r,
                           color: AppColors.textHint,
                         ),
@@ -207,32 +209,25 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                                     .removeFavorite(doctor.uid!);
 
                                 if (!context.mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      t.favorite.doctorRemoved(
-                                        doctorName: doctorName,
-                                      ),
-                                    ),
-                                    action: SnackBarAction(
-                                      label: t.common.undo,
-                                      textColor: AppColors.background,
-                                      onPressed: () {
-                                        context
-                                            .read<FavoriteCubit>()
-                                            .addFavorite(doctor.uid!);
-                                      },
-                                    ),
-                                    duration: const Duration(seconds: 3),
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
+                                SnackBarHelper.show(
+                                  context,
+                                  t.favorite.doctorRemoved(
+                                    doctorName: doctorName,
                                   ),
+                                  action: SnackBarAction(
+                                    label: t.common.undo,
+                                    textColor: AppColors.background,
+                                    onPressed: () {
+                                      context
+                                          .read<FavoriteCubit>()
+                                          .addFavorite(doctor.uid!);
+                                    },
+                                  ),
+                                  duration: const Duration(seconds: 3),
                                 );
                               },
                               child: Icon(
-                                Icons.favorite_rounded,
+                                MyIcons.favoriteRounded,
                                 color: AppColors.error,
                                 size: 20.r,
                               ),

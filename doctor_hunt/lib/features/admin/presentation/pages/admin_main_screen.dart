@@ -6,6 +6,7 @@ import '../../../../i18n/strings.g.dart';
 import 'admin_appointments_screen.dart';
 import 'admin_doctors_screen.dart';
 import 'admin_settings_screen.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -43,18 +44,18 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
         unselectedItemColor: AppColors.textHint,
         items: [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.people_outline),
-            activeIcon: const Icon(Icons.people),
+            icon: const Icon(MyIcons.peopleOutline),
+            activeIcon: const Icon(MyIcons.people),
             label: t.admin.doctors.title,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.menu_book_outlined),
-            activeIcon: const Icon(Icons.menu_book),
+            icon: const Icon(MyIcons.menuBookOutlined),
+            activeIcon: const Icon(MyIcons.menuBook),
             label: t.admin.appointments.title,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings_outlined),
-            activeIcon: const Icon(Icons.settings),
+            icon: const Icon(MyIcons.settingsOutlined),
+            activeIcon: const Icon(MyIcons.settings),
             label: t.admin.settings.title,
           ),
         ],

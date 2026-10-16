@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../features/doctors/models/doctor.dart';
-import '../../features/auth/data/models/patient_model.dart';
-import '../../features/auth/data/models/user_model.dart';
+import '../../core/models/patient_model.dart';
+import '../../core/enums/user_role.dart';
 
 class AuthService {
   AuthService._();
@@ -130,35 +129,6 @@ class AuthService {
               name: name.trim(),
               email: email.trim(),
               phone: phone.trim(),
-            ).toJson(),
-          );
-      await user.updateDisplayName(name.trim());
-    }
-    return credential;
-  }
-
-  Future<UserCredential> registerDoctor({
-    required String name,
-    required String email,
-    required String password,
-    required String phone,
-    required String specialty,
-    String bio = '',
-    int experienceYears = 0,
-  }) async {
-    final credential = await _auth.createUserWithEmailAndPassword(
-      email: email.trim(),
-      password: password,
-    );
-    final user = credential.user;
-    if (user != null) {
-      await _firestore.collection(doctorsCollection).doc(user.uid).set(
-            Doctor(
-              uid: user.uid,
-              name: name.trim(),
-             
-              specialization: specialty.trim(),
-              rating: 0,
             ).toJson(),
           );
       await user.updateDisplayName(name.trim());

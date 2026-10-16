@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/enums/app_language.dart';
-import '../../../auth/data/models/patient_model.dart';
+import '../../../../core/models/patient_model.dart';
 
 /// Presentation state for the settings screen.
 ///

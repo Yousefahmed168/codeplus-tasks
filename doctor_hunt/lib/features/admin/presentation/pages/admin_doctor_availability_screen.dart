@@ -2,15 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/di/service_locator.dart';
-import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../core/widgets/main_button.dart';
 import '../../../../core/widgets/custom_dropdown.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../cubit/doctor_availability_cubit.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminDoctorAvailabilityScreen extends StatefulWidget {
   final Doctor doctor;
@@ -38,7 +40,6 @@ class _AdminDoctorAvailabilityScreenState
   late String _startTime;
   late String _endTime;
   late int _slotDuration;
-  bool _isSaving = false;
 
   @override
   void initState() {
@@ -59,51 +60,39 @@ class _AdminDoctorAvailabilityScreenState
     });
   }
 
-  Future<void> _saveAvailability() async {
-    if (widget.doctor.uid == null) return;
-    setState(() => _isSaving = true);
-
-    try {
-      await sl<AdminService>().updateDoctor(widget.doctor.uid!, {
-        'workingDays': _selectedDays,
-        'startTime': _startTime,
-        'endTime': _endTime,
-        'slotDuration': _slotDuration,
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.admin.availability.updated),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
-        context.pop();
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.availability.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSaving = false);
-    }
+  void _saveAvailability() {
+    context.read<DoctorAvailabilityCubit>().saveAvailability(
+      doctor: widget.doctor,
+      workingDays: _selectedDays,
+      startTime: _startTime,
+      endTime: _endTime,
+      slotDuration: _slotDuration,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => DoctorAvailabilityCubit(),
+      child: BlocListener<DoctorAvailabilityCubit, DoctorAvailabilityState>(
+        listener: (context, state) {
+          if (state.status == DoctorAvailabilityStatus.saved) {
+            SnackBarHelper.showSuccess(context, t.admin.availability.updated);
+            context.pop();
+          } else if (state.status == DoctorAvailabilityStatus.failed) {
+            SnackBarHelper.showError(
+              context,
+              '${t.admin.availability.failed}: ${state.errorMessage}',
+            );
+          }
+        },
+        child: _buildScaffold(context),
+      ),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
+    final state = context.watch<DoctorAvailabilityCubit>().state;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -180,7 +169,7 @@ class _AdminDoctorAvailabilityScreenState
                               isExpanded: true,
                               prefixIcon: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                                child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
+                                child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                               ),
                               items: const [
                                 '08:00 AM',
@@ -208,7 +197,7 @@ class _AdminDoctorAvailabilityScreenState
                               isExpanded: true,
                               prefixIcon: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                                child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
+                                child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                               ),
                               items: const [
                                 '03:00 PM',
@@ -235,7 +224,7 @@ class _AdminDoctorAvailabilityScreenState
                     isExpanded: true,
                     prefixIcon: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Icon(Icons.access_time, size: 16.r, color: AppColors.primary),
+                      child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                     ),
                     items: const [
                       '15 Minutes',
@@ -255,8 +244,12 @@ class _AdminDoctorAvailabilityScreenState
             32.verticalSpace,
 
             MainButton(
-              text: _isSaving ? t.admin.editDoctor.updatingBtn : t.admin.editDoctor.updateBtn,
-              onPressed: _isSaving ? null : _saveAvailability,
+              text: state.status == DoctorAvailabilityStatus.saving
+                  ? t.admin.editDoctor.updatingBtn
+                  : t.admin.editDoctor.updateBtn,
+              onPressed: state.status == DoctorAvailabilityStatus.saving
+                  ? null
+                  : _saveAvailability,
               bgColor: AppColors.primary,
             ),
             32.verticalSpace,
@@ -297,7 +290,7 @@ class _AdminDoctorAvailabilityScreenState
             child:
                 widget.doctor.imageUrl == null ||
                     widget.doctor.imageUrl!.isEmpty
-                ? const Icon(Icons.person, color: AppColors.primary)
+                ? const Icon(MyIcons.person, color: AppColors.primary)
                 : null,
           ),
           12.horizontalSpace,
@@ -366,7 +359,7 @@ class _AdminDoctorAvailabilityScreenState
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(
-              Icons.calendar_today_outlined,
+              MyIcons.calendarTodayOutlined,
               size: 16.r,
               color: AppColors.primary,
             ),

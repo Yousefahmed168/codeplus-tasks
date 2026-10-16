@@ -8,9 +8,10 @@ import '../../../../core/services/admin_service.dart';
 import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 import '../widgets/doctor_form_widget.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
 
 class CreateDoctorScreen extends StatefulWidget {
   const CreateDoctorScreen({super.key});
@@ -45,16 +46,7 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.createDoctor.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.admin.createDoctor.failed}: $e');
       }
     }
   }
@@ -82,30 +74,12 @@ class _CreateDoctorScreenState extends State<CreateDoctorScreen> {
       await sl<AdminService>().createDoctor(doctor);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.admin.createDoctor.success),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showSuccess(context, t.admin.createDoctor.success);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.createDoctor.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.admin.createDoctor.failed}: $e');
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

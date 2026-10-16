@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class MapPreview extends StatelessWidget {
   const MapPreview({super.key});
@@ -43,7 +44,7 @@ class MapPreview extends StatelessWidget {
                   width: 40.r,
                   height: 40.r,
                   child: Icon(
-                    Icons.location_on_rounded,
+                    MyIcons.locationOnRounded,
                     size: 40.r,
                     color: AppColors.primary,
                   ),

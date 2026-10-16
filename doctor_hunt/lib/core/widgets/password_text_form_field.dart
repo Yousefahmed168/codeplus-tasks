@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 
 import '../theme/style_atoms.dart';
 import '../utils/text_styles.dart';
+import '../../core/constants/my_icons.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
@@ -50,7 +51,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
                   obscureText = !obscureText;
                 });
               },
-              icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+              icon: Icon(obscureText ? MyIcons.visibilityOff : MyIcons.visibility),
             ),
             prefixIcon: widget.prefixIcon,
           ),

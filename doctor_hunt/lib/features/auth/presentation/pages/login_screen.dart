@@ -14,6 +14,8 @@ import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/forgot_password_dialog.dart';
 import '../widgets/social_button.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,19 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error),
-                backgroundColor: AppColors.error,
-              ),
-            );
+            SnackBarHelper.showError(context, state.error);
           } else if (state is AuthPasswordResetSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.success,
-              ),
-            );
+            SnackBarHelper.showSuccess(context, state.message);
           } else if (state is AuthLoginSuccessState) {
             context.go(AppRoutes.home);
           }
@@ -111,18 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .loginWithGoogle(),
                           ),
                         ),
-                        12.horizontalSpace,
-                        Expanded(
-                          child: SocialButton(
-                            label: t.common.facebook,
-                            icon: SvgPicture.asset(
-                              AppImages.facebook,
-                              width: 20.r,
-                              height: 20.r,
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
                       ],
                     ),
                     28.verticalSpace,
@@ -132,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: t.common.email,
                       keyboardType: TextInputType.emailAddress,
                       suffixIcon: Icon(
-                        Icons.check_circle_rounded,
+                        MyIcons.checkCircleRounded,
                         color: AppColors.primary,
                         size: 20.r,
                       ),

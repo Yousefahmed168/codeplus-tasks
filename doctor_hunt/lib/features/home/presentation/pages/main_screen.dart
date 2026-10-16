@@ -5,6 +5,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../features/home/presentation/pages/home_screen.dart';
 import '../../../../features/home/presentation/widgets/home_bottom_nav_bar.dart';
@@ -41,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: AppBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         body: IndexedStack(
           index: _currentIndex,
           children: [

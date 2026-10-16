@@ -3,8 +3,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminDoctorCard extends StatelessWidget {
   const AdminDoctorCard({
@@ -51,7 +52,7 @@ class AdminDoctorCard extends StatelessWidget {
                   : null,
             ),
             child: doctor.imageUrl == null || doctor.imageUrl!.isEmpty
-                ? Icon(Icons.person, color: AppColors.primary, size: 28.r)
+                ? Icon(MyIcons.person, color: AppColors.primary, size: 28.r)
                 : null,
           ),
           16.horizontalSpace,

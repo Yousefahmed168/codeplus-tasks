@@ -82,6 +82,12 @@ class AppColors {
   /// Default card / input border
   static const Color border = Color(0xFFE8E8E8);
 
+  /// Fully transparent. Prefer this over the raw `Colors.transparent`.
+  static const Color transparent = Color(0x00000000);
+
+  /// Neutral shadow / overlay base. Apply opacity via `withValues(alpha: ...)`.
+  static const Color shadow = Color(0xFF000000);
+
   /// Divider lines between list items
   static const Color divider = Color(0xFFF0F0F0);
 

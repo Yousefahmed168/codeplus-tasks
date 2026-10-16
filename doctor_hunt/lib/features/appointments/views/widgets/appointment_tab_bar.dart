@@ -40,7 +40,7 @@ class AppointmentTabBar extends StatelessWidget {
                 curve: Curves.easeInOut,
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primary : Colors.transparent,
+                  color: isSelected ? AppColors.primary : AppColors.transparent,
                   borderRadius: BorderRadius.circular(10.r),
                   boxShadow: isSelected
                       ? [

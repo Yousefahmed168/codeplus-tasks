@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../../features/doctors/models/doctor.dart';
+import '../../core/models/doctor.dart';
 
 class AdminService {
   AdminService._();

@@ -12,6 +12,8 @@ import '../../../appointments/views/widgets/appointment_shimmer.dart';
 import '../cubit/admin_appointments_cubit.dart';
 import '../cubit/admin_appointments_state.dart';
 import '../widgets/admin_appointment_card.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 class AdminAppointmentsScreen extends StatefulWidget {
   const AdminAppointmentsScreen({super.key});
@@ -157,7 +159,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
           duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.symmetric(vertical: 10.h),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : Colors.transparent,
+            color: isSelected ? AppColors.primary : AppColors.transparent,
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: Center(
@@ -191,13 +193,13 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
   IconData _getEmptyIcon() {
     switch (_selectedTab) {
       case 0:
-        return Icons.calendar_today_outlined;
+        return MyIcons.calendarTodayOutlined;
       case 1:
-        return Icons.check_circle_outline_rounded;
+        return MyIcons.checkCircleOutlineRounded;
       case 2:
-        return Icons.cancel_outlined;
+        return MyIcons.cancelOutlined;
       default:
-        return Icons.calendar_today_outlined;
+        return MyIcons.calendarTodayOutlined;
     }
   }
 
@@ -248,25 +250,11 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
       try {
         await cubit.cancelAppointment(appt.id);
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(t.admin.appointments.cancelSuccess),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          );
+          SnackBarHelper.showError(context, t.admin.appointments.cancelSuccess);
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed: $e'),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          SnackBarHelper.showError(context, 'Failed: $e');
         }
       }
     }
@@ -306,25 +294,11 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
       try {
         await cubit.completeAppointment(appt.id);
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(t.admin.appointments.completeSuccess),
-              backgroundColor: AppColors.primary,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          );
+          SnackBarHelper.show(context, t.admin.appointments.completeSuccess, color: AppColors.primary);
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed: $e'),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          SnackBarHelper.showError(context, 'Failed: $e');
         }
       }
     }

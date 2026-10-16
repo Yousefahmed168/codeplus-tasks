@@ -11,11 +11,13 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import '../../../../i18n/strings.g.dart';
-import '../../../auth/data/models/patient_model.dart';
+import '../../../../core/models/patient_model.dart';
 import '../../../auth/presentation/widgets/logout_dialog.dart';
 import '../cubit/patient_settings_cubit.dart';
 import '../cubit/patient_settings_state.dart';
 import '../widgets/language_picker_sheet.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
+import '../../../../core/constants/my_icons.dart';
 
 /// Patient settings screen.
 ///
@@ -44,21 +46,12 @@ class _PatientSettingsView extends StatelessWidget {
       listenWhen: (previous, current) =>
           current.error != null && previous.error != current.error,
       listener: (context, state) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.error!),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, state.error!);
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           elevation: 0,
           scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
@@ -91,14 +84,14 @@ class _PatientSettingsView extends StatelessWidget {
                 _SectionHeader(title: t.patientSettings.accountSettings),
                 12.verticalSpace,
                 _ActionRow(
-                  icon: Icons.lock_outline_rounded,
+                  icon: MyIcons.lockOutlineRounded,
                   iconBackground: AppColors.settingsIconRed,
                   title: t.patientSettings.changePassword,
                   onTap: () => context.push(AppRoutes.changePassword),
                 ),
                 10.verticalSpace,
                 _SwitchRow(
-                  icon: Icons.notifications_none_rounded,
+                  icon: MyIcons.notificationsNoneRounded,
                   iconBackground: AppColors.primary,
                   title: t.patientSettings.notifications,
                   value: state.notificationsEnabled,
@@ -108,7 +101,7 @@ class _PatientSettingsView extends StatelessWidget {
                 ),
                 10.verticalSpace,
                 _ActionRow(
-                  icon: Icons.privacy_tip_outlined,
+                  icon: MyIcons.privacyTipOutlined,
                   iconBackground: AppColors.settingsIconOrange,
                   title: t.patientSettings.privacyPolicy,
                   onTap: () => context.push(AppRoutes.privacyPolicy),
@@ -212,18 +205,18 @@ class _UserInfoCard extends StatelessWidget {
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
                         placeholder: (_, _) => Icon(
-                          Icons.person_rounded,
+                          MyIcons.personRounded,
                           color: AppColors.primary,
                           size: 28.r,
                         ),
                         errorWidget: (_, _, _) => Icon(
-                          Icons.person_rounded,
+                          MyIcons.personRounded,
                           color: AppColors.primary,
                           size: 28.r,
                         ),
                       )
                     : Icon(
-                        Icons.person_rounded,
+                        MyIcons.personRounded,
                         color: AppColors.primary,
                         size: 28.r,
                       ),
@@ -265,7 +258,7 @@ class _UserInfoCard extends StatelessWidget {
             ),
             8.horizontalSpace,
             Icon(
-              Icons.chevron_right_rounded,
+              MyIcons.chevronRightRounded,
               color: AppColors.textHint,
               size: 22.r,
             ),
@@ -371,7 +364,7 @@ class _ActionRow extends StatelessWidget {
           16.horizontalSpace,
           Expanded(child: Text(title, style: context.medium14.textPrimary)),
           Icon(
-            Icons.chevron_right_rounded,
+            MyIcons.chevronRightRounded,
             color: AppColors.textSecondary,
             size: 22.r,
           ),
@@ -443,7 +436,7 @@ class _ValueRow extends StatelessWidget {
           if (onTap != null) ...[
             4.horizontalSpace,
             Icon(
-              Icons.chevron_right_rounded,
+              MyIcons.chevronRightRounded,
               color: AppColors.textSecondary,
               size: 20.r,
             ),
@@ -478,7 +471,7 @@ class _LogoutButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.logout_rounded, color: AppColors.error, size: 20.r),
+              Icon(MyIcons.logoutRounded, color: AppColors.error, size: 20.r),
               8.horizontalSpace,
               Text(
                 t.common.logout,

@@ -8,9 +8,10 @@ import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/custom_back_button.dart';
-import '../../../../features/doctors/models/doctor.dart';
+import '../../../../core/models/doctor.dart';
 import '../../../../i18n/strings.g.dart';
 import '../widgets/doctor_form_widget.dart';
+import '../../../../core/utils/snack_bar_helper.dart';
 
 class EditDoctorScreen extends StatefulWidget {
   final Doctor doctor;
@@ -57,16 +58,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.editDoctor.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.admin.editDoctor.failed}: $e');
       }
     }
   }
@@ -76,32 +68,14 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     try {
       await sl<AdminService>().deleteDoctor(widget.doctor.uid!);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.admin.editDoctor.deletedSuccess),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, t.admin.editDoctor.deletedSuccess);
         // Pop back to list
         context.pop();
         context.pop(); 
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.editDoctor.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.admin.editDoctor.failed}: $e');
       }
     }
   }
@@ -161,30 +135,12 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.admin.editDoctor.success),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showSuccess(context, t.admin.editDoctor.success);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${t.admin.editDoctor.failed}: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-        );
+        SnackBarHelper.showError(context, '${t.admin.editDoctor.failed}: $e');
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
