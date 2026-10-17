@@ -4,6 +4,8 @@ import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/services/admin_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/models/doctor.dart';
@@ -26,6 +28,8 @@ class AdminDoctorAvailabilityScreen extends StatefulWidget {
 
 class _AdminDoctorAvailabilityScreenState
     extends State<AdminDoctorAvailabilityScreen> {
+  /// Canonical weekday values persisted to Firestore (matched against
+  /// [Doctor.workingDays]); localized for display only, via [_dayLabel].
   final List<String> _allDays = [
     'Monday',
     'Tuesday',
@@ -40,6 +44,38 @@ class _AdminDoctorAvailabilityScreenState
   late String _startTime;
   late String _endTime;
   late int _slotDuration;
+  String _clinicLocation = '';
+
+  /// Selectable slot durations, in minutes.
+  static const List<int> _slotDurationMinutes = [15, 30, 45, 60];
+
+  /// Default selectable working hours (persisted verbatim).
+  static const List<String> _startTimeOptionsBase = [
+    '08:00 AM',
+    '09:00 AM',
+    '10:00 AM',
+    '11:00 AM',
+  ];
+  static const List<String> _endTimeOptionsBase = [
+    '03:00 PM',
+    '04:00 PM',
+    '05:00 PM',
+    '06:00 PM',
+    '07:00 PM',
+  ];
+
+  /// The selectable options, always including the doctor's stored value so the
+  /// dropdown never receives a value that is missing from its items.
+  List<int> get _slotDurationOptions =>
+      <int>{..._slotDurationMinutes, _slotDuration}.toList()..sort();
+
+  List<String> get _startTimeOptions => _startTimeOptionsBase.contains(_startTime)
+      ? _startTimeOptionsBase
+      : [..._startTimeOptionsBase, _startTime];
+
+  List<String> get _endTimeOptions => _endTimeOptionsBase.contains(_endTime)
+      ? _endTimeOptionsBase
+      : [..._endTimeOptionsBase, _endTime];
 
   @override
   void initState() {
@@ -48,6 +84,45 @@ class _AdminDoctorAvailabilityScreenState
     _startTime = widget.doctor.startTime;
     _endTime = widget.doctor.endTime;
     _slotDuration = widget.doctor.slotDuration;
+
+    sl<AdminService>().getCentralClinicLocation().then((location) {
+      if (mounted) setState(() => _clinicLocation = location);
+    });
+  }
+
+  /// Localized label for a persisted weekday value (`Monday`..`Sunday`).
+  String _dayLabel(String day) {
+    switch (day) {
+      case 'Monday':
+        return t.admin.availability.days.monday;
+      case 'Tuesday':
+        return t.admin.availability.days.tuesday;
+      case 'Wednesday':
+        return t.admin.availability.days.wednesday;
+      case 'Thursday':
+        return t.admin.availability.days.thursday;
+      case 'Friday':
+        return t.admin.availability.days.friday;
+      case 'Saturday':
+        return t.admin.availability.days.saturday;
+      case 'Sunday':
+        return t.admin.availability.days.sunday;
+      default:
+        return day;
+    }
+  }
+
+  String _slotDurationLabel(int minutes) =>
+      t.admin.availability.minutes(count: minutes);
+
+  /// Specialty and clinic location, falling back to a single placeholder.
+  String _doctorSubtitle() {
+    final specialty = widget.doctor.specialization?.trim();
+    final parts = [
+      if (specialty != null && specialty.isNotEmpty) specialty,
+      if (_clinicLocation.isNotEmpty) _clinicLocation,
+    ];
+    return parts.isEmpty ? t.common.notProvided : parts.join(' • ');
   }
 
   void _toggleDay(String day, bool isSelected) {
@@ -60,7 +135,7 @@ class _AdminDoctorAvailabilityScreenState
     });
   }
 
-  void _saveAvailability() {
+  void _saveAvailability(BuildContext context) {
     context.read<DoctorAvailabilityCubit>().saveAvailability(
       doctor: widget.doctor,
       workingDays: _selectedDays,
@@ -80,13 +155,13 @@ class _AdminDoctorAvailabilityScreenState
             SnackBarHelper.showSuccess(context, t.admin.availability.updated);
             context.pop();
           } else if (state.status == DoctorAvailabilityStatus.failed) {
-            SnackBarHelper.showError(
-              context,
-              '${t.admin.availability.failed}: ${state.errorMessage}',
-            );
+            SnackBarHelper.showError(context, t.admin.availability.failed);
           }
         },
-        child: _buildScaffold(context),
+        // A [Builder] gives the subtree a context below the [BlocProvider] so
+        // `context.watch`/`context.read` can resolve the cubit. The State's own
+        // context is an ancestor of the provider and would throw.
+        child: Builder(builder: _buildScaffold),
       ),
     );
   }
@@ -171,12 +246,7 @@ class _AdminDoctorAvailabilityScreenState
                                 padding: EdgeInsets.symmetric(horizontal: 8.w),
                                 child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                               ),
-                              items: const [
-                                '08:00 AM',
-                                '09:00 AM',
-                                '10:00 AM',
-                                '11:00 AM',
-                              ],
+                              items: _startTimeOptions,
                               onChanged: (v) => setState(() => _startTime = v!),
                             ),
                           ],
@@ -199,13 +269,7 @@ class _AdminDoctorAvailabilityScreenState
                                 padding: EdgeInsets.symmetric(horizontal: 8.w),
                                 child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                               ),
-                              items: const [
-                                '03:00 PM',
-                                '04:00 PM',
-                                '05:00 PM',
-                                '06:00 PM',
-                                '07:00 PM',
-                              ],
+                              items: _endTimeOptions,
                               onChanged: (v) => setState(() => _endTime = v!),
                             ),
                           ],
@@ -215,27 +279,27 @@ class _AdminDoctorAvailabilityScreenState
                   ),
                   16.verticalSpace,
                   Text(
-                    'SLOT DURATION',
+                    t.admin.availability.slotDuration,
                     style: context.semiBold11.textSecondary,
                   ),
                   5.verticalSpace,
                   CustomDropdown<String>(
-                    value: '$_slotDuration Minutes',
+                    value: _slotDurationLabel(_slotDuration),
                     isExpanded: true,
                     prefixIcon: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
                       child: Icon(MyIcons.accessTime, size: 16.r, color: AppColors.primary),
                     ),
-                    items: const [
-                      '15 Minutes',
-                      '30 Minutes',
-                      '45 Minutes',
-                      '60 Minutes',
-                    ],
+                    items: _slotDurationOptions
+                        .map(_slotDurationLabel)
+                        .toList(),
                     onChanged: (v) {
-                      setState(() {
-                        _slotDuration = int.parse(v!.split(' ')[0]);
-                      });
+                      if (v == null) return;
+                      final minutes = _slotDurationOptions.firstWhere(
+                        (m) => _slotDurationLabel(m) == v,
+                        orElse: () => _slotDuration,
+                      );
+                      setState(() => _slotDuration = minutes);
                     },
                   ),
                 ],
@@ -249,7 +313,7 @@ class _AdminDoctorAvailabilityScreenState
                   : t.admin.editDoctor.updateBtn,
               onPressed: state.status == DoctorAvailabilityStatus.saving
                   ? null
-                  : _saveAvailability,
+                  : () => _saveAvailability(context),
               bgColor: AppColors.primary,
             ),
             32.verticalSpace,
@@ -299,11 +363,11 @@ class _AdminDoctorAvailabilityScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.doctor.name ?? 'Unknown',
+                  widget.doctor.name ?? '',
                   style: context.bold14.textPrimary,
                 ),
                 Text(
-                  '${widget.doctor.specialization ?? 'General'} • Central Clinic',
+                  _doctorSubtitle(),
                   style: context.regular12.textSecondary,
                 ),
               ],
@@ -367,7 +431,7 @@ class _AdminDoctorAvailabilityScreenState
           12.horizontalSpace,
           Expanded(
             child: Text(
-              day,
+              _dayLabel(day),
               style: context.semiBold14.copyWith(
                 color: isSelected ? AppColors.textPrimary : AppColors.textHint,
               ),

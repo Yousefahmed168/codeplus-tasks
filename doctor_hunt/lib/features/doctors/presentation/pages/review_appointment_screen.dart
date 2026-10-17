@@ -39,7 +39,7 @@ class _ReviewAppointmentScreenState extends State<ReviewAppointmentScreen> {
   Future<void> _confirm() async {
     final currentUser = sl<AuthService>().currentUser;
     if (currentUser == null) {
-      SnackBarHelper.showWarning(context, t.favorite.pleaseLogin);
+      SnackBarHelper.showWarning(context, t.common.loginRequired);
       return;
     }
 

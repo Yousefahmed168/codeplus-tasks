@@ -1,4 +1,3 @@
-import '../../features/patient_profile/presentation/pages/help_center_screen.dart';
 import '../../features/patient_profile/presentation/pages/patient_profile_screen.dart';
 import '../../features/patient_profile/presentation/pages/patient_settings_screen.dart';
 import '../../features/patient_profile/presentation/pages/privacy_policy_screen.dart';
@@ -45,7 +44,6 @@ class AppRoutes {
   static const String reviewAppointment = '/review-appointment';
   static const String patientSettings = '/patient-settings';
   static const String privacyPolicy = '/privacy-policy';
-  static const String helpCenter = '/help-center';
   static const String patientAppointments = '/patient-appointments';
   static const String favoriteDoctors = '/favorite-doctors';
   static const String patientProfile = '/profile';
@@ -154,11 +152,6 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.privacyPolicy,
       pageBuilder: (context, state) =>
           _slidePage(key: state.pageKey, child: const PrivacyPolicyScreen()),
-    ),
-    GoRoute(
-      path: AppRoutes.helpCenter,
-      pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const HelpCenterScreen()),
     ),
     GoRoute(
       path: AppRoutes.favoriteDoctors,

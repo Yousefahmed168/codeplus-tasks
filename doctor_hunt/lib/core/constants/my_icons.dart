@@ -31,9 +31,7 @@ class MyIcons {
   static const IconData cameraAlt = Icons.camera_alt;
   static const IconData cameraAltRounded = Icons.camera_alt_rounded;
   static const IconData cancelOutlined = Icons.cancel_outlined;
-  static const IconData chatBubbleOutlineRounded = Icons.chat_bubble_outline_rounded;
   static const IconData scheduleRounded = Icons.schedule_rounded;
-  static const IconData arrowForwardRounded = Icons.arrow_forward_rounded;
   static const IconData rateReviewRounded = Icons.rate_review_rounded;
   static const IconData checkCircleOutline = Icons.check_circle_outline;
   static const IconData checkCircleOutlineRounded = Icons.check_circle_outline_rounded;

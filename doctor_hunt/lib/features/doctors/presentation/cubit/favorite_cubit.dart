@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/services/favorite_service.dart';
+import '../../../../i18n/strings.g.dart';
 import 'favorite_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
@@ -19,7 +21,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   void loadFavorites() {
     final uid = _authService.currentUser?.uid;
     if (uid == null) {
-      emit(FavoriteError('Not logged in'));
+      emit(FavoriteError(t.common.errorGeneric));
       return;
     }
 
@@ -47,7 +49,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         currentFavoriteIds = favorites;
         emitIfReady();
       },
-      onError: (e) => emit(FavoriteError('Failed to load favorites: $e')),
+      onError: (e) {
+        debugPrint('FavoriteCubit: failed to load favorites: $e');
+        emit(FavoriteError(t.common.errorGeneric));
+      },
     );
 
     _doctorsSub = _userService.streamDoctors().listen(
@@ -55,7 +60,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         allDoctors = doctors;
         emitIfReady();
       },
-      onError: (e) => emit(FavoriteError('Failed to load doctors: $e')),
+      onError: (e) {
+        debugPrint('FavoriteCubit: failed to load doctors: $e');
+        emit(FavoriteError(t.common.errorGeneric));
+      },
     );
   }
 

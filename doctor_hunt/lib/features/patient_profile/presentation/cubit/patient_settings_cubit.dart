@@ -9,6 +9,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/models/patient_model.dart';
+import '../../../../i18n/strings.g.dart';
 import 'patient_settings_state.dart';
 
 /// Owns the settings screen: stored preferences, the app version and the live
@@ -76,7 +77,8 @@ class PatientSettingsCubit extends Cubit<PatientSettingsState> {
       },
       onError: (Object error) {
         if (isClosed) return;
-        emit(state.copyWith(error: 'Failed to load your profile: $error'));
+        debugPrint('PatientSettingsCubit: failed to load profile: $error');
+        emit(state.copyWith(error: t.common.errorGeneric));
       },
     );
   }
@@ -100,8 +102,9 @@ class PatientSettingsCubit extends Cubit<PatientSettingsState> {
       _patientSubscription = null;
       await _authService.logout();
     } catch (e) {
+      debugPrint('PatientSettingsCubit: failed to log out: $e');
       if (!isClosed) {
-        emit(state.copyWith(error: 'Failed to log out: $e'));
+        emit(state.copyWith(error: t.common.errorGeneric));
       }
     } finally {
       if (!isClosed) {

@@ -8,6 +8,7 @@ import '../../../../core/models/review_model.dart';
 import '../../../../core/services/appointment_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/string_utils.dart';
 import '../../../../core/widgets/rating_stars.dart';
 import '../../../../i18n/strings.g.dart';
 
@@ -121,7 +122,7 @@ class _ReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = (review.patientName ?? '').trim();
+    final name = StringUtils.maskName(review.patientName ?? '');
     final date = review.createdAt != null
         ? DateFormat('d MMM yyyy').format(review.createdAt!)
         : '';

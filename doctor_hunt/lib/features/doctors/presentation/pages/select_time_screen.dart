@@ -32,7 +32,9 @@ class SelectTimeScreen extends StatefulWidget {
 }
 
 class _SelectTimeScreenState extends State<SelectTimeScreen> {
-  /// Monday-first, matching [DateTime.weekday] (1 = Monday).
+  /// Monday-first, matching [DateTime.weekday] (1 = Monday). These are the
+  /// canonical values persisted in [Doctor.workingDays] (data, not UI text; the
+  /// admin availability screen localizes them for display).
   static const List<String> _weekdayNames = [
     'Monday',
     'Tuesday',
@@ -357,7 +359,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                               if (sl<AuthService>().currentUser == null) {
                                 SnackBarHelper.showWarning(
                                   context,
-                                  t.favorite.pleaseLogin,
+                                  t.common.loginRequired,
                                 );
                                 return;
                               }

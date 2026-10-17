@@ -56,7 +56,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$patientProfile$en patientProfile = Translations$patientProfile$en._(_root);
 	late final Translations$patientSettings$en patientSettings = Translations$patientSettings$en._(_root);
 	late final Translations$privacyPolicy$en privacyPolicy = Translations$privacyPolicy$en._(_root);
-	late final Translations$helpCenter$en helpCenter = Translations$helpCenter$en._(_root);
 	late final Translations$logoutDialog$en logoutDialog = Translations$logoutDialog$en._(_root);
 	late final Translations$menu$en menu = Translations$menu$en._(_root);
 	late final Translations$appointments$en appointments = Translations$appointments$en._(_root);
@@ -82,9 +81,6 @@ class Translations$common$en {
 
 	/// en: 'Google'
 	String get google => 'Google';
-
-	/// en: 'Facebook'
-	String get facebook => 'Facebook';
 
 	/// en: 'Continue'
 	String get continueBtn => 'Continue';
@@ -148,6 +144,9 @@ class Translations$common$en {
 
 	/// en: 'An error occurred. Please try again'
 	String get errorGeneric => 'An error occurred. Please try again';
+
+	/// en: 'Please log in to continue'
+	String get loginRequired => 'Please log in to continue';
 
 	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
 
@@ -558,24 +557,24 @@ class Translations$privacyPolicy$en {
 
 	/// en: 'Doctor Hunt Apps Privacy Policy'
 	String get heading => 'Doctor Hunt Apps Privacy Policy';
-}
 
-// Path: helpCenter
-class Translations$helpCenter$en {
-	Translations$helpCenter$en._(this._root);
+	/// en: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here', making it look like readable English.'
+	String get intro => 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.';
 
-	final Translations _root; // ignore: unused_field
+	/// en: 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.'
+	String get bullet1 => 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.';
 
-	// Translations
+	/// en: 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.'
+	String get bullet2 => 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.';
 
-	/// en: 'Help center'
-	String get title => 'Help center';
+	/// en: 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
+	String get bullet3 => 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
 
-	/// en: 'I have an issue with'
-	String get issueHeader => 'I have an issue with';
+	/// en: 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
+	String get bullet4 => 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
 
-	/// en: 'Selected: $issue'
-	String selectedIssue({required Object issue}) => 'Selected: ${issue}';
+	/// en: 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
+	String get outro => 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
 }
 
 // Path: logoutDialog
@@ -955,6 +954,27 @@ class Translations$auth$errors$en {
 
 	/// en: 'User not found after login'
 	String get userNotFound => 'User not found after login';
+
+	/// en: 'Invalid email or password'
+	String get invalidCredentials => 'Invalid email or password';
+
+	/// en: 'An account already exists with this email'
+	String get emailAlreadyInUse => 'An account already exists with this email';
+
+	/// en: 'Password is too weak'
+	String get weakPassword => 'Password is too weak';
+
+	/// en: 'Invalid email address'
+	String get invalidEmail => 'Invalid email address';
+
+	/// en: 'This account has been disabled'
+	String get userDisabled => 'This account has been disabled';
+
+	/// en: 'Too many attempts. Please try again later'
+	String get tooManyRequests => 'Too many attempts. Please try again later';
+
+	/// en: 'Network error. Check your connection'
+	String get networkRequestFailed => 'Network error. Check your connection';
 }
 
 // Path: admin.chooseRole
@@ -1181,6 +1201,14 @@ class Translations$admin$availability$en {
 	/// en: '$count days enabled'
 	String daysEnabled({required Object count}) => '${count} days enabled';
 
+	/// en: 'SLOT DURATION'
+	String get slotDuration => 'SLOT DURATION';
+
+	/// en: '$count Minutes'
+	String minutes({required Object count}) => '${count} Minutes';
+
+	late final Translations$admin$availability$days$en days = Translations$admin$availability$days$en._(_root);
+
 	/// en: 'Availability updated successfully'
 	String get updated => 'Availability updated successfully';
 
@@ -1204,6 +1232,9 @@ class Translations$admin$editProfile$en {
 
 	/// en: 'FULL NAME'
 	String get fullName => 'FULL NAME';
+
+	/// en: 'e.g. John Smith'
+	String get nameHint => 'e.g. John Smith';
 
 	/// en: 'EMAIL ADDRESS'
 	String get emailAddress => 'EMAIL ADDRESS';
@@ -1354,6 +1385,9 @@ class Translations$admin$settings$en {
 
 	/// en: 'App version'
 	String get appVersion => 'App version';
+
+	/// en: 'Administrator'
+	String get adminFallbackName => 'Administrator';
 }
 
 // Path: roleSelection.roles.patient
@@ -1371,6 +1405,36 @@ class Translations$roleSelection$roles$patient$en {
 	String get description => 'Find doctors, book appointments, and manage your visits.';
 }
 
+// Path: admin.availability.days
+class Translations$admin$availability$days$en {
+	Translations$admin$availability$days$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Monday'
+	String get monday => 'Monday';
+
+	/// en: 'Tuesday'
+	String get tuesday => 'Tuesday';
+
+	/// en: 'Wednesday'
+	String get wednesday => 'Wednesday';
+
+	/// en: 'Thursday'
+	String get thursday => 'Thursday';
+
+	/// en: 'Friday'
+	String get friday => 'Friday';
+
+	/// en: 'Saturday'
+	String get saturday => 'Saturday';
+
+	/// en: 'Sunday'
+	String get sunday => 'Sunday';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -1383,7 +1447,6 @@ extension on Translations {
 			'common.email' => 'Email',
 			'common.password' => 'Password',
 			'common.google' => 'Google',
-			'common.facebook' => 'Facebook',
 			'common.continueBtn' => 'Continue',
 			'common.skip' => 'Skip',
 			'common.next' => 'Next',
@@ -1405,6 +1468,7 @@ extension on Translations {
 			'common.tapBackAgainToExit' => 'Tap back again to exit',
 			'common.loading' => 'Loading...',
 			'common.errorGeneric' => 'An error occurred. Please try again',
+			'common.loginRequired' => 'Please log in to continue',
 			'common.validation.enterEmail' => 'Enter your email',
 			'common.validation.validEmail' => 'Enter a valid email',
 			'common.validation.enterPassword' => 'Enter your password',
@@ -1459,6 +1523,13 @@ extension on Translations {
 			'auth.errors.noAccountFound' => 'No account found with this email.',
 			'auth.errors.useAdminLogin' => 'You cannot log in here. Please use the admin login screen.',
 			'auth.errors.userNotFound' => 'User not found after login',
+			'auth.errors.invalidCredentials' => 'Invalid email or password',
+			'auth.errors.emailAlreadyInUse' => 'An account already exists with this email',
+			'auth.errors.weakPassword' => 'Password is too weak',
+			'auth.errors.invalidEmail' => 'Invalid email address',
+			'auth.errors.userDisabled' => 'This account has been disabled',
+			'auth.errors.tooManyRequests' => 'Too many attempts. Please try again later',
+			'auth.errors.networkRequestFailed' => 'Network error. Check your connection',
 			'home.popularDoctor' => 'Popular Doctors',
 			'home.topRatedDoctor' => 'Top Rated Doctors',
 			'home.specialties' => 'Specialties',
@@ -1575,11 +1646,21 @@ extension on Translations {
 			'admin.availability.startTime' => 'START TIME',
 			'admin.availability.endTime' => 'END TIME',
 			'admin.availability.daysEnabled' => ({required Object count}) => '${count} days enabled',
+			'admin.availability.slotDuration' => 'SLOT DURATION',
+			'admin.availability.minutes' => ({required Object count}) => '${count} Minutes',
+			'admin.availability.days.monday' => 'Monday',
+			'admin.availability.days.tuesday' => 'Tuesday',
+			'admin.availability.days.wednesday' => 'Wednesday',
+			'admin.availability.days.thursday' => 'Thursday',
+			'admin.availability.days.friday' => 'Friday',
+			'admin.availability.days.saturday' => 'Saturday',
+			'admin.availability.days.sunday' => 'Sunday',
 			'admin.availability.updated' => 'Availability updated successfully',
 			'admin.availability.failed' => 'Failed to update availability',
 			'admin.editProfile.title' => 'Edit Profile',
 			'admin.editProfile.tapPhotoToChange' => 'Tap photo to change',
 			'admin.editProfile.fullName' => 'FULL NAME',
+			'admin.editProfile.nameHint' => 'e.g. John Smith',
 			'admin.editProfile.emailAddress' => 'EMAIL ADDRESS',
 			'admin.editProfile.clinicLocation' => 'CLINIC LOCATION',
 			'admin.editProfile.clinicLocationHint' => '123 Main St, Downtown, City',
@@ -1624,6 +1705,7 @@ extension on Translations {
 			'admin.settings.changePasswordDesc' => 'Update admin security credentials',
 			'admin.settings.appInformation' => 'App Information',
 			'admin.settings.appVersion' => 'App version',
+			'admin.settings.adminFallbackName' => 'Administrator',
 			'patientProfile.title' => 'Profile',
 			'patientProfile.personalInfo' => 'Personal information',
 			'patientProfile.contactNumber' => 'Contact Number',
@@ -1642,9 +1724,12 @@ extension on Translations {
 			'patientSettings.buildVersion' => 'Build version',
 			'privacyPolicy.title' => 'Privacy policy',
 			'privacyPolicy.heading' => 'Doctor Hunt Apps Privacy Policy',
-			'helpCenter.title' => 'Help center',
-			'helpCenter.issueHeader' => 'I have an issue with',
-			'helpCenter.selectedIssue' => ({required Object issue}) => 'Selected: ${issue}',
+			'privacyPolicy.intro' => 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.',
+			'privacyPolicy.bullet1' => 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.',
+			'privacyPolicy.bullet2' => 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.',
+			'privacyPolicy.bullet3' => 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
+			'privacyPolicy.bullet4' => 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
+			'privacyPolicy.outro' => 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
 			'logoutDialog.title' => 'Log Out',
 			'logoutDialog.confirmMessage' => 'Are you sure you want to logout?',
 			'menu.home' => 'Home',

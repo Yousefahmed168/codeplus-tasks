@@ -97,6 +97,10 @@ class _PatientSettingsView extends StatelessWidget {
                       .read<PatientSettingsCubit>()
                       .toggleNotifications(value),
                 ),
+                // NOTE: The MVP scope lists a "Language" setting, but the app
+                // ships a single locale (`AppLocale.en`). A picker with one
+                // option is a dead control, so the row is intentionally omitted
+                // until a second locale is added.
                 10.verticalSpace,
                 _ActionRow(
                   icon: MyIcons.privacyTipOutlined,

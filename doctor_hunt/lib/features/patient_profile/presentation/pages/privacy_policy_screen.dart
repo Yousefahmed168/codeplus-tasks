@@ -48,35 +48,23 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 ),
                 16.verticalSpace,
                 Text(
-                  'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.',
+                  t.privacyPolicy.intro,
                   style: context.regular14.copyWith(
                     color: AppColors.textSecondary,
                     height: 1.6,
                   ),
                 ),
                 20.verticalSpace,
-                _buildBulletPoint(
-                  context,
-                  'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.',
-                ),
+                _buildBulletPoint(context, t.privacyPolicy.bullet1),
                 14.verticalSpace,
-                _buildBulletPoint(
-                  context,
-                  'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.',
-                ),
+                _buildBulletPoint(context, t.privacyPolicy.bullet2),
                 14.verticalSpace,
-                _buildBulletPoint(
-                  context,
-                  'Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
-                ),
+                _buildBulletPoint(context, t.privacyPolicy.bullet3),
                 14.verticalSpace,
-                _buildBulletPoint(
-                  context,
-                  'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
-                ),
+                _buildBulletPoint(context, t.privacyPolicy.bullet4),
                 24.verticalSpace,
                 Text(
-                  'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
+                  t.privacyPolicy.outro,
                   style: context.regular14.copyWith(
                     color: AppColors.textSecondary,
                     height: 1.6,

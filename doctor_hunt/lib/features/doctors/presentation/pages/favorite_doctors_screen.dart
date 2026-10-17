@@ -185,14 +185,14 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    doctor.name ?? 'Doctor',
+                                    doctor.name ?? '',
                                     style: context.bold16.textPrimary,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   4.verticalSpace,
                                   Text(
-                                    doctor.specialization ?? 'Specialist',
+                                    doctor.specialization ?? '',
                                     style: context.regular14.textSecondary,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -202,7 +202,7 @@ class FavoriteDoctorsScreen extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                final doctorName = doctor.name ?? 'Doctor';
+                                final doctorName = doctor.name ?? '';
 
                                 await context
                                     .read<FavoriteCubit>()

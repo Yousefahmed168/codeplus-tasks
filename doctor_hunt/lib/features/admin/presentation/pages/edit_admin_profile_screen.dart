@@ -46,11 +46,11 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
     super.dispose();
   }
 
-  void _pickImage() {
+  void _pickImage(BuildContext context) {
     context.read<EditAdminProfileCubit>().pickImage();
   }
 
-  void _save() {
+  void _save(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
     context.read<EditAdminProfileCubit>().save(
       name: _nameCtrl.text.trim(),
@@ -78,10 +78,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
             SnackBarHelper.showSuccess(context, t.admin.editProfile.success);
             context.pop();
           } else if (state.status == EditAdminProfileStatus.failed) {
-            SnackBarHelper.showError(
-              context,
-              '${t.admin.editProfile.failed}: ${state.errorMessage}',
-            );
+            SnackBarHelper.showError(context, t.admin.editProfile.failed);
           }
         },
         builder: (context, state) => _buildScaffold(context, state),
@@ -118,7 +115,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
             children: [
               // Avatar
               GestureDetector(
-                onTap: _pickImage,
+                onTap: () => _pickImage(context),
                 child: Stack(
                   children: [
                     Container(
@@ -191,7 +188,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
               8.verticalSpace,
               CustomTextFormField(
                 controller: _nameCtrl,
-                hintText: t.admin.createDoctor.nameHint,
+                hintText: t.admin.editProfile.nameHint,
                 prefixIcon: Icon(
                   MyIcons.personOutline,
                   color: AppColors.textHint,
@@ -271,7 +268,7 @@ class _EditAdminProfileScreenState extends State<EditAdminProfileScreen> {
                       : t.admin.editProfile.saveChanges,
                   onPressed: state.status == EditAdminProfileStatus.saving
                       ? null
-                      : _save,
+                      : () => _save(context),
                 ),
               ),
             ],

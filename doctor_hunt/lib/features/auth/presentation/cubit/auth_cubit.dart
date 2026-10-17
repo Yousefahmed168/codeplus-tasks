@@ -1,5 +1,7 @@
 import '../../../../core/di/service_locator.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/services/auth_service.dart';
@@ -33,8 +35,11 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         emit(AuthErrorState(t.auth.errors.userNotFound));
       }
+    } on FirebaseAuthException catch (e) {
+      emit(AuthErrorState(_authService.getErrorMessage(e.code)));
     } catch (e) {
-      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
+      debugPrint('AuthCubit: auth action failed: $e');
+      emit(AuthErrorState(t.common.errorGeneric));
     }
   }
 
@@ -43,8 +48,11 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _authService.sendPasswordResetEmail(email);
       emit(AuthPasswordResetSuccessState(t.auth.resetEmailSent));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthErrorState(_authService.getErrorMessage(e.code)));
     } catch (e) {
-      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
+      debugPrint('AuthCubit: auth action failed: $e');
+      emit(AuthErrorState(t.common.errorGeneric));
     }
   }
 
@@ -63,8 +71,11 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
       emit(AuthLoginSuccessState(role.name));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthErrorState(_authService.getErrorMessage(e.code)));
     } catch (e) {
-      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
+      debugPrint('AuthCubit: auth action failed: $e');
+      emit(AuthErrorState(t.common.errorGeneric));
     }
   }
 
@@ -83,8 +94,11 @@ class AuthCubit extends Cubit<AuthState> {
         phone: phone,
       );
       emit(AuthSuccessState(message: t.auth.registrationSuccessful));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthErrorState(_authService.getErrorMessage(e.code)));
     } catch (e) {
-      emit(AuthErrorState(_authService.getErrorMessage(e.toString())));
+      debugPrint('AuthCubit: auth action failed: $e');
+      emit(AuthErrorState(t.common.errorGeneric));
     }
   }
 }

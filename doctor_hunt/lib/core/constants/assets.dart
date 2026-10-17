@@ -10,10 +10,6 @@ class Assets {
   /// assets/icons/eye.svg
   static const String resourceIconsEye = "assets/icons/eye.svg";
 
-  /// Assets for resourceIconsFacebook
-  /// assets/icons/Facebook.svg
-  static const String resourceIconsFacebook = "assets/icons/Facebook.svg";
-
   /// Assets for resourceIconsGoogle
   /// assets/icons/google.svg
   static const String resourceIconsGoogle = "assets/icons/google.svg";

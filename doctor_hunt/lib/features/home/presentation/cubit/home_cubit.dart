@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -8,6 +9,7 @@ import '../../../../core/services/favorite_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/models/patient_model.dart';
 import '../../../../core/models/doctor.dart';
+import '../../../../i18n/strings.g.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -38,7 +40,10 @@ class HomeCubit extends Cubit<HomeState> {
         _currentDoctors = doctors;
         _emitLoaded();
       },
-      onError: (e) => emit(HomeError('Failed to load doctors: $e')),
+      onError: (e) {
+        debugPrint('HomeCubit: failed to load doctors: $e');
+        emit(HomeError(t.common.errorGeneric));
+      },
     );
 
     if (uid != null) {
@@ -47,7 +52,10 @@ class HomeCubit extends Cubit<HomeState> {
           _currentPatient = patient;
           _emitLoaded();
         },
-        onError: (e) => emit(HomeError('Failed to load patient: $e')),
+        onError: (e) {
+          debugPrint('HomeCubit: failed to load patient: $e');
+          emit(HomeError(t.common.errorGeneric));
+        },
       );
 
       _favoritesSub = _favoriteService.streamFavoriteIds(uid).listen(
@@ -55,7 +63,10 @@ class HomeCubit extends Cubit<HomeState> {
           _currentFavorites = favorites;
           _emitLoaded();
         },
-        onError: (e) => emit(HomeError('Failed to load favorites: $e')),
+        onError: (e) {
+          debugPrint('HomeCubit: failed to load favorites: $e');
+          emit(HomeError(t.common.errorGeneric));
+        },
       );
     } else {
       _emitLoaded();

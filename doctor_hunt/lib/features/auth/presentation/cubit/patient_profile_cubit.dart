@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -8,6 +9,7 @@ import '../../../../core/services/cloudinary_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/models/patient_model.dart';
 import '../../../../core/enums/user_role.dart';
+import '../../../../i18n/strings.g.dart';
 import 'patient_profile_state.dart';
 
 class PatientProfileCubit extends Cubit<PatientProfileState> {
@@ -23,7 +25,7 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
     emit(PatientProfileLoading());
     final uid = _authService.currentUser?.uid;
     if (uid == null) {
-      emit(const PatientProfileError('User not logged in'));
+      emit(PatientProfileError(t.common.errorGeneric));
       return;
     }
 
@@ -33,11 +35,12 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
         if (patient != null) {
           emit(PatientProfileLoaded(patient: patient));
         } else {
-          emit(const PatientProfileError('Patient profile not found'));
+          emit(PatientProfileError(t.common.errorGeneric));
         }
       },
       onError: (error) {
-        emit(PatientProfileError('Failed to load profile: $error'));
+        debugPrint('PatientProfileCubit: failed to load profile: $error');
+        emit(PatientProfileError(t.common.errorGeneric));
       },
     );
   }
@@ -86,10 +89,15 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
         role: UserRole.patient,
       );
 
-      // The patient stream pushes the new document; no need to emit Loaded here.
+      // Always exit the transient saving state. Relying on the Firestore stream
+      // to push the new document is unsafe: a write that does not change any
+      // field emits no snapshot, which would leave the UI stuck on "Loading...".
+      if (isClosed) return true;
+      emit(PatientProfileLoaded(patient: updated));
       return true;
     } catch (e) {
-      emit(PatientProfileError('Failed to update profile: $e'));
+      debugPrint('PatientProfileCubit: failed to update profile: $e');
+      emit(PatientProfileError(t.common.errorGeneric));
       // Revert to loaded state after showing error
       emit(PatientProfileLoaded(patient: currentPatient));
       return false;

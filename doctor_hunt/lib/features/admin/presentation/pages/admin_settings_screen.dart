@@ -1,9 +1,9 @@
 import '../../../auth/presentation/widgets/logout_dialog.dart'
     show LogoutDialog;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/services/auth_service.dart';
@@ -21,13 +21,14 @@ class AdminSettingsScreen extends StatefulWidget {
 }
 
 class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
-  User? get _user => FirebaseAuth.instance.currentUser;
-
   @override
   Widget build(BuildContext context) {
-    final user = _user;
-    final displayName = user?.displayName ?? 'Administrator';
-    final email = user?.email ?? 'admin@doctorhunt.com';
+    final user = sl<AuthService>().currentUser;
+    final rawName = user?.displayName?.trim() ?? '';
+    final displayName = rawName.isEmpty
+        ? t.admin.settings.adminFallbackName
+        : rawName;
+    final email = user?.email?.trim() ?? '';
     final initials = StringUtils.getInitials(displayName);
 
     return Scaffold(
@@ -112,7 +113,10 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                     children: [
                       Text(displayName, style: context.semiBold16.textPrimary),
                       2.verticalSpace,
-                      Text(email, style: context.regular12.textSecondary),
+                      Text(
+                        email.isEmpty ? t.common.notProvided : email,
+                        style: context.regular12.textSecondary,
+                      ),
                     ],
                   ),
                 ),
@@ -144,7 +148,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             icon: MyIcons.infoOutline,
             title: t.admin.settings.appInformation,
             subtitle: t.admin.settings.appVersion,
-            version: 'v1.0.0',
+            trailing: const _AppVersionText(),
           ),
           24.verticalSpace,
 
@@ -238,7 +242,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
     required IconData icon,
     required String title,
     required String subtitle,
-    String? version,
+    Widget? trailing,
   }) {
     return Container(
       padding: EdgeInsets.all(16.r),
@@ -275,9 +279,40 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
               ],
             ),
           ),
-          if (version != null)
-            Text(version, style: context.regular12.textSecondary),
+          ?trailing,
         ],
+      ),
+    );
+  }
+}
+
+/// Reads the real bundle version instead of a hardcoded literal.
+class _AppVersionText extends StatefulWidget {
+  const _AppVersionText();
+
+  @override
+  State<_AppVersionText> createState() => _AppVersionTextState();
+}
+
+class _AppVersionTextState extends State<_AppVersionText> {
+  late final Future<String> _version = _load();
+
+  Future<String> _load() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      return 'v${info.version}+${info.buildNumber}';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: _version,
+      builder: (context, snapshot) => Text(
+        snapshot.data ?? '',
+        style: context.regular12.textSecondary,
       ),
     );
   }

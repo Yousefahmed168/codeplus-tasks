@@ -15,4 +15,15 @@ class StringUtils {
     }
     return parts[0][0].toUpperCase();
   }
+
+  /// Masks a display name for public surfaces, keeping the first name and the
+  /// initial of the last part (`Ahmed Ali` -> `Ahmed A.`). Single-word names are
+  /// returned unchanged; an empty name yields an empty string.
+  static String maskName(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return '';
+    final parts = trimmed.split(RegExp(r'\s+'));
+    if (parts.length == 1) return parts.first;
+    return '${parts.first} ${parts.last[0].toUpperCase()}.';
+  }
 }

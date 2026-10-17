@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/models/doctor.dart';
 import '../../../../core/services/admin_service.dart';
+import '../../../../i18n/strings.g.dart';
 
 enum DoctorAvailabilityStatus { idle, saving, saved, failed }
 
@@ -43,10 +45,11 @@ class DoctorAvailabilityCubit extends Cubit<DoctorAvailabilityState> {
       });
       emit(const DoctorAvailabilityState(status: DoctorAvailabilityStatus.saved));
     } catch (e) {
+      debugPrint('DoctorAvailabilityCubit: failed to save availability: $e');
       emit(
         DoctorAvailabilityState(
           status: DoctorAvailabilityStatus.failed,
-          errorMessage: e.toString(),
+          errorMessage: t.common.errorGeneric,
         ),
       );
     }

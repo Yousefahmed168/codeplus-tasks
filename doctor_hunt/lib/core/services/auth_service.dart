@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../core/models/patient_model.dart';
 import '../../core/enums/user_role.dart';
+import '../../i18n/strings.g.dart';
 
 class AuthService {
   AuthService._();
@@ -154,28 +155,28 @@ class AuthService {
     await _auth.signOut();
   }
 
+  /// Maps a Firebase Auth error [code] to a localized, user-facing message.
   String getErrorMessage(String code) {
     switch (code) {
       case 'user-not-found':
-        return 'No account found with this email';
+        return t.auth.errors.noAccountFound;
       case 'wrong-password':
-        return 'Incorrect password';
-      case 'email-already-in-use':
-        return 'An account already exists with this email';
-      case 'weak-password':
-        return 'Password is too weak';
-      case 'invalid-email':
-        return 'Invalid email address';
-      case 'user-disabled':
-        return 'This account has been disabled';
-      case 'too-many-requests':
-        return 'Too many attempts. Please try again later';
-      case 'network-request-failed':
-        return 'Network error. Check your connection';
       case 'invalid-credential':
-        return 'Invalid email or password';
+        return t.auth.errors.invalidCredentials;
+      case 'email-already-in-use':
+        return t.auth.errors.emailAlreadyInUse;
+      case 'weak-password':
+        return t.auth.errors.weakPassword;
+      case 'invalid-email':
+        return t.auth.errors.invalidEmail;
+      case 'user-disabled':
+        return t.auth.errors.userDisabled;
+      case 'too-many-requests':
+        return t.auth.errors.tooManyRequests;
+      case 'network-request-failed':
+        return t.auth.errors.networkRequestFailed;
       default:
-        return 'An error occurred. Please try again';
+        return t.common.errorGeneric;
     }
   }
 }

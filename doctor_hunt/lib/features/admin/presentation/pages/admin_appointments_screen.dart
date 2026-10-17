@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/string_utils.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../appointments/views/widgets/appointment_empty_state.dart';
 import '../../../appointments/views/widgets/appointment_shimmer.dart';
@@ -25,6 +28,13 @@ class AdminAppointmentsScreen extends StatefulWidget {
 
 class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
   int _selectedTab = 0; // 0: All, 1: Upcoming, 2: Completed, 3: Cancelled
+
+  /// Initials of the signed-in admin (falls back to the localized label).
+  String get _adminInitials {
+    final name = sl<AuthService>().currentUser?.displayName?.trim() ?? '';
+    final label = name.isEmpty ? t.admin.settings.adminFallbackName : name;
+    return StringUtils.getInitials(label);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +62,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
               ),
               child: Center(
                 child: Text(
-                  'A',
+                  _adminInitials,
                   style: context.bold16.copyWith(color: AppColors.textOnPrimary),
                 ),
               ),
@@ -260,7 +270,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
         }
       } catch (e) {
         if (context.mounted) {
-          SnackBarHelper.showError(context, 'Failed: $e');
+          SnackBarHelper.showError(context, t.common.errorGeneric);
         }
       }
     }
@@ -304,7 +314,7 @@ class _AdminAppointmentsScreenState extends State<AdminAppointmentsScreen> {
         }
       } catch (e) {
         if (context.mounted) {
-          SnackBarHelper.showError(context, 'Failed: $e');
+          SnackBarHelper.showError(context, t.common.errorGeneric);
         }
       }
     }

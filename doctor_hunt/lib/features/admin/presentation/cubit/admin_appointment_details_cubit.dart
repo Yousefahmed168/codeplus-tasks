@@ -81,9 +81,10 @@ class AdminAppointmentDetailsCubit
         successAction: 'cancelled',
       ));
     } catch (e) {
+      debugPrint('AdminAppointmentDetailsCubit: action failed: $e');
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: e.toString(),
+        errorMessage: t.common.errorGeneric,
       ));
     }
   }
@@ -100,9 +101,10 @@ class AdminAppointmentDetailsCubit
         successAction: 'completed',
       ));
     } catch (e) {
+      debugPrint('AdminAppointmentDetailsCubit: action failed: $e');
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: e.toString(),
+        errorMessage: t.common.errorGeneric,
       ));
     }
   }
