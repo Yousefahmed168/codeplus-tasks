@@ -21,13 +21,9 @@
 
 ## Demo
 
-<p align="center">
-  <video src="docs/demo.mp4" width="300" controls muted playsinline></video>
-</p>
 
-<p align="center">
-  ▶ <a href="docs/demo.mp4"><b>Watch the app demo</b></a>
-</p>
+https://github.com/user-attachments/assets/5a50a94e-8277-4315-9a36-ebe7db202a57
+
 
 ---
 
@@ -204,10 +200,15 @@ test/
 
 14 unit/widget tests, all green. There is no `integration_test/` directory yet.
 
-## License
+## 👨‍💻 Developed By
 
-This repository currently has no explicit license. Contact the author if you want to use the code.
+**Yousef Ahmed**  
+*Flutter Developer*
 
-## Author
 
-**Yousefahmed168** — [github.com/Yousefahmed168/codeplus-tasks](https://github.com/Yousefahmed168/codeplus-tasks)
+### 📬 Contact & Collaboration
+
+- **GitHub:** https://github.com/Yousefahmed168
+- **LinkedIn:** https://www.linkedin.com/in/yousef-ahmed16/
+- **Email:** tourkousef@gmail.com
+- **Mobile:** +01557204387
