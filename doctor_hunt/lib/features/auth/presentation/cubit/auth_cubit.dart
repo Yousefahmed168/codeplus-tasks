@@ -1,4 +1,5 @@
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/routes/session_controller.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -31,6 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
           emit(AuthErrorState(t.auth.errors.useAdminLogin));
           return;
         }
+        await sl<SessionController>().applyRole(role);
         emit(AuthLoginSuccessState(role.name));
       } else {
         emit(AuthErrorState(t.auth.errors.userNotFound));
@@ -70,6 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthErrorState(t.auth.errors.useAdminLogin));
         return;
       }
+      await sl<SessionController>().applyRole(role);
       emit(AuthLoginSuccessState(role.name));
     } on FirebaseAuthException catch (e) {
       emit(AuthErrorState(_authService.getErrorMessage(e.code)));

@@ -26,6 +26,8 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
+
     return DoubleBackToExit(
       onPopIntercept: () {
         if (_currentTab != 0) {
@@ -35,32 +37,38 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
         return false;
       },
       child: Scaffold(
-      backgroundColor: AppColors.background,
-      body: IndexedStack(index: _currentTab, children: _screens),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTab,
-        onTap: (i) => setState(() => _currentTab = i),
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textHint,
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(MyIcons.peopleOutline),
-            activeIcon: const Icon(MyIcons.people),
-            label: t.admin.doctors.title,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(MyIcons.menuBookOutlined),
-            activeIcon: const Icon(MyIcons.menuBook),
-            label: t.admin.appointments.title,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(MyIcons.settingsOutlined),
-            activeIcon: const Icon(MyIcons.settings),
-            label: t.admin.settings.title,
-          ),
-        ],
+        backgroundColor: AppColors.background,
+        // Keep the nav bar behind the keyboard rather than floating above it.
+        resizeToAvoidBottomInset: false,
+        body: IndexedStack(index: _currentTab, children: _screens),
+        // Drop the nav bar from the layout while typing so it does not reserve
+        // a blank band between the content and the keyboard.
+        bottomNavigationBar: isKeyboardVisible
+            ? null
+            : BottomNavigationBar(
+                currentIndex: _currentTab,
+                onTap: (i) => setState(() => _currentTab = i),
+                selectedItemColor: AppColors.primary,
+                unselectedItemColor: AppColors.textHint,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: const Icon(MyIcons.peopleOutline),
+                    activeIcon: const Icon(MyIcons.people),
+                    label: t.admin.doctors.title,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(MyIcons.menuBookOutlined),
+                    activeIcon: const Icon(MyIcons.menuBook),
+                    label: t.admin.appointments.title,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(MyIcons.settingsOutlined),
+                    activeIcon: const Icon(MyIcons.settings),
+                    label: t.admin.settings.title,
+                  ),
+                ],
+              ),
       ),
-    ),
     );
   }
 }

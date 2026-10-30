@@ -407,6 +407,9 @@ class Translations$selectTime$en {
 	/// en: 'Proceed'
 	String get proceed => 'Proceed';
 
+	/// en: 'This slot was just booked. Pick another time.'
+	String get slotJustBooked => 'This slot was just booked. Pick another time.';
+
 	/// en: 'Next availability on $date'
 	String nextAvailabilityOn({required Object date}) => 'Next availability on ${date}';
 
@@ -701,6 +704,9 @@ class Translations$appointments$en {
 
 	/// en: 'Failed to book appointment'
 	String get bookingFailed => 'Failed to book appointment';
+
+	/// en: 'This time slot was just booked by someone else. Please choose another one.'
+	String get slotUnavailable => 'This time slot was just booked by someone else. Please choose another one.';
 
 	/// en: 'Book an appointment with a doctor to see it here.'
 	String get noUpcomingSubtitle => 'Book an appointment with a doctor to see it here.';
@@ -1068,6 +1074,24 @@ class Translations$admin$doctors$en {
 
 	/// en: 'Dr. @name deactivated'
 	String get deactivated => 'Dr. @name deactivated';
+
+	/// en: 'Delete Doctor'
+	String get delete => 'Delete Doctor';
+
+	/// en: 'Deleting...'
+	String get deleting => 'Deleting...';
+
+	/// en: 'Delete Doctor'
+	String get deleteConfirmTitle => 'Delete Doctor';
+
+	/// en: 'Are you sure you want to delete Dr. @name? This permanently removes the doctor profile and cannot be undone. Past appointments are kept.'
+	String get deleteConfirm => 'Are you sure you want to delete Dr. @name? This permanently removes the doctor profile and cannot be undone. Past appointments are kept.';
+
+	/// en: 'Dr. @name deleted'
+	String get deleted => 'Dr. @name deleted';
+
+	/// en: 'Failed to delete doctor'
+	String get deleteFailed => 'Failed to delete doctor';
 }
 
 // Path: admin.createDoctor
@@ -1578,6 +1602,7 @@ extension on Translations {
 			'selectTime.afternoonSlots' => ({required Object count}) => 'Afternoon ${count} slots',
 			'selectTime.eveningSlots' => ({required Object count}) => 'Evening ${count} slots',
 			'selectTime.proceed' => 'Proceed',
+			'selectTime.slotJustBooked' => 'This slot was just booked. Pick another time.',
 			'selectTime.nextAvailabilityOn' => ({required Object date}) => 'Next availability on ${date}',
 			'selectTime.noUpcomingDates' => 'No upcoming availability',
 			'selectTime.clinicLocationLabel' => ({required Object location}) => 'Clinic location: ${location}',
@@ -1614,6 +1639,12 @@ extension on Translations {
 			'admin.doctors.deactivateConfirm' => 'Are you sure you want to deactivate Dr. @name? The doctor will be hidden from patients.',
 			'admin.doctors.activated' => 'Dr. @name activated',
 			'admin.doctors.deactivated' => 'Dr. @name deactivated',
+			'admin.doctors.delete' => 'Delete Doctor',
+			'admin.doctors.deleting' => 'Deleting...',
+			'admin.doctors.deleteConfirmTitle' => 'Delete Doctor',
+			'admin.doctors.deleteConfirm' => 'Are you sure you want to delete Dr. @name? This permanently removes the doctor profile and cannot be undone. Past appointments are kept.',
+			'admin.doctors.deleted' => 'Dr. @name deleted',
+			'admin.doctors.deleteFailed' => 'Failed to delete doctor',
 			'admin.createDoctor.title' => 'Create Doctor',
 			'admin.createDoctor.nameLabel' => 'Doctor Name',
 			'admin.createDoctor.nameHint' => 'e.g. Dr. Ahmed Ali',
@@ -1763,6 +1794,7 @@ extension on Translations {
 			'appointments.reviewSuccess' => 'Thank you for your review!',
 			'appointments.reviewFailed' => 'Failed to submit review',
 			'appointments.bookingFailed' => 'Failed to book appointment',
+			'appointments.slotUnavailable' => 'This time slot was just booked by someone else. Please choose another one.',
 			'appointments.noUpcomingSubtitle' => 'Book an appointment with a doctor to see it here.',
 			'appointments.noCompletedSubtitle' => 'Your completed appointments will appear here.',
 			'appointments.noCancelledSubtitle' => 'Your cancelled appointments will appear here.',

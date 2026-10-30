@@ -6,6 +6,7 @@ import '../services/auth_service.dart';
 import '../services/cloudinary_service.dart';
 import '../services/favorite_service.dart';
 import '../services/user_service.dart';
+import '../routes/session_controller.dart';
 
 /// Global service locator instance.
 final GetIt sl = GetIt.instance;
@@ -30,4 +31,9 @@ void setupServiceLocator() {
 
   // Cloudinary
   sl.registerLazySingleton<CloudinaryService>(() => CloudinaryService.instance);
+
+  // Session (drives the router guards)
+  sl.registerLazySingleton<SessionController>(
+    () => SessionController(authService: sl<AuthService>()),
+  );
 }

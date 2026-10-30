@@ -2,12 +2,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SharedPref {
   static late SharedPreferences pref;
+  static bool _isInitialized = false;
+
+  static bool get isInitialized => _isInitialized;
 
   static const String kOnboarding = 'onboarding';
   static const String kUserId = 'user_id';
 
   static Future<void> init() async {
     pref = await SharedPreferences.getInstance();
+    _isInitialized = true;
   }
 
   static Future<bool> setOnboardingShown() {

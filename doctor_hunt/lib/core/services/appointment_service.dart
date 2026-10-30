@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import '../errors/exceptions.dart';
 import '../models/appointment_model.dart';
 import '../models/review_model.dart';
+import '../utils/booking_slots.dart';
 
 class AppointmentService {
   AppointmentService._();
@@ -12,59 +14,168 @@ class AppointmentService {
   static const String appointmentsCollection = 'appointments';
   static const String reviewsCollection = 'reviews';
   static const String doctorsCollection = 'doctors';
+  static const String bookingsCollection = 'bookings';
 
   /// Create a new appointment in 'upcoming' status.
+  ///
+  /// Slot uniqueness is enforced through a deterministic reservation document
+  /// (`bookings/{doctorId}_{yyyy-MM-dd}_{slot}`). The existence check and both
+  /// writes run in a single transaction, so two patients racing for the same
+  /// slot can never both succeed.
   Future<String> createAppointment(AppointmentModel appointment) async {
-    try {
-      final docRef = _firestore.collection(appointmentsCollection).doc();
-      final data = appointment.copyWith(
-        id: docRef.id,
-        status: AppointmentStatus.upcoming,
-        createdAt: DateTime.now(),
-      ).toJson();
+    final appointmentRef = _firestore.collection(appointmentsCollection).doc();
+    final bookingRef = _firestore
+        .collection(bookingsCollection)
+        .doc(
+          BookingSlots.bookingDocId(
+            doctorId: appointment.doctorId,
+            date: appointment.date,
+            timeSlot: appointment.timeSlot,
+          ),
+        );
 
-      await docRef.set(data);
-      return docRef.id;
+    try {
+      // Appointments created before the `bookings` collection existed have no
+      // reservation document, so check them once before opening the transaction.
+      await _assertNoLegacyBooking(appointment);
+
+      await _firestore.runTransaction((transaction) async {
+        final existing = await transaction.get(bookingRef);
+        if (existing.exists) throw SlotUnavailableException();
+
+        transaction.set(bookingRef, {
+          'doctorId': appointment.doctorId,
+          'dateKey': BookingSlots.dateKey(appointment.date),
+          'timeSlot': appointment.timeSlot,
+          'appointmentId': appointmentRef.id,
+          'patientId': appointment.patientId,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+        transaction.set(
+          appointmentRef,
+          appointment
+              .copyWith(
+                id: appointmentRef.id,
+                status: AppointmentStatus.upcoming,
+                createdAt: DateTime.now(),
+              )
+              .toJson(),
+        );
+      });
+      return appointmentRef.id;
+    } on SlotUnavailableException {
+      rethrow;
     } catch (e) {
       debugPrint('AppointmentService.createAppointment error: $e');
       rethrow;
     }
   }
 
+  /// Guards against reservations booked before the `bookings` collection was
+  /// introduced. Queries by doctor only so no composite index is required.
+  Future<void> _assertNoLegacyBooking(AppointmentModel appointment) async {
+    final snapshot = await _firestore
+        .collection(appointmentsCollection)
+        .where('doctorId', isEqualTo: appointment.doctorId)
+        .get();
+
+    final conflict = snapshot.docs.any((doc) {
+      final data = doc.data();
+      if (AppointmentStatus.fromString(data['status']?.toString()) !=
+          AppointmentStatus.upcoming) {
+        return false;
+      }
+      if (data['timeSlot']?.toString() != appointment.timeSlot) return false;
+      final date = _readDate(data['date']);
+      return date != null && BookingSlots.isSameDay(date, appointment.date);
+    });
+
+    if (conflict) throw SlotUnavailableException();
+  }
+
   /// Patient or Admin can cancel upcoming appointment.
-  Future<void> cancelAppointment(String appointmentId) async {
+  Future<void> cancelAppointment(String appointmentId) => _updateStatus(
+    appointmentId,
+    AppointmentStatus.cancelled,
+    {'cancelledAt': FieldValue.serverTimestamp()},
+  );
+
+  /// Admin can mark an appointment as completed.
+  Future<void> completeAppointment(String appointmentId) => _updateStatus(
+    appointmentId,
+    AppointmentStatus.completed,
+    {'completedAt': FieldValue.serverTimestamp()},
+  );
+
+  /// Updates the lifecycle status and releases the slot reservation in the
+  /// same transaction, so a cancelled appointment frees its slot immediately.
+  Future<void> _updateStatus(
+    String appointmentId,
+    AppointmentStatus status,
+    Map<String, dynamic> extraFields,
+  ) async {
+    final appointmentRef = _firestore
+        .collection(appointmentsCollection)
+        .doc(appointmentId);
     try {
-      await _firestore.collection(appointmentsCollection).doc(appointmentId).update({
-        'status': AppointmentStatus.cancelled.toValue(),
-        'cancelledAt': FieldValue.serverTimestamp(),
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(appointmentRef);
+        if (!snapshot.exists) return;
+
+        final data = snapshot.data()!;
+        transaction.update(appointmentRef, {
+          'status': status.toValue(),
+          ...extraFields,
+        });
+
+        final doctorId = data['doctorId']?.toString() ?? '';
+        final timeSlot = data['timeSlot']?.toString() ?? '';
+        final date = _readDate(data['date']);
+        if (doctorId.isEmpty || timeSlot.isEmpty || date == null) return;
+
+        transaction.delete(
+          _firestore
+              .collection(bookingsCollection)
+              .doc(
+                BookingSlots.bookingDocId(
+                  doctorId: doctorId,
+                  date: date,
+                  timeSlot: timeSlot,
+                ),
+              ),
+        );
       });
     } catch (e) {
-      debugPrint('AppointmentService.cancelAppointment error: $e');
+      debugPrint('AppointmentService._updateStatus error: $e');
       rethrow;
     }
   }
 
-  /// Admin can mark an appointment as completed.
-  Future<void> completeAppointment(String appointmentId) async {
-    try {
-      await _firestore.collection(appointmentsCollection).doc(appointmentId).update({
-        'status': AppointmentStatus.completed.toValue(),
-        'completedAt': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      debugPrint('AppointmentService.completeAppointment error: $e');
-      rethrow;
-    }
+  /// Live set of reserved slot document ids for [doctorId].
+  ///
+  /// The booking document id is deterministic, so the UI can compute the id for
+  /// any generated slot and check membership directly.
+  Stream<Set<String>> streamBookedSlots(String doctorId) {
+    if (doctorId.isEmpty) return Stream.value(const <String>{});
+    return _firestore
+        .collection(bookingsCollection)
+        .where('doctorId', isEqualTo: doctorId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.id).toSet());
+  }
+
+  DateTime? _readDate(dynamic value) {
+    if (value is Timestamp) return value.toDate();
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.tryParse(value);
+    return null;
   }
 
   /// Decodes a Firestore payload into an [AppointmentModel].
   ///
   /// A single malformed document is skipped instead of tearing down the whole
   /// stream, so one bad record can never blank out the patient or admin list.
-  AppointmentModel? _decodeAppointment(
-    Map<String, dynamic>? data,
-    String? id,
-  ) {
+  AppointmentModel? _decodeAppointment(Map<String, dynamic>? data, String? id) {
     if (data == null) return null;
     try {
       return AppointmentModel.fromJson(data, id);
@@ -91,9 +202,12 @@ class AppointmentService {
   }
 
   /// Stream appointments for admin with optional status filtering.
-  Stream<List<AppointmentModel>> streamAdminAppointments({AppointmentStatus? status}) {
-    Query<Map<String, dynamic>> query =
-        _firestore.collection(appointmentsCollection);
+  Stream<List<AppointmentModel>> streamAdminAppointments({
+    AppointmentStatus? status,
+  }) {
+    Query<Map<String, dynamic>> query = _firestore.collection(
+      appointmentsCollection,
+    );
     if (status != null) {
       query = query.where('status', isEqualTo: status.toValue());
     }
@@ -152,7 +266,10 @@ class AppointmentService {
     String? comment,
   }) async {
     try {
-      final apptDoc = await _firestore.collection(appointmentsCollection).doc(appointmentId).get();
+      final apptDoc = await _firestore
+          .collection(appointmentsCollection)
+          .doc(appointmentId)
+          .get();
       if (!apptDoc.exists) {
         throw Exception('Appointment not found');
       }
@@ -177,11 +294,14 @@ class AppointmentService {
       });
 
       // Mark appointment as reviewed
-      await _firestore.collection(appointmentsCollection).doc(appointmentId).update({
-        'hasReviewed': true,
-        'reviewRating': rating,
-        'reviewComment': comment?.trim() ?? '',
-      });
+      await _firestore
+          .collection(appointmentsCollection)
+          .doc(appointmentId)
+          .update({
+            'hasReviewed': true,
+            'reviewRating': rating,
+            'reviewComment': comment?.trim() ?? '',
+          });
 
       // Recalculate doctor rating and review count
       await _recalculateDoctorRating(doctorId);
@@ -205,7 +325,9 @@ class AppointmentService {
         final r = (doc.data()['rating'] as num?)?.toDouble() ?? 0.0;
         total += r;
       }
-      final double avgRating = double.parse((total / reviewsSnap.docs.length).toStringAsFixed(1));
+      final double avgRating = double.parse(
+        (total / reviewsSnap.docs.length).toStringAsFixed(1),
+      );
 
       await _firestore.collection(doctorsCollection).doc(doctorId).update({
         'rating': avgRating,

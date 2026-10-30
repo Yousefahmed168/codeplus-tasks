@@ -6,16 +6,25 @@ class AppBackground extends StatelessWidget {
     super.key,
     required this.child,
     this.backgroundColor = AppColors.background,
+    this.resizeToAvoidBottomInset = true,
   });
 
   final Widget child;
 
   final Color backgroundColor;
 
+  /// Forwarded to the internal [Scaffold].
+  ///
+  /// Shells that need to keep their own bottom navigation bar behind the
+  /// keyboard pass `false` here; otherwise this wrapping Scaffold shrinks its
+  /// body first and pushes the whole shell above the keyboard.
+  final bool resizeToAvoidBottomInset;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: Stack(
         children: [
           //  Top-left blob

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/enums/user_role.dart';
+import '../../../../core/routes/session_controller.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../i18n/strings.g.dart';
 import 'admin_login_state.dart';
@@ -15,6 +17,7 @@ class AdminLoginCubit extends Cubit<AdminLoginState> {
     emit(AdminLoginLoading());
     try {
       await _authService.loginAdmin(email: email, password: password);
+      await sl<SessionController>().applyRole(UserRole.admin);
       emit(AdminLoginSuccess());
     } on FirebaseAuthException catch (e) {
       emit(AdminLoginError(_authService.getErrorMessage(e.code)));

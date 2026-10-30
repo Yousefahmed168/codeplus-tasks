@@ -26,6 +26,7 @@ class AdminDoctorDetailsScreen extends StatefulWidget {
 
 class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
   late Doctor _doctor;
+  bool _isDeleting = false;
 
   @override
   void initState() {
@@ -41,7 +42,9 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         title: Text(t.admin.doctors.statusConfirmTitle),
         content: Text(
           (willActivate
@@ -87,6 +90,56 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
     }
   }
 
+  Future<void> _deleteDoctor() async {
+    final uid = _doctor.uid;
+    if (uid == null || _isDeleting) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        title: Text(t.admin.doctors.deleteConfirmTitle),
+        content: Text(
+          t.admin.doctors.deleteConfirm.replaceAll('@name', _doctor.name ?? ''),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(t.common.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              t.common.delete,
+              style: context.semiBold14.copyWith(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isDeleting = true);
+    try {
+      await sl<AdminService>().deleteDoctor(uid);
+      if (!mounted) return;
+      SnackBarHelper.showSuccess(
+        context,
+        t.admin.doctors.deleted.replaceAll('@name', _doctor.name ?? ''),
+      );
+      context.pop();
+    } catch (_) {
+      if (mounted) {
+        SnackBarHelper.showError(context, t.admin.doctors.deleteFailed);
+      }
+    } finally {
+      if (mounted) setState(() => _isDeleting = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,21 +179,14 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                       : null,
                 ),
                 child: _doctor.imageUrl == null || _doctor.imageUrl!.isEmpty
-                    ? Icon(
-                        MyIcons.person,
-                        color: AppColors.primary,
-                        size: 48.r,
-                      )
+                    ? Icon(MyIcons.person, color: AppColors.primary, size: 48.r)
                     : null,
               ),
             ),
             16.verticalSpace,
 
             // Doctor Name
-            Text(
-              _doctor.name ?? '',
-              style: context.bold20.textPrimary,
-            ),
+            Text(_doctor.name ?? '', style: context.bold20.textPrimary),
             8.verticalSpace,
 
             // Active status pill
@@ -167,7 +213,9 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
                   ),
                   6.horizontalSpace,
                   Text(
-                    _doctor.isActive ? t.admin.doctors.active : t.admin.doctorDetails.inactive,
+                    _doctor.isActive
+                        ? t.admin.doctors.active
+                        : t.admin.doctorDetails.inactive,
                     style: context.semiBold12.copyWith(
                       color: _doctor.isActive
                           ? AppColors.success
@@ -217,6 +265,18 @@ class _AdminDoctorDetailsScreenState extends State<AdminDoctorDetailsScreen> {
               onPressed: _toggleStatus,
               bgColor: _doctor.isActive ? AppColors.error : AppColors.success,
               textColor: AppColors.textOnPrimary,
+            ),
+            16.verticalSpace,
+
+            // Permanent deletion
+            MainButton(
+              text: _isDeleting
+                  ? t.admin.doctors.deleting
+                  : t.admin.doctors.delete,
+              onPressed: _isDeleting ? null : _deleteDoctor,
+              bgColor: AppColors.background,
+              textColor: AppColors.error,
+              borderColor: AppColors.error,
             ),
             32.verticalSpace,
           ],

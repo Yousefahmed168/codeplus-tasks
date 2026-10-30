@@ -1,5 +1,7 @@
 import '../widgets/doctor_profile_header.dart';
 
+import 'dart:async';
+
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,12 @@ import 'package:intl/intl.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/models/booking_draft.dart';
 import '../../../../core/services/admin_service.dart';
+import '../../../../core/services/appointment_service.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
+import '../../../../core/utils/booking_slots.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/widgets/dialogs.dart';
 import '../../../../core/widgets/main_button.dart';
@@ -32,19 +36,6 @@ class SelectTimeScreen extends StatefulWidget {
 }
 
 class _SelectTimeScreenState extends State<SelectTimeScreen> {
-  /// Monday-first, matching [DateTime.weekday] (1 = Monday). These are the
-  /// canonical values persisted in [Doctor.workingDays] (data, not UI text; the
-  /// admin availability screen localizes them for display).
-  static const List<String> _weekdayNames = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
-
   /// Slots before this minute-of-day are "afternoon", the rest "evening".
   static const int _afternoonCutoffMinutes = 17 * 60; // 5:00 PM
 
@@ -53,6 +44,10 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
   String? _selectedTime;
   String _clinicLocation = '';
   bool _isFavorite = false;
+
+  /// Reservation document ids for [widget.doctor] (`bookings` collection).
+  Set<String> _bookedSlotIds = const <String>{};
+  StreamSubscription<Set<String>>? _bookedSlotsSubscription;
 
   @override
   void initState() {
@@ -63,19 +58,62 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
       orElse: () => _availableDates.first,
     );
 
+    final doctorUid = widget.doctor.uid;
+    final isSignedIn = sl<AuthService>().currentUser != null;
+    if (isSignedIn && doctorUid != null && doctorUid.isNotEmpty) {
+      _bookedSlotsSubscription = sl<AppointmentService>()
+          .streamBookedSlots(doctorUid)
+          .listen(
+            (ids) {
+              if (!mounted) return;
+              final date = _selectedDate;
+              final slot = _selectedTime;
+              final lostSelection =
+                  date != null &&
+                  slot != null &&
+                  !_isSlotBooked(date, slot) &&
+                  ids.contains(
+                    BookingSlots.bookingDocId(
+                      doctorId: doctorUid,
+                      date: date,
+                      timeSlot: slot,
+                    ),
+                  );
+              setState(() {
+                _bookedSlotIds = ids;
+                if (lostSelection) _selectedTime = null;
+              });
+              if (lostSelection) {
+                SnackBarHelper.showWarning(
+                  context,
+                  t.selectTime.slotJustBooked,
+                );
+              }
+            },
+            onError: (Object error) {
+              debugPrint('SelectTimeScreen: booked slots stream error: $error');
+            },
+          );
+    }
+
     sl<AdminService>().getCentralClinicLocation().then((loc) {
       if (mounted) setState(() => _clinicLocation = loc);
     });
 
     final uid = sl<AuthService>().currentUser?.uid;
-    final doctorUid = widget.doctor.uid;
     if (uid != null && doctorUid != null) {
       sl<FavoriteService>()
           .isFavorited(patientUid: uid, doctorUid: doctorUid)
           .then((val) {
-        if (mounted) setState(() => _isFavorite = val);
-      });
+            if (mounted) setState(() => _isFavorite = val);
+          });
     }
+  }
+
+  @override
+  void dispose() {
+    _bookedSlotsSubscription?.cancel();
+    super.dispose();
   }
 
   /// The next bookable dates, limited to the doctor's working days.
@@ -89,7 +127,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
     final dates = <DateTime>[];
     for (var i = 0; i < maxDays && dates.length < limit; i++) {
       final date = today.add(Duration(days: i));
-      final weekday = _weekdayNames[date.weekday - 1].toLowerCase();
+      final weekday = BookingSlots.weekdayNames[date.weekday - 1].toLowerCase();
       if (workingDays.isNotEmpty && !workingDays.contains(weekday)) continue;
       dates.add(date);
     }
@@ -99,52 +137,34 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
     return dates;
   }
 
-  /// Parses a time such as `09:00 AM` into minutes since midnight.
-  int _parseMinutes(String time) {
-    final parts = time.trim().split(' ');
-    final hm = parts.first.split(':');
-    if (hm.length != 2) return 0;
-    var hours = int.tryParse(hm[0]) ?? 0;
-    final minutes = int.tryParse(hm[1]) ?? 0;
-    final period = parts.length > 1 ? parts[1].toUpperCase() : '';
-    if (period == 'PM' && hours != 12) hours += 12;
-    if (period == 'AM' && hours == 12) hours = 0;
-    return hours * 60 + minutes;
-  }
+  /// Bookable slot labels for [date], excluding already reserved slots.
+  List<String> _slotsForDate(DateTime date) => BookingSlots.generate(
+    widget.doctor,
+    date,
+  ).where((slot) => !_isSlotBooked(date, slot)).toList();
 
-  String _formatMinutes(int minutes) {
-    final reference = DateTime(2000, 1, 1, minutes ~/ 60, minutes % 60);
-    return DateFormat('h:mm a').format(reference);
-  }
-
-  /// Bookable slot labels for [date], derived from the doctor's working hours
-  /// and slot duration. Past slots are removed for today.
-  List<String> _slotsForDate(DateTime date) {
-    final start = _parseMinutes(widget.doctor.startTime);
-    final end = _parseMinutes(widget.doctor.endTime);
-    final step = widget.doctor.slotDuration > 0
-        ? widget.doctor.slotDuration
-        : 30;
-    if (end <= start) return const [];
-
-    final now = DateTime.now();
-    final isToday = DateTime(date.year, date.month, date.day) ==
-        DateTime(now.year, now.month, now.day);
-
-    final slots = <String>[];
-    for (var minute = start; minute + step <= end; minute += step) {
-      if (isToday && minute <= now.hour * 60 + now.minute) continue;
-      slots.add(_formatMinutes(minute));
-    }
-    return slots;
+  bool _isSlotBooked(DateTime date, String timeSlot) {
+    final doctorId = widget.doctor.uid;
+    if (doctorId == null || doctorId.isEmpty) return false;
+    return _bookedSlotIds.contains(
+      BookingSlots.bookingDocId(
+        doctorId: doctorId,
+        date: date,
+        timeSlot: timeSlot,
+      ),
+    );
   }
 
   List<String> _afternoonSlotsFor(DateTime date) => _slotsForDate(date)
-      .where((label) => _parseMinutes(label) < _afternoonCutoffMinutes)
+      .where(
+        (label) => BookingSlots.parseMinutes(label) < _afternoonCutoffMinutes,
+      )
       .toList();
 
   List<String> _eveningSlotsFor(DateTime date) => _slotsForDate(date)
-      .where((label) => _parseMinutes(label) >= _afternoonCutoffMinutes)
+      .where(
+        (label) => BookingSlots.parseMinutes(label) >= _afternoonCutoffMinutes,
+      )
       .toList();
 
   /// The first bookable date strictly after [from], or null if none.
@@ -192,8 +212,7 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                   clinic: _clinicLocation,
                   rating: widget.doctor.rating ?? 0,
                   reviewsCount: widget.doctor.reviewsCount,
-                  imagePath:
-                      widget.doctor.imageUrl ?? AppImages.doctor,
+                  imagePath: widget.doctor.imageUrl ?? AppImages.doctor,
                   isFavorite: _isFavorite,
                   onFavoriteToggle: () async {
                     final uid = sl<AuthService>().currentUser?.uid;
@@ -315,9 +334,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         child: Wrap(
                           spacing: 12.w,
                           runSpacing: 12.h,
-                          children: _afternoonSlotsFor(_selectedDate!)
-                              .map((time) => _buildTimeSlot(time))
-                              .toList(),
+                          children: _afternoonSlotsFor(
+                            _selectedDate!,
+                          ).map((time) => _buildTimeSlot(time)).toList(),
                         ),
                       ),
                       32.verticalSpace,
@@ -340,9 +359,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                         child: Wrap(
                           spacing: 12.w,
                           runSpacing: 12.h,
-                          children: _eveningSlotsFor(_selectedDate!)
-                              .map((time) => _buildTimeSlot(time))
-                              .toList(),
+                          children: _eveningSlotsFor(
+                            _selectedDate!,
+                          ).map((time) => _buildTimeSlot(time)).toList(),
                         ),
                       ),
                       32.verticalSpace,
@@ -397,9 +416,9 @@ class _SelectTimeScreenState extends State<SelectTimeScreen> {
                           onPressed: next == null
                               ? null
                               : () => setState(() {
-                                    _selectedDate = next;
-                                    _selectedTime = null;
-                                  }),
+                                  _selectedDate = next;
+                                  _selectedTime = null;
+                                }),
                           bgColor: AppColors.primary,
                           textColor: AppColors.textOnPrimary,
                         );

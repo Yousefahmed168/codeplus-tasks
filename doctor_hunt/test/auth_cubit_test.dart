@@ -1,5 +1,6 @@
 import 'package:doctor_hunt/core/di/service_locator.dart';
 import 'package:doctor_hunt/core/enums/user_role.dart';
+import 'package:doctor_hunt/core/routes/session_controller.dart';
 import 'package:doctor_hunt/core/services/auth_service.dart';
 import 'package:doctor_hunt/core/services/cloudinary_service.dart';
 import 'package:doctor_hunt/core/services/user_service.dart';
@@ -19,12 +20,15 @@ void main() {
     LocaleSettings.setLocaleSync(AppLocale.en);
   });
 
-  setUp(() {
-    sl.reset();
+  setUp(() async {
+    await sl.reset();
     auth = FakeAuthService();
     sl.registerSingleton<AuthService>(auth);
     sl.registerSingleton<UserService>(FakeUserService());
     sl.registerSingleton<CloudinaryService>(FakeCloudinaryService());
+    sl.registerSingleton<SessionController>(
+      SessionController(authService: auth),
+    );
     cubit = AuthCubit();
   });
 
@@ -33,17 +37,19 @@ void main() {
     await sl.reset();
   });
 
-  test('login as a patient emits AuthLoginSuccessState with the role name',
-      () async {
-    auth.currentUserValue = FakeUser(uid: 'patient-1');
-    auth.roleValue = UserRole.patient;
+  test(
+    'login as a patient emits AuthLoginSuccessState with the role name',
+    () async {
+      auth.currentUserValue = FakeUser(uid: 'patient-1');
+      auth.roleValue = UserRole.patient;
 
-    await cubit.login(email: 'patient@test.com', password: '123456');
+      await cubit.login(email: 'patient@test.com', password: '123456');
 
-    expect(cubit.state, isA<AuthLoginSuccessState>());
-    expect((cubit.state as AuthLoginSuccessState).roleName, 'patient');
-    expect(auth.logoutCalled, isFalse);
-  });
+      expect(cubit.state, isA<AuthLoginSuccessState>());
+      expect((cubit.state as AuthLoginSuccessState).roleName, 'patient');
+      expect(auth.logoutCalled, isFalse);
+    },
+  );
 
   test('login as an admin signs out and emits an error', () async {
     auth.currentUserValue = FakeUser(uid: 'admin-1');

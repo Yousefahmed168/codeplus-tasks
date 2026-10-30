@@ -32,8 +32,15 @@ class _MainScreenState extends State<MainScreen> {
         }
       },
       child: AppBackground(
+        // AppBackground wraps this shell in a Scaffold. If it resizes for the
+        // keyboard it shrinks the shell first and the nav bar rides up on top
+        // of the keyboard, so the outer background must not resize either.
+        resizeToAvoidBottomInset: false,
         child: Scaffold(
           backgroundColor: AppColors.transparent,
+          // Keep the bottom nav bar pinned below the keyboard instead of
+          // letting it ride up on top of it when a tab's field is focused.
+          resizeToAvoidBottomInset: false,
           body: IndexedStack(
             index: _currentIndex,
             children: [
@@ -45,14 +52,20 @@ class _MainScreenState extends State<MainScreen> {
               const PatientProfileScreen(isTab: true),
             ],
           ),
-          bottomNavigationBar: HomeBottomNavBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-          ),
+          // While the keyboard is open the nav bar is removed from the layout
+          // instead of only being painted behind the keyboard. Otherwise its
+          // reserved height leaves a blank band between the content and the
+          // keyboard.
+          bottomNavigationBar: MediaQuery.viewInsetsOf(context).bottom > 0
+              ? null
+              : HomeBottomNavBar(
+                  currentIndex: _currentIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                ),
         ),
       ),
     );

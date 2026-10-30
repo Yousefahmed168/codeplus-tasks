@@ -1,4 +1,3 @@
-
 import '../../../../core/models/doctor.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
@@ -56,6 +55,10 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
   @override
   Widget build(BuildContext context) {
     return AppBackground(
+      // Only the inner Scaffold should shrink for the keyboard; letting the
+      // background Scaffold shrink too would apply the inset twice and leave
+      // a blank band above the keyboard.
+      resizeToAvoidBottomInset: false,
       child: Scaffold(
         backgroundColor: AppColors.transparent,
         body: SafeArea(
@@ -303,10 +306,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    doctor.name ?? '',
-                    style: context.bold16.textPrimary,
-                  ),
+                  Text(doctor.name ?? '', style: context.bold16.textPrimary),
                   2.verticalSpace,
                   Text(
                     doctor.specialization ?? '',
@@ -315,7 +315,11 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                   6.verticalSpace,
                   Row(
                     children: [
-                      Icon(MyIcons.starRounded, size: 14.r, color: AppColors.star),
+                      Icon(
+                        MyIcons.starRounded,
+                        size: 14.r,
+                        color: AppColors.star,
+                      ),
                       4.horizontalSpace,
                       Text(
                         (doctor.rating ?? 0).toStringAsFixed(1),

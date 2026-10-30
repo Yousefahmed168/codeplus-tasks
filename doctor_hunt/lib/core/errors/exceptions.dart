@@ -79,3 +79,12 @@ class ValidationException extends AppException {
 class ParseException extends AppException {
   ParseException({super.message = 'Failed to parse response data.'});
 }
+
+/// Booking Conflict Exception
+/// Thrown when the requested slot has already been reserved by another patient.
+class SlotUnavailableException extends AppException {
+  SlotUnavailableException({
+    super.message = 'This time slot is no longer available.',
+    super.statusCode = 409,
+  });
+}

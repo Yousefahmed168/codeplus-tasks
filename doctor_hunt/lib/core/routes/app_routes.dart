@@ -29,6 +29,10 @@ import '../../features/admin/presentation/pages/edit_doctor_screen.dart';
 import '../../features/admin/presentation/pages/edit_admin_profile_screen.dart';
 import '../../features/auth/presentation/pages/change_password_screen.dart';
 import '../../features/admin/presentation/pages/admin_appointment_details_screen.dart';
+import '../../core/di/service_locator.dart';
+import 'route_error_screen.dart';
+import 'route_guard.dart';
+import 'session_controller.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -65,6 +69,29 @@ class AppRoutes {
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
   debugLogDiagnostics: true,
+  refreshListenable: sl<SessionController>(),
+  redirect: (context, state) {
+    final session = sl<SessionController>();
+    final location = state.matchedLocation.isEmpty
+        ? state.uri.path
+        : state.matchedLocation;
+
+    final guarded = RouteGuard.resolveRedirect(
+      location: location,
+      status: session.status,
+      role: session.role,
+    );
+    if (guarded != null) return guarded;
+
+    // Deep links cannot carry `extra`, so send the user somewhere safe instead
+    // of letting the `as Doctor` cast in a page builder throw.
+    if (RouteGuard.extraRequiredRoutes.contains(location) &&
+        state.extra == null) {
+      return RouteGuard.fallbackFor(session.role);
+    }
+    return null;
+  },
+  errorBuilder: (context, state) => const RouteErrorScreen(),
   routes: [
     GoRoute(
       path: AppRoutes.splash,

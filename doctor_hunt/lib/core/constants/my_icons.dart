@@ -42,6 +42,7 @@ class MyIcons {
   static const IconData closeRounded = Icons.close_rounded;
   static const IconData editOutlined = Icons.edit_outlined;
   static const IconData emailOutlined = Icons.email_outlined;
+  static const IconData errorOutlineRounded = Icons.error_outline_rounded;
   static const IconData favorite = Icons.favorite;
   static const IconData favoriteBorder = Icons.favorite_border;
   static const IconData favoriteBorderRounded = Icons.favorite_border_rounded;

@@ -10,6 +10,7 @@ class AdminService {
 
   static const String adminsCollection = 'admins';
   static const String doctorsCollection = 'doctors';
+  static const String bookingsCollection = 'bookings';
   static const String clinicCollection = 'clinic_info';
   static const String centralClinicDocId = 'central_clinic';
 
@@ -73,6 +74,41 @@ class AdminService {
     }
   }
 
+  /// Permanently removes a doctor profile.
+  ///
+  /// Appointment and review documents are intentionally kept so the clinic
+  /// keeps its history (the doctor name is denormalised on each appointment).
+  /// Active slot reservations are deleted so they are not left dangling.
+  Future<void> deleteDoctor(String uid) async {
+    try {
+      final reservationsSnapshot = await _firestore
+          .collection(bookingsCollection)
+          .where('doctorId', isEqualTo: uid)
+          .get();
+
+      // Firestore batches are capped at 500 writes; chunk to stay well below.
+      // Reservations go first so a failure never leaves the profile deleted
+      // with reservations still attached to it.
+      const chunkSize = 400;
+      final reservations = reservationsSnapshot.docs;
+      for (var start = 0; start < reservations.length; start += chunkSize) {
+        final batch = _firestore.batch();
+        final end = start + chunkSize < reservations.length
+            ? start + chunkSize
+            : reservations.length;
+        for (final doc in reservations.sublist(start, end)) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+      }
+
+      await _firestore.collection(doctorsCollection).doc(uid).delete();
+    } catch (e) {
+      debugPrint('AdminService.deleteDoctor error: $e');
+      rethrow;
+    }
+  }
+
   // --- Single Central Clinic Location ---
 
   Stream<String> streamCentralClinicLocation() {
@@ -82,7 +118,8 @@ class AdminService {
         .snapshots()
         .map((doc) {
           if (doc.exists && doc.data() != null) {
-            return doc.data()!['location'] as String? ?? 'Central Clinic Location';
+            return doc.data()!['location'] as String? ??
+                'Central Clinic Location';
           }
           return 'Central Clinic Location';
         });
@@ -90,7 +127,10 @@ class AdminService {
 
   Future<String> getCentralClinicLocation() async {
     try {
-      final doc = await _firestore.collection(clinicCollection).doc(centralClinicDocId).get();
+      final doc = await _firestore
+          .collection(clinicCollection)
+          .doc(centralClinicDocId)
+          .get();
       if (doc.exists && doc.data() != null) {
         return doc.data()!['location'] as String? ?? 'Central Clinic Location';
       }
@@ -102,10 +142,10 @@ class AdminService {
 
   Future<void> updateCentralClinicLocation(String newLocation) async {
     try {
-      await _firestore.collection(clinicCollection).doc(centralClinicDocId).set({
-        'location': newLocation,
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      await _firestore.collection(clinicCollection).doc(centralClinicDocId).set(
+        {'location': newLocation, 'updatedAt': FieldValue.serverTimestamp()},
+        SetOptions(merge: true),
+      );
     } catch (e) {
       debugPrint('AdminService.updateCentralClinicLocation error: $e');
       rethrow;

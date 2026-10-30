@@ -37,6 +37,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
     return BlocProvider(
       create: (context) => AppointmentsCubit()..loadAppointments(),
       child: AppBackground(
+        // Keep the keyboard inset to the inner Scaffold only.
+        resizeToAvoidBottomInset: false,
         child: Scaffold(
           backgroundColor: AppColors.transparent,
           appBar: AppBar(
@@ -66,7 +68,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           ),
           body: BlocBuilder<AppointmentsCubit, AppointmentsState>(
             builder: (context, state) {
-              if (state is AppointmentsLoading || state is AppointmentsInitial) {
+              if (state is AppointmentsLoading ||
+                  state is AppointmentsInitial) {
                 return const AppointmentShimmer();
               }
 
@@ -160,29 +163,29 @@ class _AppointmentList extends StatelessWidget {
         final appt = appointments[index];
         return AppointmentCard(
           appointment: appt,
-          onCancel: appt.canCancel
-              ? () => _confirmCancel(context, appt)
-              : null,
+          onCancel: appt.canCancel ? () => _confirmCancel(context, appt) : null,
           onViewDetails: () {
             context.push(
               AppRoutes.adminAppointmentDetails,
               extra: {'appointment': appt, 'isAdminView': false},
             );
           },
-          onRate: appt.canReview
-              ? () => _openRateDialog(context, appt)
-              : null,
+          onRate: appt.canReview ? () => _openRateDialog(context, appt) : null,
         );
       },
     );
   }
 
   Future<void> _confirmCancel(
-      BuildContext context, AppointmentModel appt) async {
+    BuildContext context,
+    AppointmentModel appt,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         title: Text(t.appointments.cancelConfirmTitle),
         content: Text(t.appointments.cancelConfirmMessage),
         actions: [
@@ -213,18 +216,20 @@ class _AppointmentList extends StatelessWidget {
   }
 
   Future<void> _openRateDialog(
-      BuildContext context, AppointmentModel appt) async {
+    BuildContext context,
+    AppointmentModel appt,
+  ) async {
     await RateDoctorDialog.show(
       context,
       doctorName: appt.doctorName,
       onSubmit: (rating, comment) async {
         try {
           await context.read<AppointmentsCubit>().submitReview(
-                appointmentId: appt.id,
-                doctorId: appt.doctorId,
-                rating: rating,
-                comment: comment.isEmpty ? null : comment,
-              );
+            appointmentId: appt.id,
+            doctorId: appt.doctorId,
+            rating: rating,
+            comment: comment.isEmpty ? null : comment,
+          );
           if (context.mounted) {
             SnackBarHelper.show(
               context,

@@ -173,6 +173,7 @@
     "afternoonSlots": "Afternoon $count slots",
     "eveningSlots": "Evening $count slots",
     "proceed": "Proceed",
+    "slotJustBooked": "This slot was just booked. Pick another time.",
     "nextAvailabilityOn": "Next availability on $date",
     "noUpcomingDates": "No upcoming availability",
     "clinicLocationLabel": "Clinic location: $location",
@@ -217,7 +218,13 @@
       "activateConfirm": "Are you sure you want to activate Dr. @name?",
       "deactivateConfirm": "Are you sure you want to deactivate Dr. @name? The doctor will be hidden from patients.",
       "activated": "Dr. @name activated",
-      "deactivated": "Dr. @name deactivated"
+      "deactivated": "Dr. @name deactivated",
+      "delete": "Delete Doctor",
+      "deleting": "Deleting...",
+      "deleteConfirmTitle": "Delete Doctor",
+      "deleteConfirm": "Are you sure you want to delete Dr. @name? This permanently removes the doctor profile and cannot be undone. Past appointments are kept.",
+      "deleted": "Dr. @name deleted",
+      "deleteFailed": "Failed to delete doctor"
     },
     "createDoctor": {
       "title": "Create Doctor",
@@ -396,6 +403,7 @@
     "reviewSuccess": "Thank you for your review!",
     "reviewFailed": "Failed to submit review",
     "bookingFailed": "Failed to book appointment",
+    "slotUnavailable": "This time slot was just booked by someone else. Please choose another one.",
     "noUpcomingSubtitle": "Book an appointment with a doctor to see it here.",
     "noCompletedSubtitle": "Your completed appointments will appear here.",
     "noCancelledSubtitle": "Your cancelled appointments will appear here."

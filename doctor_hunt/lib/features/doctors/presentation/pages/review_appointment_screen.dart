@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/errors/exceptions.dart';
 import '../../../../core/models/appointment_model.dart';
 import '../../../../core/models/booking_draft.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -83,6 +84,11 @@ class _ReviewAppointmentScreenState extends State<ReviewAppointmentScreen> {
           },
         ),
       );
+    } on SlotUnavailableException {
+      if (mounted) {
+        SnackBarHelper.showError(context, t.appointments.slotUnavailable);
+        context.pop();
+      }
     } catch (e) {
       if (mounted) {
         SnackBarHelper.showError(context, t.appointments.bookingFailed);
@@ -113,7 +119,7 @@ class _ReviewAppointmentScreenState extends State<ReviewAppointmentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               8.verticalSpace,
-              Text(t.review.subtitle, style: context.regular14.textSecondary),
+              Text(t.review.subtitle, style: context.medium18.textPrimary),
               20.verticalSpace,
               Container(
                 padding: EdgeInsets.all(16.r),

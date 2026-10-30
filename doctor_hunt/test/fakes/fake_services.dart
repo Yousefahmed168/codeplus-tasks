@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:doctor_hunt/core/enums/user_role.dart';
 import 'package:doctor_hunt/core/models/appointment_model.dart';
+import 'package:doctor_hunt/core/services/admin_service.dart';
 import 'package:doctor_hunt/core/services/appointment_service.dart';
 import 'package:doctor_hunt/core/services/auth_service.dart';
 import 'package:doctor_hunt/core/services/cloudinary_service.dart';
@@ -95,10 +96,32 @@ class FakeCloudinaryService implements CloudinaryService {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+/// Admin service double that records destructive actions.
+class FakeAdminService implements AdminService {
+  final List<String> deletedUids = <String>[];
+  final List<({String uid, bool isActive})> statusChanges =
+      <({String uid, bool isActive})>[];
+
+  @override
+  Future<void> deleteDoctor(String uid) async {
+    deletedUids.add(uid);
+  }
+
+  @override
+  Future<void> toggleDoctorStatus(String uid, bool isActive) async {
+    statusChanges.add((uid: uid, isActive: isActive));
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 /// Appointment service double driven by a broadcast stream the test controls.
 class FakeAppointmentService implements AppointmentService {
   final StreamController<List<AppointmentModel>> _controller =
       StreamController<List<AppointmentModel>>.broadcast();
+  final StreamController<Set<String>> _bookedSlotsController =
+      StreamController<Set<String>>.broadcast();
 
   final List<String> cancelledIds = <String>[];
   final List<Map<String, Object?>> reviews = <Map<String, Object?>>[];
@@ -106,11 +129,21 @@ class FakeAppointmentService implements AppointmentService {
   void emitAppointments(List<AppointmentModel> appointments) =>
       _controller.add(appointments);
 
-  Future<void> dispose() => _controller.close();
+  void emitBookedSlots(Set<String> bookingIds) =>
+      _bookedSlotsController.add(bookingIds);
+
+  Future<void> dispose() async {
+    await _controller.close();
+    await _bookedSlotsController.close();
+  }
 
   @override
   Stream<List<AppointmentModel>> streamPatientAppointments(String patientId) =>
       _controller.stream;
+
+  @override
+  Stream<Set<String>> streamBookedSlots(String doctorId) =>
+      _bookedSlotsController.stream;
 
   @override
   Future<void> cancelAppointment(String appointmentId) async {

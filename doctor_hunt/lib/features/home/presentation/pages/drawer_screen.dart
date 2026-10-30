@@ -34,12 +34,16 @@ class DrawerScreenState extends State<DrawerScreen>
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.8).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0),
-      end: const Offset(0.7, 0), // 70% of screen width
-    ).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
-    );
+    _slideAnimation =
+        Tween<Offset>(
+          begin: const Offset(0, 0),
+          end: const Offset(0.7, 0), // 70% of screen width
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          ),
+        );
     _menuScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
@@ -85,6 +89,10 @@ class DrawerScreenState extends State<DrawerScreen>
       },
       child: Scaffold(
         backgroundColor: AppColors.menuBackground,
+        // This is the outermost Scaffold of the patient shell. If it resizes
+        // for the keyboard it shrinks the whole Stack and pushes MainScreen's
+        // bottom navigation bar above the keyboard.
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             // Menu layer
@@ -108,7 +116,9 @@ class DrawerScreenState extends State<DrawerScreen>
                   child: Transform.scale(
                     scale: _scaleAnimation.value,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(isDrawerOpen ? 32.r : 0),
+                      borderRadius: BorderRadius.circular(
+                        isDrawerOpen ? 32.r : 0,
+                      ),
                       child: IgnorePointer(
                         ignoring: isDrawerOpen,
                         child: child,
@@ -119,7 +129,7 @@ class DrawerScreenState extends State<DrawerScreen>
               },
               child: const MainScreen(),
             ),
-            
+
             // Tap outside to close
             if (isDrawerOpen)
               Positioned(
@@ -130,9 +140,7 @@ class DrawerScreenState extends State<DrawerScreen>
                 child: GestureDetector(
                   onTap: closeDrawer,
                   behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    color: AppColors.transparent,
-                  ),
+                  child: Container(color: AppColors.transparent),
                 ),
               ),
           ],
