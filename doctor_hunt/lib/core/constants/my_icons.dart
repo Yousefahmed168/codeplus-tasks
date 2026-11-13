@@ -22,7 +22,8 @@ class MyIcons {
   static const IconData accessTimeRounded = Icons.access_time_rounded;
   static const IconData accountCircleRounded = Icons.account_circle_rounded;
   static const IconData add = Icons.add;
-  static const IconData adminPanelSettingsOutlined = Icons.admin_panel_settings_outlined;
+  static const IconData adminPanelSettingsOutlined =
+      Icons.admin_panel_settings_outlined;
   static const IconData attachMoney = Icons.attach_money;
   static const IconData attachMoneyRounded = Icons.attach_money_rounded;
   static const IconData calendarMonthRounded = Icons.calendar_month_rounded;
@@ -34,7 +35,8 @@ class MyIcons {
   static const IconData scheduleRounded = Icons.schedule_rounded;
   static const IconData rateReviewRounded = Icons.rate_review_rounded;
   static const IconData checkCircleOutline = Icons.check_circle_outline;
-  static const IconData checkCircleOutlineRounded = Icons.check_circle_outline_rounded;
+  static const IconData checkCircleOutlineRounded =
+      Icons.check_circle_outline_rounded;
   static const IconData checkCircleRounded = Icons.check_circle_rounded;
   static const IconData checkRounded = Icons.check_rounded;
   static const IconData chevronRightRounded = Icons.chevron_right_rounded;
@@ -50,18 +52,21 @@ class MyIcons {
   static const IconData homeRounded = Icons.home_rounded;
   static const IconData infoOutline = Icons.info_outline;
   static const IconData keyboardArrowDown = Icons.keyboard_arrow_down;
+  static const IconData language = Icons.language;
   static const IconData locationOnOutlined = Icons.location_on_outlined;
   static const IconData locationOnRounded = Icons.location_on_rounded;
   static const IconData lockOutline = Icons.lock_outline;
   static const IconData lockOutlineRounded = Icons.lock_outline_rounded;
   static const IconData logout = Icons.logout;
   static const IconData logoutRounded = Icons.logout_rounded;
-  static const IconData medicalServicesOutlined = Icons.medical_services_outlined;
+  static const IconData medicalServicesOutlined =
+      Icons.medical_services_outlined;
   static const IconData menuBook = Icons.menu_book;
   static const IconData menuBookOutlined = Icons.menu_book_outlined;
   static const IconData menuBookRounded = Icons.menu_book_rounded;
   static const IconData menuRounded = Icons.menu_rounded;
-  static const IconData notificationsNoneRounded = Icons.notifications_none_rounded;
+  static const IconData notificationsNoneRounded =
+      Icons.notifications_none_rounded;
   static const IconData people = Icons.people;
   static const IconData peopleOutline = Icons.people_outline;
   static const IconData person = Icons.person;

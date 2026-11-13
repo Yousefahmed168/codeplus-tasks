@@ -8,6 +8,7 @@ abstract class SharedPref {
 
   static const String kOnboarding = 'onboarding';
   static const String kUserId = 'user_id';
+  static const String kLanguage = 'app_language';
 
   static Future<void> init() async {
     pref = await SharedPreferences.getInstance();
@@ -28,6 +29,14 @@ abstract class SharedPref {
 
   static String getUserId() {
     return pref.getString(kUserId) ?? '';
+  }
+
+  static Future<void> cacheLanguage(String code) {
+    return pref.setString(kLanguage, code);
+  }
+
+  static String getLanguageCode() {
+    return pref.getString(kLanguage) ?? '';
   }
 
   static Future<void> cacheData(String key, dynamic value) async {
@@ -56,4 +65,3 @@ abstract class SharedPref {
     await pref.clear();
   }
 }
-

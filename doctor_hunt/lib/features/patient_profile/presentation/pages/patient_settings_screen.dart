@@ -9,6 +9,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/widgets/custom_back_button.dart';
+import '../../../../core/widgets/language_picker_dialog.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/models/patient_model.dart';
 import '../../../auth/presentation/widgets/logout_dialog.dart';
@@ -97,10 +98,13 @@ class _PatientSettingsView extends StatelessWidget {
                       .read<PatientSettingsCubit>()
                       .toggleNotifications(value),
                 ),
-                // NOTE: The MVP scope lists a "Language" setting, but the app
-                // ships a single locale (`AppLocale.en`). A picker with one
-                // option is a dead control, so the row is intentionally omitted
-                // until a second locale is added.
+                10.verticalSpace,
+                _ActionRow(
+                  icon: MyIcons.language,
+                  iconBackground: AppColors.settingsIconBlue,
+                  title: t.common.language,
+                  onTap: () => LanguagePickerDialog.show(context),
+                ),
                 10.verticalSpace,
                 _ActionRow(
                   icon: MyIcons.privacyTipOutlined,

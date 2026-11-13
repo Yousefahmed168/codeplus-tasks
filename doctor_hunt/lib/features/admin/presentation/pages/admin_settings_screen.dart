@@ -10,6 +10,7 @@ import '../../../../core/services/auth_service.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
 import '../../../../core/utils/string_utils.dart';
+import '../../../../core/widgets/language_picker_dialog.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/constants/my_icons.dart';
 
@@ -62,7 +63,9 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                   ? Center(
                       child: Text(
                         initials,
-                        style: context.semiBold12.copyWith(color: AppColors.textOnPrimary),
+                        style: context.semiBold12.copyWith(
+                          color: AppColors.textOnPrimary,
+                        ),
                       ),
                     )
                   : null,
@@ -103,7 +106,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                         : null,
                   ),
                   child: user?.photoURL == null || user!.photoURL!.isEmpty
-                      ? Icon(MyIcons.person, color: AppColors.primary, size: 24.r)
+                      ? Icon(
+                          MyIcons.person,
+                          color: AppColors.primary,
+                          size: 24.r,
+                        )
                       : null,
                 ),
                 12.horizontalSpace,
@@ -140,6 +147,15 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
             title: t.admin.settings.changePassword,
             subtitle: t.admin.settings.changePasswordDesc,
             onTap: () => context.push(AppRoutes.changePassword),
+          ),
+          12.verticalSpace,
+
+          // Language
+          _buildNavRow(
+            icon: MyIcons.language,
+            title: t.common.language,
+            subtitle: LanguagePickerDialog.currentLabel(),
+            onTap: () => LanguagePickerDialog.show(context),
           ),
           12.verticalSpace,
 
@@ -310,10 +326,8 @@ class _AppVersionTextState extends State<_AppVersionText> {
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
       future: _version,
-      builder: (context, snapshot) => Text(
-        snapshot.data ?? '',
-        style: context.regular12.textSecondary,
-      ),
+      builder: (context, snapshot) =>
+          Text(snapshot.data ?? '', style: context.regular12.textSecondary),
     );
   }
 }

@@ -5,6 +5,7 @@ import '../services/appointment_service.dart';
 import '../services/auth_service.dart';
 import '../services/cloudinary_service.dart';
 import '../services/favorite_service.dart';
+import '../services/language_service.dart';
 import '../services/user_service.dart';
 import '../routes/session_controller.dart';
 
@@ -27,10 +28,15 @@ void setupServiceLocator() {
   sl.registerLazySingleton<AdminService>(() => AdminService.instance);
 
   // Appointments
-  sl.registerLazySingleton<AppointmentService>(() => AppointmentService.instance);
+  sl.registerLazySingleton<AppointmentService>(
+    () => AppointmentService.instance,
+  );
 
   // Cloudinary
   sl.registerLazySingleton<CloudinaryService>(() => CloudinaryService.instance);
+
+  // Language (persisted app locale)
+  sl.registerLazySingleton<LanguageService>(() => LanguageService.instance);
 
   // Session (drives the router guards)
   sl.registerLazySingleton<SessionController>(

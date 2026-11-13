@@ -148,6 +148,18 @@ class Translations$common$en {
 	/// en: 'Please log in to continue'
 	String get loginRequired => 'Please log in to continue';
 
+	/// en: 'Language'
+	String get language => 'Language';
+
+	/// en: 'English'
+	String get languageEnglish => 'English';
+
+	/// en: 'العربية'
+	String get languageArabic => 'العربية';
+
+	/// en: 'Language updated'
+	String get languageUpdated => 'Language updated';
+
 	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
 
 	/// en: 'Not provided'
@@ -561,23 +573,23 @@ class Translations$privacyPolicy$en {
 	/// en: 'Doctor Hunt Apps Privacy Policy'
 	String get heading => 'Doctor Hunt Apps Privacy Policy';
 
-	/// en: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here', making it look like readable English.'
-	String get intro => 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.';
+	/// en: 'This policy explains what information Doctor Hunt collects, how it is used, and the choices you have. We collect only the data needed to run the service: your account details, your profile information, and the appointments you book.'
+	String get intro => 'This policy explains what information Doctor Hunt collects, how it is used, and the choices you have. We collect only the data needed to run the service: your account details, your profile information, and the appointments you book.';
 
-	/// en: 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.'
-	String get bullet1 => 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.';
+	/// en: 'We do not sell your personal information to third parties.'
+	String get bullet1 => 'We do not sell your personal information to third parties.';
 
-	/// en: 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.'
-	String get bullet2 => 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.';
+	/// en: 'Your appointments and reviews stay private to you and the related doctor.'
+	String get bullet2 => 'Your appointments and reviews stay private to you and the related doctor.';
 
-	/// en: 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
-	String get bullet3 => 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
+	/// en: 'You can edit or delete your profile information at any time.'
+	String get bullet3 => 'You can edit or delete your profile information at any time.';
 
-	/// en: 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
-	String get bullet4 => 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
+	/// en: 'Contact us if you have any questions about your data.'
+	String get bullet4 => 'Contact us if you have any questions about your data.';
 
-	/// en: 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.'
-	String get outro => 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.';
+	/// en: 'By using Doctor Hunt you agree to this policy. We may update it from time to time and will notify you about important changes.'
+	String get outro => 'By using Doctor Hunt you agree to this policy. We may update it from time to time and will notify you about important changes.';
 }
 
 // Path: logoutDialog
@@ -810,8 +822,8 @@ class Translations$onboarding$pages$0$en {
 	/// en: 'Find Trusted Doctors'
 	String get title => 'Find Trusted Doctors';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
+	/// en: 'Search by name or specialty to find the right doctor for you.'
+	String get description => 'Search by name or specialty to find the right doctor for you.';
 }
 
 // Path: onboarding.pages.1
@@ -825,8 +837,8 @@ class Translations$onboarding$pages$1$en {
 	/// en: 'Choose Best Doctors'
 	String get title => 'Choose Best Doctors';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
+	/// en: 'Compare ratings, reviews and fees to pick the best doctor.'
+	String get description => 'Compare ratings, reviews and fees to pick the best doctor.';
 }
 
 // Path: onboarding.pages.2
@@ -840,8 +852,8 @@ class Translations$onboarding$pages$2$en {
 	/// en: 'Easy Appointments'
 	String get title => 'Easy Appointments';
 
-	/// en: 'Contrary to popular belief, Lorem Ipsum is not simply random text.'
-	String get description => 'Contrary to popular belief, Lorem Ipsum is not simply random text.';
+	/// en: 'Book your visit in a few taps and manage it in one place.'
+	String get description => 'Book your visit in a few taps and manage it in one place.';
 }
 
 // Path: roleSelection.roles
@@ -1493,6 +1505,10 @@ extension on Translations {
 			'common.loading' => 'Loading...',
 			'common.errorGeneric' => 'An error occurred. Please try again',
 			'common.loginRequired' => 'Please log in to continue',
+			'common.language' => 'Language',
+			'common.languageEnglish' => 'English',
+			'common.languageArabic' => 'العربية',
+			'common.languageUpdated' => 'Language updated',
 			'common.validation.enterEmail' => 'Enter your email',
 			'common.validation.validEmail' => 'Enter a valid email',
 			'common.validation.enterPassword' => 'Enter your password',
@@ -1508,11 +1524,11 @@ extension on Translations {
 			'common.notProvided' => 'Not provided',
 			'common.amount' => ({required Object amount}) => '\$${amount}',
 			'onboarding.pages.0.title' => 'Find Trusted Doctors',
-			'onboarding.pages.0.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+			'onboarding.pages.0.description' => 'Search by name or specialty to find the right doctor for you.',
 			'onboarding.pages.1.title' => 'Choose Best Doctors',
-			'onboarding.pages.1.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+			'onboarding.pages.1.description' => 'Compare ratings, reviews and fees to pick the best doctor.',
 			'onboarding.pages.2.title' => 'Easy Appointments',
-			'onboarding.pages.2.description' => 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+			'onboarding.pages.2.description' => 'Book your visit in a few taps and manage it in one place.',
 			'roleSelection.title' => 'Choose your role',
 			'roleSelection.subtitle' => 'The selected role determines the experience and available features.',
 			'roleSelection.roles.patient.title' => 'Patient',
@@ -1755,12 +1771,12 @@ extension on Translations {
 			'patientSettings.buildVersion' => 'Build version',
 			'privacyPolicy.title' => 'Privacy policy',
 			'privacyPolicy.heading' => 'Doctor Hunt Apps Privacy Policy',
-			'privacyPolicy.intro' => 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words believable. It is a long established fact that reader will distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here\', making it look like readable English.',
-			'privacyPolicy.bullet1' => 'The standard chunk of Lorem Ipsum used since 1500s is reproduced below for those interested.',
-			'privacyPolicy.bullet2' => 'Sections 110.32 and 110.33 from "de Finibus Bonorum et Malorum". The point of using.',
-			'privacyPolicy.bullet3' => 'Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
-			'privacyPolicy.bullet4' => 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
-			'privacyPolicy.outro' => 'It is a long established fact that reader distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
+			'privacyPolicy.intro' => 'This policy explains what information Doctor Hunt collects, how it is used, and the choices you have. We collect only the data needed to run the service: your account details, your profile information, and the appointments you book.',
+			'privacyPolicy.bullet1' => 'We do not sell your personal information to third parties.',
+			'privacyPolicy.bullet2' => 'Your appointments and reviews stay private to you and the related doctor.',
+			'privacyPolicy.bullet3' => 'You can edit or delete your profile information at any time.',
+			'privacyPolicy.bullet4' => 'Contact us if you have any questions about your data.',
+			'privacyPolicy.outro' => 'By using Doctor Hunt you agree to this policy. We may update it from time to time and will notify you about important changes.',
 			'logoutDialog.title' => 'Log Out',
 			'logoutDialog.confirmMessage' => 'Are you sure you want to logout?',
 			'menu.home' => 'Home',

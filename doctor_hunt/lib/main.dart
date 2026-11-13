@@ -9,6 +9,7 @@ import 'core/di/service_locator.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/session_controller.dart';
 import 'core/services/local/shared_pref.dart';
+import 'core/services/language_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/colors.dart';
 import 'firebase_options.dart';
@@ -40,8 +41,13 @@ void main() async {
   // Resolve the cached session so the first route guard already knows the role
   await sl<SessionController>().initialize();
 
-  // Initialize slang locale
-  LocaleSettings.useDeviceLocale();
+  // Initialize slang locale: the user's in-app pick wins over the device locale
+  final savedLanguage = sl<LanguageService>().savedLanguage;
+  if (savedLanguage != null) {
+    await LocaleSettings.setLocale(savedLanguage, listenToDeviceLocale: false);
+  } else {
+    await LocaleSettings.useDeviceLocale();
+  }
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
