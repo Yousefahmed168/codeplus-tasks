@@ -8,6 +8,7 @@ import '../../features/appointments/views/appointments_screen.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/register_screen.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../core/enums/doctor_sort.dart';
 import '../../core/models/doctor.dart';
 import '../../core/models/booking_draft.dart';
 import '../../features/doctors/presentation/pages/doctor_details_screen.dart';
@@ -51,6 +52,9 @@ class AppRoutes {
   static const String patientAppointments = '/patient-appointments';
   static const String favoriteDoctors = '/favorite-doctors';
   static const String patientProfile = '/profile';
+
+  /// Search route pre-sorted for a Home "See all" link.
+  static String searchFor(DoctorSort sort) => '$search?sort=${sort.queryValue}';
 
   // Admin routes
   static const String adminLogin = '/admin/login';
@@ -146,8 +150,12 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.search,
-      pageBuilder: (context, state) =>
-          _slidePage(key: state.pageKey, child: const FindDoctorScreen()),
+      pageBuilder: (context, state) => _slidePage(
+        key: state.pageKey,
+        child: FindDoctorScreen(
+          sort: DoctorSort.fromQuery(state.uri.queryParameters['sort']),
+        ),
+      ),
     ),
     GoRoute(
       path: AppRoutes.selectTime,
@@ -169,7 +177,7 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    
+
     GoRoute(
       path: AppRoutes.patientSettings,
       pageBuilder: (context, state) =>

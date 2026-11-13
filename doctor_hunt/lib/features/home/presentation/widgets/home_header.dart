@@ -112,7 +112,10 @@ class HomeHeader extends StatelessWidget {
                       height: 48.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.textOnPrimary, width: 2.w),
+                        border: Border.all(
+                          color: AppColors.textOnPrimary,
+                          width: 2.w,
+                        ),
                       ),
                       child: ClipOval(
                         child: hasImage && imageUrl!.isNotEmpty
@@ -120,7 +123,9 @@ class HomeHeader extends StatelessWidget {
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
                                 placeholder: (_, _) => Container(
-                                  color: AppColors.textOnPrimary.withValues(alpha: 0.3),
+                                  color: AppColors.textOnPrimary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   child: Icon(
                                     MyIcons.personRounded,
                                     color: AppColors.textOnPrimary,

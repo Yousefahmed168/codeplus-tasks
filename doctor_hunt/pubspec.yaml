@@ -36,6 +36,7 @@ dependencies:
   dartz: ^0.10.1
   dio: ^5.11.0
   equatable: ^2.1.0
+  flutter_debouncer: ^2.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1

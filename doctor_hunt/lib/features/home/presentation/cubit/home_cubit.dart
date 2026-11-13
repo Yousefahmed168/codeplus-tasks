@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/enums/doctor_sort.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/favorite_service.dart';
 import '../../../../core/services/user_service.dart';
 import '../../../../core/models/patient_model.dart';
 import '../../../../core/models/doctor.dart';
+import '../../../../core/utils/doctor_sorting.dart';
 import '../../../../i18n/strings.g.dart';
 import 'home_state.dart';
 
@@ -47,38 +49,40 @@ class HomeCubit extends Cubit<HomeState> {
     );
 
     if (uid != null) {
-      _patientSub = _userService.streamPatient(uid).listen(
-        (patient) {
-          _currentPatient = patient;
-          _emitLoaded();
-        },
-        onError: (e) {
-          debugPrint('HomeCubit: failed to load patient: $e');
-          emit(HomeError(t.common.errorGeneric));
-        },
-      );
+      _patientSub = _userService
+          .streamPatient(uid)
+          .listen(
+            (patient) {
+              _currentPatient = patient;
+              _emitLoaded();
+            },
+            onError: (e) {
+              debugPrint('HomeCubit: failed to load patient: $e');
+              emit(HomeError(t.common.errorGeneric));
+            },
+          );
 
-      _favoritesSub = _favoriteService.streamFavoriteIds(uid).listen(
-        (favorites) {
-          _currentFavorites = favorites;
-          _emitLoaded();
-        },
-        onError: (e) {
-          debugPrint('HomeCubit: failed to load favorites: $e');
-          emit(HomeError(t.common.errorGeneric));
-        },
-      );
+      _favoritesSub = _favoriteService
+          .streamFavoriteIds(uid)
+          .listen(
+            (favorites) {
+              _currentFavorites = favorites;
+              _emitLoaded();
+            },
+            onError: (e) {
+              debugPrint('HomeCubit: failed to load favorites: $e');
+              emit(HomeError(t.common.errorGeneric));
+            },
+          );
     } else {
       _emitLoaded();
     }
   }
-  
+
   void _emitLoaded() {
     // Popular = most reviewed, Top Rated = highest rating (locked MVP scope).
-    final popular = [..._currentDoctors]
-      ..sort((a, b) => b.reviewsCount.compareTo(a.reviewsCount));
-    final topRated = [..._currentDoctors]
-      ..sort((a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0));
+    final popular = sortDoctors(_currentDoctors, DoctorSort.popular);
+    final topRated = sortDoctors(_currentDoctors, DoctorSort.topRated);
 
     emit(
       HomeLoaded(
@@ -94,7 +98,10 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> toggleFavorite(String doctorUid) async {
     final uid = _authService.currentUser?.uid;
     if (uid != null) {
-      await _favoriteService.toggleFavorite(patientUid: uid, doctorUid: doctorUid);
+      await _favoriteService.toggleFavorite(
+        patientUid: uid,
+        doctorUid: doctorUid,
+      );
     }
   }
 

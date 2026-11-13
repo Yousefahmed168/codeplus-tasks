@@ -1,4 +1,6 @@
+import '../../../../core/enums/doctor_sort.dart';
 import '../../../../core/models/doctor.dart';
+import '../../../../core/utils/doctor_sorting.dart';
 
 import '../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../core/widgets/custom_back_button.dart';
@@ -14,17 +16,22 @@ import '../../../../core/widgets/specialty_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../i18n/strings.g.dart';
 import '../../../../core/constants/my_icons.dart';
 
 class FindDoctorScreen extends StatefulWidget {
-  const FindDoctorScreen({super.key, this.isTab = false});
+  const FindDoctorScreen({super.key, this.isTab = false, this.sort});
 
   /// When true the screen is embedded as a bottom-navigation tab: the back
   /// button is hidden and the search field does not steal focus.
   final bool isTab;
+
+  /// Optional order used by the Home "See all" links. When null the doctors
+  /// keep the order coming from the data source (regular search).
+  final DoctorSort? sort;
 
   @override
   State<FindDoctorScreen> createState() => _FindDoctorScreenState();
@@ -33,13 +40,20 @@ class FindDoctorScreen extends StatefulWidget {
 class _FindDoctorScreenState extends State<FindDoctorScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  final Debouncer _searchDebouncer = Debouncer();
+  late final Stream<List<Doctor>> _doctorsStream;
   String _searchQuery = "";
   String? _selectedSpecialty;
 
   @override
   void initState() {
     super.initState();
-    if (widget.isTab) return;
+    // Cache the stream: creating it in build() would resubscribe to Firestore
+    // on every keystroke/rebuild.
+    _doctorsStream = sl<UserService>().streamDoctors();
+    // "See all" opens a sorted list, so keep the keyboard closed and let the
+    // user browse. A plain search still focuses the field.
+    if (widget.isTab || widget.sort != null) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -47,10 +61,17 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
   @override
   void dispose() {
+    _searchDebouncer.cancel();
     _searchController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
+
+  String get _title => switch (widget.sort) {
+    DoctorSort.popular => t.home.popularDoctor,
+    DoctorSort.topRated => t.home.topRatedDoctor,
+    null => t.findDoctors.title,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +103,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                       ),
                       12.horizontalSpace,
                     ],
-                    Text(
-                      t.findDoctors.title,
-                      style: context.bold20.textPrimary,
-                    ),
+                    Text(_title, style: context.bold20.textPrimary),
                     const Spacer(),
                     IconButton(
                       onPressed: () => context.push(AppRoutes.favoriteDoctors),
@@ -107,6 +125,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                       child: CustomTextFormField(
                         suffixIcon: GestureDetector(
                           onTap: () {
+                            _searchDebouncer.cancel();
                             _searchController.clear();
                             setState(() => _searchQuery = '');
                           },
@@ -122,7 +141,15 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                           size: 16.r,
                         ),
                         controller: _searchController,
-                        onChange: (v) => setState(() => _searchQuery = v),
+                        onChange: (v) {
+                          _searchDebouncer.debounce(
+                            duration: const Duration(milliseconds: 350),
+                            onDebounce: () {
+                              if (!mounted) return;
+                              setState(() => _searchQuery = v.trim());
+                            },
+                          );
+                        },
                         textInputAction: TextInputAction.search,
                         hintText: t.home.searchHint,
                       ),
@@ -141,7 +168,7 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
   Widget _buildSearchResults() {
     return StreamBuilder<List<Doctor>>(
-      stream: sl<UserService>().streamDoctors(),
+      stream: _doctorsStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return ListView.separated(
@@ -172,8 +199,8 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
         final allDoctors = snapshot.data ?? [];
         final specialties = _specialtiesOf(allDoctors);
-        final query = _searchQuery.toLowerCase();
-        final results = allDoctors
+        final query = _searchQuery.trim().toLowerCase();
+        final filtered = allDoctors
             .where(
               (d) =>
                   ((d.name ?? '').toLowerCase().contains(query) ||
@@ -182,6 +209,9 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
                       d.specialization == _selectedSpecialty),
             )
             .toList();
+        final results = widget.sort == null
+            ? filtered
+            : sortDoctors(filtered, widget.sort!);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

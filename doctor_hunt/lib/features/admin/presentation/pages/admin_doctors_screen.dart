@@ -3,6 +3,7 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../../core/constants/specializations.dart';
 import '../../../../core/utils/app_images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,7 @@ class AdminDoctorsScreen extends StatefulWidget {
 
 class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
   final _searchCtrl = TextEditingController();
+  final _searchDebouncer = Debouncer();
   String _searchQuery = '';
   String? _selectedCategory;
   late final Stream<List<Doctor>> _doctorsStream;
@@ -39,6 +41,7 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
 
   @override
   void dispose() {
+    _searchDebouncer.cancel();
     _searchCtrl.dispose();
     super.dispose();
   }
@@ -48,7 +51,9 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         title: Text(t.admin.doctors.statusConfirmTitle),
         content: Text(
           (willActivate
@@ -142,22 +147,18 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
 
         final allDoctors = snapshot.data ?? [];
         final allLabel = t.admin.doctors.allSpecialties;
+        final query = _searchQuery.trim().toLowerCase();
+        final category = _selectedCategory?.toLowerCase();
         final filteredDoctors = allDoctors.where((d) {
           final matchesSearch =
-              _searchQuery.isEmpty ||
-              (d.name ?? '').toLowerCase().contains(
-                _searchQuery.toLowerCase(),
-              ) ||
-              (d.specialization ?? '').toLowerCase().contains(
-                _searchQuery.toLowerCase(),
-              );
+              query.isEmpty ||
+              (d.name ?? '').toLowerCase().contains(query) ||
+              (d.specialization ?? '').toLowerCase().contains(query);
 
           final matchesCategory =
               _selectedCategory == null ||
               _selectedCategory == allLabel ||
-              (d.specialization ?? '').toLowerCase().contains(
-                _selectedCategory!.toLowerCase(),
-              );
+              (d.specialization ?? '').toLowerCase().contains(category ?? '');
 
           return matchesSearch && matchesCategory;
         }).toList();
@@ -178,7 +179,15 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
               hintText: t.admin.doctors.searchHint,
               prefixIcon: Icon(MyIcons.search, size: 20.r),
               controller: _searchCtrl,
-              onChange: (v) => setState(() => _searchQuery = v),
+              onChange: (v) {
+                _searchDebouncer.debounce(
+                  duration: const Duration(milliseconds: 350),
+                  onDebounce: () {
+                    if (!mounted) return;
+                    setState(() => _searchQuery = v.trim());
+                  },
+                );
+              },
             ),
             14.verticalSpace,
 
@@ -207,7 +216,9 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                         vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : AppColors.surface,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.surface,
                         borderRadius: BorderRadius.circular(20.r),
                         border: Border.all(
                           color: isSelected
@@ -266,7 +277,11 @@ class _AdminDoctorsScreenState extends State<AdminDoctorsScreen> {
                   padding: EdgeInsets.only(top: 60.h),
                   child: Column(
                     children: [
-                      SvgPicture.asset(AppImages.logo, width: 80.r, height: 80.r),
+                      SvgPicture.asset(
+                        AppImages.logo,
+                        width: 80.r,
+                        height: 80.r,
+                      ),
                       16.verticalSpace,
                       Text(
                         t.admin.doctors.noDoctorsFound,

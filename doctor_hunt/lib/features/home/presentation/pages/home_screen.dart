@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/enums/doctor_sort.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/style_atoms.dart';
@@ -72,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }
-                      if (state is HomeLoaded) return _buildLoaded(context, state);
+                      if (state is HomeLoaded) {
+                        return _buildLoaded(context, state);
+                      }
                       return const SizedBox.shrink();
                     },
                   ),
@@ -161,7 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildSectionHeader(
           title: t.home.popularDoctor,
           showSeeAll: true,
-          onSeeAllTap: () => context.go(AppRoutes.search),
+          onSeeAllTap: () =>
+              context.push(AppRoutes.searchFor(DoctorSort.popular)),
         ),
         12.verticalSpace,
         _buildPopularList(context, popular, state.favoriteIds),
@@ -169,7 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildSectionHeader(
           title: t.home.topRatedDoctor,
           showSeeAll: true,
-          onSeeAllTap: () => context.go(AppRoutes.search),
+          onSeeAllTap: () =>
+              context.push(AppRoutes.searchFor(DoctorSort.topRated)),
         ),
         12.verticalSpace,
         _buildTopRatedList(context, topRated, state.favoriteIds),
